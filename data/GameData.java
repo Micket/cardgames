@@ -1,0 +1,70 @@
+package data;
+
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
+
+import com.trolltech.qt.gui.QGraphicsItemInterface;
+import com.trolltech.qt.gui.QGraphicsPixmapItem;
+import com.trolltech.qt.gui.QPixmap;
+import com.trolltech.qt.svg.QGraphicsSvgItem;
+
+public class GameData
+	{
+
+	/**
+	 * For the name of a card, what image does it map to?
+	 */
+	public Map<String,String> imageMap=new HashMap<String, String>();
+	
+	
+	
+	//Separate?: common heaps, heaps for each player
+	public Map<String, PlayerData> playerMap=new HashMap<String, PlayerData>();
+
+	
+	
+	public GameData()
+		{
+		//This is the default deck of cards. It can be extended with custom cards
+		for(int i=1;i<=12;i++)
+			{
+			imageMap.put("spades "+i, "spades"+i+".svg");
+			imageMap.put("diamonds "+i, "diamonds"+i+".svg");
+			imageMap.put("hearts "+i, "hearts"+i+".svg");
+			imageMap.put("clubs "+i, "clubs"+i+".svg");
+			}
+
+		imageMap.put("poker back","pokerbackside.svg");
+
+		System.out.println(imageMap);
+		}
+	
+
+	/**
+	 * Images should be stored on the client for bandwidth. But it would make sense to allow the server to provide missing cards,
+	 * in case a game need a very specialized card - this allows for more stupid clients.
+	 * 
+	 * Interface problem: Now this depends on QT
+	 */
+	public QGraphicsItemInterface getImageForCard(String card)
+		{
+		String cardFile=imageMap.get(card);
+		if(cardFile==null)
+			{
+			throw new RuntimeException("No card image map for "+card); //Later: Request image from server
+			}
+			
+		String file="cards/"+cardFile;
+		if(new File("cards",cardFile).exists())
+			{
+			if(file.endsWith(".svg"))
+				return new QGraphicsSvgItem(file);
+			else
+				return new QGraphicsPixmapItem(new QPixmap(file));
+			}
+		else
+			throw new RuntimeException("No such file, "+file); //Later: Request image from server
+		}
+	
+	}
