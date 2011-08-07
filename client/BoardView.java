@@ -98,17 +98,21 @@ public class BoardView extends QGraphicsView
 			
 			
 			QGraphicsItemInterface picked=scene().itemAt(event.posF());
-			for(AnimatedCard card:cards)
+			if(picked!=null)
 				{
-				if(card.imageFront==picked || card.imageBack==picked)
-				//if(card.image.contains(pos))
+				for(AnimatedCard card:cards)
 					{
-//					System.out.println("drag");
-					card.isBeingDragged=true;
-					//TODO sometimes there are cards on top to move as well
-					
+					if(card.imageFront==picked || card.imageBack==picked)
+					//if(card.image.contains(pos))
+						{
+//						System.out.println("drag");
+						card.isBeingDragged=true;
+						//TODO sometimes there are cards on top to move as well
+						
+						}
 					}
 				}
+			
 			
 
 			/*
