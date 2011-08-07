@@ -2,14 +2,15 @@ package data;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Collections;
 
 /**
- * A stack of zero or more cards
- *
+ * A stack of zero or more cards.
+ * Should this even extend list? I find myself wrapping everything..
  * @author mahogny
  *
  */
-public interface CardStack<E>
+public class CardStack<E>
 	{
 
 	/**
@@ -24,6 +25,11 @@ public interface CardStack<E>
 		cards.add(c);
 		}
 
+    public void addCards(CardStack<E> cs)
+        {
+        cards.addAll(cs.cards);
+        }
+
     public E drawCard()
         {
         E card = cards.get(0);
@@ -33,12 +39,15 @@ public interface CardStack<E>
 
     public CardStack<E> drawCards(int n)
         {
-        CardStack<E> cards = new CardStack<E>();
+        CardStack<E> cs = new CardStack<E>();
         List<E> cl = cards.subList(0,n);
-        cards.cards.addAll(cl);
+        cs.cards.addAll(cl);
         cl.clear();
-        return cards;
+        return cs;
         }
 
-
+    public E getCard(int i) { return cards.get(i); }
+    public int size() { return cards.size(); }
+    public void shuffle() { Collections.shuffle(cards); }
+    public void clear() { cards.clear(); }
 	}
