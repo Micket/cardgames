@@ -5,7 +5,7 @@ package data;
  */
 public class PlayingCard extends Card
 	{
-    public enum Suit { Clubs, Diamonds, Hearts, Spades }
+    public enum Suit { Clubs, Diamonds, Hearts, Spades, Red, Black } // Jokers can often be only red or black
     public enum Rank
         {
         Deuce(2), Three(3), Four(4), Five(5), Six(6), Seven(7), Eight(8), Nine(9), Ten(10), Jack(11), Queen(12), King(13), Ace(1), Joker(0); // Include the joker here?
@@ -23,14 +23,14 @@ public class PlayingCard extends Card
         rank = r;
         }
 
+    /// Convenience checks;
     public boolean isAce() { return rank == Rank.Ace; }
-
     public boolean isJoker() { return rank == Rank.Joker; }
+    public boolean isRed() { return suit == Suit.Diamonds || suit == Suit.Hearts || suit == suit.Red; }
+    public boolean isBlack() { return suit == Suit.Clubs || suit == Suit.Spades || suit == suit.Black; }
 
     public Rank getRank() { return rank; }
-
     public Suit getSuit() { return suit; }
-
     public int getValue() { return rank.giveValue(); }
 
     public String getID() { return rank+""+suit; }

@@ -9,6 +9,8 @@ public class Card
 	public boolean showsFront=false;
 	public int rotation=0; //Can be 0,1,2,3, going clockwise
 
-	//abstract public String getID();
+    // There replaces the strings;
+    public String getID() { return ""; }
+    public int getDeckNumber() { return 0; }
 
 	}
