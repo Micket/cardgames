@@ -50,4 +50,24 @@ public class CardStack<E>
     public int size() { return cards.size(); }
     public void shuffle() { Collections.shuffle(cards); }
     public void clear() { cards.clear(); }
+    public void moveCard(int from, int to)
+        {
+        List<E> new_order;
+        E card = cards.get(from);
+        if (to < from) // Not pretty, or fast...
+            {
+            new_order = cards.subList(0,to);
+            new_order.add(card);
+            new_order.addAll(cards.subList(to,from));
+            new_order.addAll(cards.subList(from+1,cards.size()));
+            }
+        else
+            {
+            new_order = cards.subList(0,from);
+            new_order.addAll(cards.subList(from+1,to+1));
+            new_order.add(card);
+            new_order.addAll(cards.subList(to+1,cards.size()));
+            }
+        cards = new_order;
+        }
 	}
