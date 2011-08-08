@@ -11,7 +11,7 @@ import data.PlayingCard;
 
 /**
  * Logic for the simple card game BlackJack with betting.
- * Game ends when everyone but one has lost their cash, or after 10 turns, or if everyone lost everything.
+ * Real BlackJack rules are a bit more complicated than this, but i'm leaving that out for now.
  * @author Micket
  */
 public class BlackJack extends GameLogic
@@ -51,8 +51,13 @@ public class BlackJack extends GameLogic
             }
         }
 
+    /**
+     * Checks if all players are done playing the turn (in one way or another).
+     */
     public boolean allDone()
         {
+        if (gs != GameState.Playing)
+            return false;
         boolean done = true;
         for (PlayerState p : players)
             done &= p.done;
@@ -89,12 +94,12 @@ public class BlackJack extends GameLogic
             {
             PlayingCard c = deck.drawCard();
             p.hand.addCard(c);
+            // Tell user what he drew card c.
             if (sumCards(p.hand) > playerStop)
                 {
                 p.done = true;
+                // Tell everyone he is fat
                 }
-            // Tell user what he drew card c.
-            // Tell all other users that he drew.
             }
         }
 
@@ -118,15 +123,18 @@ public class BlackJack extends GameLogic
 
         for (int i = 0; i < players.size(); i++)
             {
-            playerPoints = sumCards(players.get(i).hand);
+            PlayerState ps = players.get(i);
+            playerPoints = sumCards(ps.hand);
             if (playerPoints <= playerStop && (points > playerStop || points < playerPoints))
                 {
-                players.get(i).cash += players.get(i).bet;
+                ps.cash += ps.bet;
+                ps.bet = 0;
                 // Tell all users we have a winner.
                 }
             else
                 {
-                players.get(i).cash -= players.get(i).bet;
+                ps.cash -= ps.bet;
+                ps.bet = 0;
                 // Tell all users we have a loser.
                 }
             }
@@ -185,9 +193,9 @@ public class BlackJack extends GameLogic
             }
         for (int i = 0; i < aces; ++i)
             {
-            if (points <= playerStop - 9)
+            if (points <= playerStop - 10)
                 {
-                points += 9;
+                points += 10;
                 }
             }
         return points;
