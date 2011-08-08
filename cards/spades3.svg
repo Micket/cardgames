@@ -1,241 +1,39 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
-
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   version="1.1"
-   width="169.01213"
-   height="244.54904"
-   viewBox="-0.2 -236 169.07499 244.54905"
-   id="svg2"
-   inkscape:version="0.48.1 r9760"
-   sodipodi:docname="spades3.svg">
-  <metadata
-     id="metadata709">
-    <rdf:RDF>
-      <cc:Work
-         rdf:about="">
-        <dc:format>image/svg+xml</dc:format>
-        <dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-      </cc:Work>
-    </rdf:RDF>
-  </metadata>
-  <sodipodi:namedview
-     pagecolor="#ffffff"
-     bordercolor="#666666"
-     borderopacity="1"
-     objecttolerance="10"
-     gridtolerance="10"
-     guidetolerance="10"
-     inkscape:pageopacity="0"
-     inkscape:pageshadow="2"
-     inkscape:window-width="640"
-     inkscape:window-height="480"
-     id="namedview707" />
-  <defs
-     id="defs4">
-    <g
-       transform="matrix(0.4,0,0,0.4,236.59,667.12)"
-       id="lys"
-       style="fill:#ffffff;fill-opacity:1;stroke:none">
-      <path
-         d="m 355.65,280.19 c 0,0 -3.75,-8.1 -8.1,-12.6 -4.36,-4.51 -9.68,-7.58 -11.04,-6.53"
-         transform="translate(-1.35,-0.76)"
-         id="lys_1"
-         style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none" />
-      <path
-         d="m 368.97,258.94 c -2.29,0.08 -5.9,1.92 -7.85,3.87 -2.59,2.6 -3.52,7.58 -3.59,9.44 -0.07,1.86 -1.32,-0.84 -2.19,-2.37 -0.86,-1.54 -1.93,-5.4 -2.22,-3.22 -0.28,2.2 -0.34,3.26 0.07,5.72 0.4,2.45 1.59,7.15 2.56,8.68 l 3.97,3.94 c 1.87,-1.88 3.1,-6.25 3.19,-6.25 l -0.07,9.34 4.35,4.32 c -1.16,-2.37 -1.94,-6.58 -1.63,-10.38 0.32,-3.8 2.3,-8.59 2.06,-10.44 -1.14,-0.4 -2.9,2.58 -5.21,1.88 -0.08,-1.75 0.74,-6.02 1.9,-7.69 1.17,-1.66 4.43,-5.7 6.41,-6.28 -0.36,-0.42 -0.99,-0.59 -1.75,-0.56 z"
-         id="lys_2"
-         style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none" />
-      <path
-         d="m 329.36,254.28 c 9.62,-4.95 19.64,8.3 19.64,8.3 0,0 1.44,-9.25 3.32,-9.36 1.88,-0.11 4.87,7.31 4.87,7.31 0,0 5.76,-7.64 15.72,-7.58 9.97,0.05 11.57,9.13 5.87,9.57 -5.66,0.44 -2.38,-5.15 -2.27,-3.65 0.06,0.17 -5.37,-7.75 -19.15,7.86 -2.03,2.3 -3.94,-8.46 -4.93,-6.09 -1.21,2.88 -0.22,6.26 -1.11,8.53 1.39,1.71 -11.35,-13.84 -16.77,-9.58"
-         transform="translate(-1.35,-0.76)"
-         id="lys_3"
-         style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none" />
-      <use
-         transform="matrix(0,1,1,0,74.5,-74.49)"
-         id="use646"
-         style="fill:#ffffff;fill-opacity:1;stroke:none"
-         x="0"
-         y="0"
-         width="2178.99"
-         height="1216.1899"
-         xlink:href="#lys_3" />
-      <use
-         transform="matrix(0,1,1,0,74.9,-74.93)"
-         id="use648"
-         style="fill:#ffffff;fill-opacity:1;stroke:none"
-         x="0"
-         y="0"
-         width="2178.99"
-         height="1216.1899"
-         xlink:href="#lys_1" />
-      <use
-         transform="matrix(0,1,1,0,74.82,-74.82)"
-         id="use650"
-         style="fill:#ffffff;fill-opacity:1;stroke:none"
-         x="0"
-         y="0"
-         width="2178.99"
-         height="1216.1899"
-         xlink:href="#lys_2" />
-    </g>
-    <g
-       transform="matrix(0.4,0,0,0.4,236.59,667.12)"
-       id="lys-8"
-       style="fill:#ffffff;fill-opacity:1;stroke:none">
-      <path
-         d="m 355.65,280.19 c 0,0 -3.75,-8.1 -8.1,-12.6 -4.36,-4.51 -9.68,-7.58 -11.04,-6.53"
-         transform="translate(-1.35,-0.76)"
-         id="lys_1-0"
-         style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none" />
-      <path
-         d="m 368.97,258.94 c -2.29,0.08 -5.9,1.92 -7.85,3.87 -2.59,2.6 -3.52,7.58 -3.59,9.44 -0.07,1.86 -1.32,-0.84 -2.19,-2.37 -0.86,-1.54 -1.93,-5.4 -2.22,-3.22 -0.28,2.2 -0.34,3.26 0.07,5.72 0.4,2.45 1.59,7.15 2.56,8.68 l 3.97,3.94 c 1.87,-1.88 3.1,-6.25 3.19,-6.25 l -0.07,9.34 4.35,4.32 c -1.16,-2.37 -1.94,-6.58 -1.63,-10.38 0.32,-3.8 2.3,-8.59 2.06,-10.44 -1.14,-0.4 -2.9,2.58 -5.21,1.88 -0.08,-1.75 0.74,-6.02 1.9,-7.69 1.17,-1.66 4.43,-5.7 6.41,-6.28 -0.36,-0.42 -0.99,-0.59 -1.75,-0.56 z"
-         id="lys_2-3"
-         style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none" />
-      <path
-         d="m 329.36,254.28 c 9.62,-4.95 19.64,8.3 19.64,8.3 0,0 1.44,-9.25 3.32,-9.36 1.88,-0.11 4.87,7.31 4.87,7.31 0,0 5.76,-7.64 15.72,-7.58 9.97,0.05 11.57,9.13 5.87,9.57 -5.66,0.44 -2.38,-5.15 -2.27,-3.65 0.06,0.17 -5.37,-7.75 -19.15,7.86 -2.03,2.3 -3.94,-8.46 -4.93,-6.09 -1.21,2.88 -0.22,6.26 -1.11,8.53 1.39,1.71 -11.35,-13.84 -16.77,-9.58"
-         transform="translate(-1.35,-0.76)"
-         id="lys_3-7"
-         style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none" />
-      <use
-         transform="matrix(0,1,1,0,74.5,-74.49)"
-         id="use3823"
-         style="fill:#ffffff;fill-opacity:1;stroke:none"
-         x="0"
-         y="0"
-         width="169.075"
-         height="244.54906"
-         xlink:href="#lys_3-7" />
-      <use
-         transform="matrix(0,1,1,0,74.9,-74.93)"
-         id="use3825"
-         style="fill:#ffffff;fill-opacity:1;stroke:none"
-         x="0"
-         y="0"
-         width="169.075"
-         height="244.54906"
-         xlink:href="#lys_1-0" />
-      <use
-         transform="matrix(0,1,1,0,74.82,-74.82)"
-         id="use3827"
-         style="fill:#ffffff;fill-opacity:1;stroke:none"
-         x="0"
-         y="0"
-         width="169.075"
-         height="244.54906"
-         xlink:href="#lys_2-3" />
-    </g>
-    <g
-       id="club-0">
-      <path
-         d="m 3.35,4.66 c 0,-1.81 -1.51,-3.28 -3.38,-3.28 -1.87,0 -3.38,1.47 -3.38,3.28 0,1.81 1.51,3.28 3.38,3.28 1.87,0 3.38,-1.47 3.38,-3.28 z"
-         id="path3229" />
-      <path
-         d="m 7.71,-1.55 c 0,-1.81 -1.51,-3.28 -3.38,-3.28 -1.87,0 -3.38,1.47 -3.38,3.28 0,1.81 1.51,3.28 3.38,3.28 1.87,0 3.38,-1.47 3.38,-3.28 z"
-         id="path3231" />
-      <path
-         d="m -0.95,-1.57 c 0,-0.66 -0.2,-1.28 -0.55,-1.8 -0.6,-0.89 -1.65,-1.48 -2.83,-1.48 -1.87,0 -3.38,1.47 -3.38,3.28 0,1.81 1.51,3.28 3.38,3.28 1.87,0 3.38,-1.47 3.38,-3.28 z"
-         id="path3233" />
-      <path
-         d="m 3.94,-7.94 c -1.67,0 -2.55,1.36 -3.01,2.72 -0.46,1.36 -0.5,2.72 -0.5,2.72 h -0.86 c 0,0 -0.16,-5.43 -3.5,-5.44 h 7.87 z"
-         id="path3235" />
-      <path
-         d="m -2.32,2.25 c 1.9,-1.9 1.9,-4.75 1.9,-4.75 l 0.85,-0.01 c 0,0 0,2.91 1.85,4.76"
-         id="path3237" />
-      <path
-         d="m -1.94,-3.85 c 1.9,1.9 4.75,1.9 4.75,1.9 v 0.85 c 0,0 -2.91,0 -4.76,1.85"
-         id="path3239" />
-      <path
-         d="m 1.87,-3.86 c -1.9,1.9 -4.75,1.9 -4.75,1.9 v 0.85 c 0,0 2.91,0 4.76,1.85"
-         id="path3241" />
-    </g>
-    <g
-       id="base-5">
-      <path
-         d="m 0,0 c 0,3.78 3.09,6.87 6.87,6.87 l 152.845,0 c 3.77,0 6.86,-3.09 6.86,-6.87 l 0,-228.4 c 0,-3.78 -3.09,-6.87 -6.86,-6.87 l -152.845,0 c -3.78,0 -6.87,3.09 -6.87,6.87 L 0,0 z"
-         id="path3226"
-         style="fill:#ffffff;stroke:#000000;stroke-width:2.5" />
-    </g>
-    <g
-       id="n_3-6">
-      <text
-         transform="scale(0.56453,1.05741)"
-         id="text3193"
-         style="font-size:43px;font-weight:bold;font-family:Bitstream Vera Serif">3</text>
-    </g>
-  </defs>
-  <g
-     transform="translate(-334.09999,0.47452416)"
-     id="3_club">
-    <use
-       id="use3869"
-       x="335.14999"
-       y="0"
-       width="1"
-       height="1"
-       xlink:href="#base-5" />
-    <use
-       id="use3871"
-       x="339.14999"
-       y="-199.117"
-       width="1"
-       height="1"
-       xlink:href="#n_3-6" />
-    <use
-       transform="matrix(-1,0,0,-1,997.45,-60.56)"
-       id="use3873"
-       x="498.72501"
-       y="-30.280001"
-       width="1"
-       height="1"
-       xlink:href="#n_3-6" />
-    <use
-       transform="matrix(-1,0,0,-1,697.6,-370.234)"
-       id="use3875"
-       x="348.79999"
-       y="-185.117"
-       width="1"
-       height="1"
-       xlink:href="#club-0" />
-    <use
-       id="use3877"
-       x="489.07501"
-       y="-44.279999"
-       width="1"
-       height="1"
-       xlink:href="#club-0" />
-    <use
-       transform="scale(2.4,2.4)"
-       id="use3879"
-       x="174.55701"
-       y="-14.599"
-       width="1"
-       height="1"
-       xlink:href="#club-0" />
-    <use
-       transform="matrix(-2.4,0,0,-2.4,837.8736,-243.13728)"
-       id="use3881"
-       x="174.55701"
-       y="-50.653599"
-       width="1"
-       height="1"
-       xlink:href="#club-0" />
-    <use
-       transform="matrix(-2.4,0,0,-2.4,837.8736,-397.02)"
-       id="use3883"
-       x="174.55701"
-       y="-82.712502"
-       width="1"
-       height="1"
-       xlink:href="#club-0" />
+<svg id="svg2" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" height="244.55" width="169.01" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="-0.2 -236 169.07499 244.54905" xmlns:dc="http://purl.org/dc/elements/1.1/">
+ <metadata id="metadata709">
+  <rdf:RDF>
+   <cc:Work rdf:about="">
+    <dc:format>image/svg+xml</dc:format>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs id="defs4">
+  <g id="club-0">
+   <path id="path3229" d="m3.35 4.66c0-1.81-1.51-3.28-3.38-3.28s-3.38 1.47-3.38 3.28 1.51 3.28 3.38 3.28 3.38-1.47 3.38-3.28z"/>
+   <path id="path3231" d="m7.71-1.55c0-1.81-1.51-3.28-3.38-3.28s-3.38 1.47-3.38 3.28 1.51 3.28 3.38 3.28 3.38-1.47 3.38-3.28z"/>
+   <path id="path3233" d="m-0.95-1.57c0-0.66-0.2-1.28-0.55-1.8-0.6-0.89-1.65-1.48-2.83-1.48-1.87 0-3.38 1.47-3.38 3.28s1.51 3.28 3.38 3.28 3.38-1.47 3.38-3.28z"/>
+   <path id="path3235" d="m3.94-7.94c-1.67 0-2.55 1.36-3.01 2.72s-0.5 2.72-0.5 2.72h-0.86s-0.16-5.43-3.5-5.44h7.87z"/>
+   <path id="path3237" d="m-2.32 2.25c1.9-1.9 1.9-4.75 1.9-4.75l0.85-0.01s0 2.91 1.85 4.76"/>
+   <path id="path3239" d="m-1.94-3.85c1.9 1.9 4.75 1.9 4.75 1.9v0.85s-2.91 0-4.76 1.85"/>
+   <path id="path3241" d="m1.87-3.86c-1.9 1.9-4.75 1.9-4.75 1.9v0.85s2.91 0 4.76 1.85"/>
   </g>
+  <g id="base-5">
+   <path id="path3226" d="m0 0c0 3.78 3.09 6.87 6.87 6.87h152.84c3.77 0 6.86-3.09 6.86-6.87v-228.4c0-3.78-3.09-6.87-6.86-6.87h-152.84c-3.78 0-6.87 3.09-6.87 6.87v228.4z" stroke="#000" stroke-width="2.5" fill="#fff"/>
+  </g>
+  <g id="n_3-6">
+   <text id="text3193" font-weight="bold" transform="scale(.56453 1.0574)" font-size="43px" font-family="Bitstream Vera Serif">3</text>
+  </g>
+ </defs>
+ <g id="3_club" transform="translate(-334.1 .47452)">
+  <use id="use3869" xlink:href="#base-5" height="1" width="1" y="0" x="335.14999"/>
+  <use id="use3871" xlink:href="#n_3-6" height="1" width="1" y="-199.117" x="339.14999"/>
+  <use id="use3873" xlink:href="#n_3-6" transform="matrix(-1,0,0,-1,997.45,-60.56)" height="1" width="1" y="-30.280001" x="498.72501"/>
+  <use id="use3875" xlink:href="#club-0" transform="matrix(-1 0 0 -1 697.6 -370.23)" height="1" width="1" y="-185.117" x="348.79999"/>
+  <use id="use3877" xlink:href="#club-0" height="1" width="1" y="-44.279999" x="489.07501"/>
+  <use id="use3879" xlink:href="#club-0" transform="scale(2.4)" height="1" width="1" y="-14.599" x="174.55701"/>
+  <use id="use3881" xlink:href="#club-0" transform="matrix(-2.4 0 0 -2.4 837.87 -243.14)" height="1" width="1" y="-50.653599" x="174.55701"/>
+  <use id="use3883" xlink:href="#club-0" transform="matrix(-2.4 0 0 -2.4 837.87 -397.02)" height="1" width="1" y="-82.712502" x="174.55701"/>
+ </g>
 </svg>
