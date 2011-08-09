@@ -1,6 +1,10 @@
-package data;
+package server;
 
 import java.net.Socket;
+
+import action.Message;
+
+import client.Client;
 
 
 /**
@@ -8,10 +12,11 @@ import java.net.Socket;
  * @author mahogny
  *
  */
-public class PlayerConnection
+public class ConnectionToClient
 	{
 
 	public Socket socket;
+	public Client localClient;
 	
 	public String nick;
 	
@@ -20,5 +25,10 @@ public class PlayerConnection
 	 */
 	public int connectionID;
 	
+	
+	public void send(Message msg)
+		{
+		
+		}
 	
 	}

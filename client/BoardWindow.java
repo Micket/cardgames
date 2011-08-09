@@ -1,13 +1,19 @@
 package client;
+
+import action.Message;
+import action.UserAction;
+
 import com.trolltech.qt.gui.*;
 
 
-public class BoardWindow extends QMainWindow
+public class BoardWindow extends QMainWindow implements ServerListener
 	{
 	
-
-	public BoardWindow()
+	private Client client;
+	
+	public BoardWindow(Client client)
 		{
+		this.client=client;
 
 		
 		//setFixedSize(250, 250);
@@ -35,16 +41,9 @@ public class BoardWindow extends QMainWindow
 		setWindowTitle(tr("Card game"));
 		}
 
-
-	public static void main(String args[])
+	public void serverMessage(Message msg)
 		{
-		QApplication.initialize(args);
 		
-		
-		BoardWindow widget = new BoardWindow();
-		widget.show();
-
-		QApplication.exec();
 		}
 
 

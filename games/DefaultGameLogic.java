@@ -1,5 +1,8 @@
 package games;
 
+import action.UserActionClickedButton;
+import action.UserActionClickedCard;
+
 /**
  */
 public class DefaultGameLogic extends GameLogic

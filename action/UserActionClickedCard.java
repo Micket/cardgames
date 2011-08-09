@@ -1,4 +1,4 @@
-package games;
+package action;
 
 public class UserActionClickedCard extends UserAction
 	{
