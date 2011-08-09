@@ -7,11 +7,7 @@ import action.UserActionLobbyMessage;
 
 import com.trolltech.qt.gui.QAction;
 import com.trolltech.qt.gui.QApplication;
-import com.trolltech.qt.gui.QKeySequence;
-import com.trolltech.qt.gui.QLabel;
 import com.trolltech.qt.gui.QLineEdit;
-import com.trolltech.qt.gui.QMainWindow;
-import com.trolltech.qt.gui.QMenu;
 import com.trolltech.qt.gui.QMenuBar;
 import com.trolltech.qt.gui.QPushButton;
 import com.trolltech.qt.gui.QTextEdit;

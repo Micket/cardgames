@@ -2,16 +2,16 @@ package games;
 
 import java.lang.Math;
 import java.util.List;
-import java.util.ArrayList;
-
 import action.UserAction;
 import action.UserActionClickedButton;
 
 
 import data.CardStack;
+import data.ClientCard;
 import data.PlayingCard;
 // Common things for playing cards here?
 //import data.PlayingCardUtil;
+import data.ServerCard;
 
 /**
  * Logic for the simple card game BlackJack with betting.
@@ -20,6 +20,9 @@ import data.PlayingCard;
  */
 public class BlackJack extends DefaultGameLogic
 	{
+
+	
+	
     enum GameState { Betting, Playing, Over }
     class PlayerState
         {
@@ -228,4 +231,44 @@ public class BlackJack extends DefaultGameLogic
 
     public String getName() { return "BlackJack"; }
 
+    
+    
+    
+    
+    
+    
+    
+    
+    /////////////////////////////////////////////////
+    
+    
+    // 
+    
+    public ClientCard convertCard(ServerCard sc)
+    	{
+    	
+    	
+    	return null;
+    	
+    	}
+    
+    
+    
+    /*
+    	{
+  		CardStack<PlayingCard> cards=null;
+  		CardStack<?> cards2=cards;
+  		CardStack<ServerCard> cards3=cards2;
+  		
+  		
+  		ServerCard c;
+  		((PlayingCard)c).isAce();
+  		}
+  		*/
+    
+    
+    
+    
+    
+    
 	}

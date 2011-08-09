@@ -16,7 +16,7 @@ public class PlayingCardUtil
             for(PlayingCard.Rank r : EnumSet.range(PlayingCard.Rank.Deuce, PlayingCard.Rank.Ace))
                 deck52.addCard(new PlayingCard(s,r));
 
-        for(PlayingCard.Suit s : EnumSet.range(PlayingCard.Suit.Red, PlayingCard.Suit.Black))
+        for(PlayingCard.Suit s : EnumSet.range(PlayingCard.Suit.RedJoker, PlayingCard.Suit.BlackJoker))
             deck52.addCard(new PlayingCard(s,PlayingCard.Rank.Joker));
 
         }
