@@ -14,7 +14,7 @@ import data.PlayingCard;
  * Real BlackJack rules are a bit more complicated than this, but i'm leaving that out for now.
  * @author Micket
  */
-public class BlackJack extends GameLogic
+public class BlackJack extends DefaultGameLogic
 	{
     enum GameState { Betting, Playing, Over }
     class PlayerState

@@ -1,30 +1,18 @@
 package games;
 
+import games.*;
+
 /**
  * Note: Aisleriot has all games as descriptions. Could be possible to import all of them with a reader
- *
+ * www.pagat.com for many many games.
  * @author mahogny
  *
  */
 abstract public class GameLogic
 	{
 
-	/**
-	 * Function 1:
-	 *     Take game state. Take user action. Reject (=return null), or return new game state
-	 *
-	 *     User action: move cards, or quit game, or enter game
-	 *
-	 */
-
-
-	/**
-	 * Function 2:
-	 */
-
-	/**
-	 *
-	 */
+    abstract public boolean userActionClickedCard(int fromUser, UserActionClickedCard s);
+    abstract public boolean userActionButton(int fromUser, UserActionClickedButton s);
 
     abstract public String getName();
 
