@@ -53,15 +53,18 @@ public class BlackJack extends DefaultGameLogic
 
     public void userActionClickedButton(int fromUser, UserActionClickedButton action)
         {
+        PlayerState p = players.get(fromUser);
         if (action.buttonID == 0) // Another card.
             {
-
+            playerDraw(p);
             }
         else if (action.buttonID == 1) // Stay
             {
+            p.done = true;
             }
         else if (action.buttonID == 2) // Bet 1
             {
+            playerBetting(p, action.buttonValue);
             }
         if (allDone())
             {
@@ -87,7 +90,7 @@ public class BlackJack extends DefaultGameLogic
      */
     private void playerBetting(PlayerState p, int bet)
         {
-        if (gs != GameState.Betting || bet > p.cash)
+        if (gs != GameState.Betting || bet > p.cash || bet <= 0)
             {
             // Tell user he can't.
             }
