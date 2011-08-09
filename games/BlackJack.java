@@ -51,6 +51,24 @@ public class BlackJack extends DefaultGameLogic
             }
         }
 
+    public void userActionClickedButton(int fromUser, UserActionClickedButton action)
+        {
+        if (action.buttonID == 0) // Another card.
+            {
+
+            }
+        else if (action.buttonID == 1) // Stay
+            {
+            }
+        else if (action.buttonID == 2) // Bet 1
+            {
+            }
+        if (allDone())
+            {
+            dealersTurn();
+            }
+        }
+
     /**
      * Checks if all players are done playing the turn (in one way or another).
      */
