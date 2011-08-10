@@ -23,7 +23,17 @@ public class Client
 	public void localSend(Message msg)
 		{
 		for(ServerListener listener:serverListeners)
-			listener.serverMessage(msg);
+			listener.eventServerMessage(msg);
+		}
+	
+	
+	private void createServer()
+		{
+		ServerConnectionLocal serverConn=new ServerConnectionLocal();
+		this.serverConn=serverConn;
+		ConnectionToClient connToClient=new ConnectionToClient();
+		connToClient.localClient=this;
+		serverConn.thread.connections.put(0,connToClient);
 		}
 	
 	
@@ -33,13 +43,7 @@ public class Client
 		
 		Client client=new Client();
 		
-		//temp
-		ServerConnectionLocal serverConn=new ServerConnectionLocal();
-		client.serverConn=serverConn;
-		ConnectionToClient connToClient=new ConnectionToClient();
-		connToClient.localClient=client;
-		serverConn.thread.connections.add(connToClient);
-		
+		client.createServer();
 		
 		BoardWindow boardWindow = new BoardWindow(client);
 		client.serverListeners.add(boardWindow); //TODO on close, unregister

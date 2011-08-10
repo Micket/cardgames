@@ -5,6 +5,6 @@ import action.Message;
 public interface ServerListener
 	{
 
-	public void serverMessage(Message msg);
+	public void eventServerMessage(Message msg);
 	
 	}

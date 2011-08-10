@@ -105,7 +105,7 @@ public class LobbyWindow extends QWidget implements ServerListener
 		}
 	
 
-	public void serverMessage(Message msg)
+	public void eventServerMessage(Message msg)
 		{
 		System.out.println("foo");
 		for(UserAction action:msg.actions)

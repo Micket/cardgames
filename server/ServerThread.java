@@ -2,8 +2,10 @@ package server;
 
 import games.GameLogic;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Set;
 
 import action.Message;
@@ -14,14 +16,16 @@ import action.UserActionLobbyMessage;
 public class ServerThread extends Thread
 	{
 	
+	//from ID
+	public Map<Integer,ConnectionToClient> connections=new HashMap<Integer, ConnectionToClient>();
 	
-	public Set<ConnectionToClient> connections=new HashSet<ConnectionToClient>();
-
 	
 	public Set<GameLogic> sessions=new HashSet<GameLogic>();
-	
-	
 	private LinkedList<Message> messages=new LinkedList<Message>();
+
+	
+	private Set<ServerOpenPort> openPorts=new HashSet<ServerOpenPort>();
+	
 	
 	public void localSend(int fromClientID, Message msg)
 		{
@@ -97,13 +101,14 @@ public class ServerThread extends Thread
 
 		//Pass message on to all clients
 		
-		for(ConnectionToClient conn:connections)
-			{
-			if(conn.localClient!=null)
-				conn.localClient.localSend(msg);
-			else
-				;//TODO
-			}
+		for(ConnectionToClient conn:connections.values())
+			conn.send(msg);
+		}
+	
+	
+	public void openPort()
+		{
+		openPorts.add(new ServerOpenPort(this, 4444));
 		}
 	
 	}
