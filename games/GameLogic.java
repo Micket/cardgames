@@ -1,5 +1,6 @@
 package games;
 
+import action.UserAction;
 import action.UserActionClickedButton;
 import action.UserActionClickedCard;
 
@@ -12,9 +13,18 @@ import action.UserActionClickedCard;
 abstract public class GameLogic
 	{
 
-    abstract public boolean userActionClickedCard(int fromUser, UserActionClickedCard s);
-    abstract public boolean userActionButton(int fromUser, UserActionClickedButton s);
+	public boolean userAction(int fromUser, UserAction s)
+		{
+		if (s instanceof UserActionClickedCard)
+			return userActionClickedCard(fromUser, (UserActionClickedCard) s);
+		else if (s instanceof UserActionClickedButton)
+			return userActionClickedButton(fromUser, (UserActionClickedButton) s);
+		return false;
+		}
 
-    abstract public String getName();
+	abstract public boolean userActionClickedCard(int fromUser, UserActionClickedCard s);
 
+	abstract public boolean userActionClickedButton(int fromUser, UserActionClickedButton s);
+
+	abstract public String getName();
 	}

@@ -13,7 +13,7 @@ public class DefaultGameLogic extends GameLogic
         System.out.println("Card clicked!");
         return false;
         }
-    public boolean userActionButton(int fromUser, UserActionClickedButton s)
+    public boolean userActionClickedButton(int fromUser, UserActionClickedButton s)
         {
         System.out.println("Button pressed");
         return false;
