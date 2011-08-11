@@ -48,15 +48,12 @@ public class BlackJack extends DefaultGameLogic
 	private GameState gs;
 	private List<PlayerState> players;
 
-	public void userAction(UserAction action)
+/* How should we handle the start?
+	BlackJack(List<Integer> connections)
 		{
-		// Do stuff...
-
-		if (allDone())
-			{
-			dealersTurn();
-			}
+		// Do some initialization..
 		}
+*/
 
 	public boolean userActionClickedButton(int fromUser, UserActionClickedButton action)
 		{
@@ -64,15 +61,22 @@ public class BlackJack extends DefaultGameLogic
 		if (action.buttonID == 0) // Another card.
 			{
 			return playerDraw(p);
-			} else if (action.buttonID == 1) // Stay
+			}
+		else if (action.buttonID == 1) // Stay
 			{
 			p.done = true;
-			} else if (action.buttonID == 2) // Bet 1
+			}
+		else if (action.buttonID == 2) // Bet 1
 			{
 			return playerBetting(p, action.buttonValue);
-			} else
+			}
+		else
 			{
 			return false;
+			}
+		if (allBets())
+			{
+			startTurn();
 			}
 		if (allDone())
 			{
@@ -97,6 +101,53 @@ public class BlackJack extends DefaultGameLogic
 			}
 		return done;
 		}
+	
+	/**
+	 * Checks if all players have bet (or have lost).
+	 */
+	public boolean allBets()
+		{
+		if (gs != GameState.Betting)
+			{
+			return false;
+			}
+		boolean done = true;
+		for (PlayerState p : players)
+			{
+			done &= p.cash == 0 || p.bet > 0;
+			}
+		return done;
+		}
+	
+    /**
+	 * Checks if a player or the bank has won.
+	 */
+	public boolean isGameOver()
+		{
+		boolean moneyLeft = false;
+		for (PlayerState p : players)
+			{
+			if (p.cash > 0)
+				{
+				if (moneyLeft)
+					return false; // At least two players left.
+				else
+					moneyLeft = true;
+				}
+			}
+		return true; // Either 0 or 1 player left.
+		}
+	
+	/**
+	 * Finds the winner (-1 means the dealer won).
+	 */
+	public int findWinner()
+		{
+		for (int i = 0; i < players.size(); i++)
+			if (players.get(i).cash > 0)
+				return i;
+		return -1;
+		}
 
 	/**
 	 * Request to draw new card for specified player.
@@ -107,7 +158,8 @@ public class BlackJack extends DefaultGameLogic
 			{
 			// Tell user he can't.
 			return false;
-			} else
+			}
+		else
 			{
 			p.bet = bet;
 			// Tell all users what he betted.
@@ -124,7 +176,8 @@ public class BlackJack extends DefaultGameLogic
 			{
 			// Tell user he can't.
 			return false;
-			} else
+			}
+		else
 			{
 			PlayingCard c = deck.drawCard();
 			p.hand.addCard(c);
@@ -165,7 +218,8 @@ public class BlackJack extends DefaultGameLogic
 				ps.cash += ps.bet;
 				ps.bet = 0;
 				// Tell all users we have a winner.
-				} else
+				}
+			else
 				{
 				ps.cash -= ps.bet;
 				ps.bet = 0;
@@ -222,7 +276,8 @@ public class BlackJack extends DefaultGameLogic
 				{
 				aces++;
 				points += 1; // Minimum value for aces
-				} else
+				}
+			else
 				{
 				points += Math.min(hand.getCard(i).getValue(), 10);
 				}
@@ -241,7 +296,7 @@ public class BlackJack extends DefaultGameLogic
 		{
 		return "BlackJack";
 		}
-	
+
 	public String getDescription()
 		{
 		return "BlackJack tournament edition. Bet money until only one remain.";
