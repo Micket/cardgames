@@ -29,10 +29,10 @@ public class GameData
 		//This is the default deck of cards. It can be extended with custom cards
 		for(int i=1;i<=12;i++)
 			{
-			imageMap.put("spades "+i, "spades"+i+".svg");
-			imageMap.put("diamonds "+i, "diamonds"+i+".svg");
-			imageMap.put("hearts "+i, "hearts"+i+".svg");
-			imageMap.put("clubs "+i, "clubs"+i+".svg");
+			imageMap.put("poker Spades "+i, "spades"+i+".svg");
+			imageMap.put("poker Diamonds "+i, "diamonds"+i+".svg");
+			imageMap.put("poker Hearts "+i, "hearts"+i+".svg");
+			imageMap.put("poker Clubs "+i, "clubs"+i+".svg");
 			}
 
 		imageMap.put("poker back","pokerbackside.svg");

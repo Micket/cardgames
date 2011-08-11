@@ -41,7 +41,7 @@ public class BoardWindow extends QMainWindow implements ServerListener
 		setWindowTitle(tr("Card game"));
 		}
 
-	public void serverMessage(Message msg)
+	public void eventServerMessage(Message msg)
 		{
 		
 		}

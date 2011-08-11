@@ -2,7 +2,6 @@ package games;
 
 import action.UserActionClickedButton;
 import action.UserActionClickedCard;
-import games.*;
 
 /**
  * Note: Aisleriot has all games as descriptions. Could be possible to import all of them with a reader

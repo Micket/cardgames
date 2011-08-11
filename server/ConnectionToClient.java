@@ -12,7 +12,7 @@ import client.Client;
  * @author mahogny
  *
  */
-public class ConnectionToClient
+public class ConnectionToClient extends Thread
 	{
 
 	public Socket socket;
@@ -23,11 +23,32 @@ public class ConnectionToClient
 	/**
 	 * Random unique ID obtained upon connection. It never changes during a session.
 	 */
-	public int connectionID;
+	//public int connectionID;
 	
 	
 	public void send(Message msg)
 		{
+		if(localClient!=null)
+			localClient.localSend(msg);
+		else
+			;//TODO
+
+		}
+	
+	
+	@Override
+	public void run()
+		{
+		
+		for(;;)
+			{
+			System.out.println("Get message");
+			
+			//TODO
+			}
+		
+		//socket.
+		
 		
 		}
 	

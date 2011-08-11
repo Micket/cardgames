@@ -9,7 +9,7 @@ import com.trolltech.qt.core.Qt;
 import com.trolltech.qt.core.Qt.MouseButton;
 import com.trolltech.qt.gui.*;
 
-import data.Card;
+import data.ClientCard;
 import data.GameData;
 
 public class BoardView extends QGraphicsView
@@ -28,8 +28,8 @@ public class BoardView extends QGraphicsView
 		
 		for(int i=1;i<=10;i++)
 			{
-			Card cdata=new Card();
-			cdata.front="spades "+i;
+			ClientCard cdata=new ClientCard();
+			cdata.front="poker Spades "+i;
 			cdata.back="poker back";
 			
 			AnimatedCard c=new AnimatedCard(cdata);

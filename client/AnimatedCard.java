@@ -1,11 +1,11 @@
 package client;
 import com.trolltech.qt.gui.QGraphicsItemInterface;
-import data.Card;
+import data.ClientCard;
 
 
 public class AnimatedCard
 	{
-	public Card cardData;
+	public ClientCard cardData;
 
 	public QGraphicsItemInterface imageFront;
 	public QGraphicsItemInterface imageBack;
@@ -14,7 +14,7 @@ public class AnimatedCard
 	public boolean isBeingDragged=false;
 	
 	
-	public AnimatedCard(Card cardData)
+	public AnimatedCard(ClientCard cardData)
 		{
 		this.cardData=cardData;
 		}
