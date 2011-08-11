@@ -1,11 +1,14 @@
 package games;
 
 import java.lang.Math;
-import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 import serverData.CardStack;
 import serverData.PlayingCard;
 import serverData.ServerCard;
+
+import server.ConnectionToClient;
 
 import clientData.ClientCard;
 import action.UserAction;
@@ -23,40 +26,57 @@ import action.UserActionClickedButton;
 public class BlackJack extends DefaultGameLogic
 	{
 
-	enum GameState
-		{
-
-		Betting, Playing, Over
-		}
+	enum GameState { Betting, Playing, Over }
 
 	class PlayerState
 		{
-
 		public CardStack<PlayingCard> hand = new CardStack<PlayingCard>();
 		public boolean done = false;
 		public int bet = 0;
 		public int cash = 1000;
+		public boolean quit = false;
 		}
+	
 	/// Value at which the dealer stops.
 	private int dealerStop = 17;
 	/// Value at which the player (should) stop.
 	private int playerStop = 21;
 	/// Number of decks used.
 	private int decks = 1;
+	
 	/// Complete deck of cards (for convenience)
 	private CardStack<PlayingCard> newDeck;
 	private CardStack<PlayingCard> deck;
 	private CardStack<PlayingCard> dealerHand;
 	private GameState gs;
-	private List<PlayerState> players;
+	private Map<Integer,PlayerState> players = new HashMap<Integer,PlayerState>();
 
-/* How should we handle the start?
-	BlackJack(List<Integer> connections)
+	public void startGame()
 		{
-		// Do some initialization..
+		gameOn = true;
+		gs = GameState.Betting;
+		// Send some message to clients?
 		}
-*/
-
+	
+	public boolean userJoined(int userID)
+		{
+		if (players.size() >= this.getMaxPlayers())
+			return false;
+		players.put(userID, new PlayerState());
+		return true;
+		}
+	
+	public boolean userLeft(int userID)
+		{
+		if (!players.containsKey(userID))
+			return false;
+		if (gameOn)
+			players.get(userID).quit = true;
+		else
+			players.remove(userID);
+		return true;
+		}
+	
 	public boolean userActionClickedButton(int fromUser, UserActionClickedButton action)
 		{
 		PlayerState p = players.get(fromUser);
@@ -97,7 +117,7 @@ public class BlackJack extends DefaultGameLogic
 			return false;
 			}
 		boolean done = true;
-		for (PlayerState p : players)
+		for (PlayerState p : players.values())
 			{
 			done &= p.done;
 			}
@@ -114,7 +134,7 @@ public class BlackJack extends DefaultGameLogic
 			return false;
 			}
 		boolean done = true;
-		for (PlayerState p : players)
+		for (PlayerState p : players.values())
 			{
 			done &= p.cash == 0 || p.bet > 0;
 			}
@@ -127,7 +147,7 @@ public class BlackJack extends DefaultGameLogic
 	public boolean isGameOver()
 		{
 		boolean moneyLeft = false;
-		for (PlayerState p : players)
+		for (PlayerState p : players.values())
 			{
 			if (p.cash > 0)
 				{
