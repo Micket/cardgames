@@ -1,7 +1,5 @@
 package server;
 
-import games.GameLogic;
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -11,7 +9,8 @@ import java.util.Set;
 import action.Message;
 import action.UserAction;
 import action.UserActionLobbyMessage;
-
+import action.UserActionStartGame;
+import games.GameLogic;
 
 public class ServerThread extends Thread
 	{
@@ -74,6 +73,7 @@ public class ServerThread extends Thread
 				Message outMsg=new Message();
 				
 				for(UserAction action:msg.actions)
+					{
 					if(action instanceof UserActionLobbyMessage)
 						{
 						UserActionLobbyMessage lm=(UserActionLobbyMessage)action;
@@ -86,7 +86,26 @@ public class ServerThread extends Thread
 						
 						
 						}
-				
+					else if (action instanceof UserActionStartGame)
+						{
+						GameLogic game = GameLogic.GameFactory(((UserActionStartGame)action).gameID);
+						if (game != null)
+							{
+							sessions.add(game);
+							System.out.println("Starting game.");
+							}
+						else
+							{
+							System.out.println("Couldn't find game.");
+							}
+						}
+					else // Pass on message to game.
+						{
+						GameLogic game = null;
+						game.userAction(action.fromClientID, action);
+						System.out.println("Should send actions to game. (But to which)?");
+						}
+					}
 				}
 			
 			
