@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
-<svg id="svg2" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" height="244.55" width="169.01" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="-0.2 -236 169.07501 244.54905" xmlns:dc="http://purl.org/dc/elements/1.1/">
+<svg id="svg2" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" height="244.55" viewBox="-0.2 -236 169.07501 244.54905" width="169.01" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/">
  <metadata id="metadata2102">
   <rdf:RDF>
    <cc:Work rdf:about="">
@@ -11,13 +11,13 @@
  </metadata>
  <defs id="defs4">
   <g id="heart-4">
-   <path id="path63621" fill="#e6180a" d="m-7.67 3.93c0.01-4.71 5.91-8.14 7.64-11.87 1.75 3.72 7.66 7.12 7.7 11.83 0.01 2.22-1.71 4.03-3.82 4.03-2.12 0-3.85-1.79-3.85-4.01 0 2.23-1.71 4.03-3.82 4.03-2.12 0.01-3.84-1.79-3.85-4.01z"/>
+   <path id="path63621" d="m-7.67 3.93c0.01-4.71 5.91-8.14 7.64-11.87 1.75 3.72 7.66 7.12 7.7 11.83 0.01 2.22-1.71 4.03-3.82 4.03-2.12 0-3.85-1.79-3.85-4.01 0 2.23-1.71 4.03-3.82 4.03-2.12 0.01-3.84-1.79-3.85-4.01z" fill="#e6180a"/>
   </g>
   <g id="base-67">
-   <path id="path63600" d="m0 0c0 3.78 3.09 6.87 6.87 6.87h152.84c3.77 0 6.86-3.09 6.86-6.87v-228.4c0-3.78-3.09-6.87-6.86-6.87h-152.84c-3.78 0-6.87 3.09-6.87 6.87v228.4z" stroke="#000" stroke-width="2.5" fill="#fff"/>
+   <path id="path63600" stroke="#000" stroke-width="2.5" fill="#fff" d="m0 0c0 3.78 3.09 6.87 6.87 6.87h152.84c3.77 0 6.86-3.09 6.86-6.87v-228.4c0-3.78-3.09-6.87-6.86-6.87h-152.84c-3.78 0-6.87 3.09-6.87 6.87v228.4z"/>
   </g>
   <g id="n_8-1">
-   <text id="text63582" font-weight="bold" transform="scale(.56453 1.0574)" font-size="43px" font-family="Bitstream Vera Serif">8</text>
+   <text id="text63582" font-size="43px" font-weight="bold" font-family="Bitstream Vera Serif" transform="scale(.56453 1.0574)">8</text>
   </g>
  </defs>
  <g id="8_heart" transform="translate(-1172 -485.8)">
