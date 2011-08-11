@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import server.ConnectionToClient;
+import server.ConnectionToLocal;
 
 import action.Message;
 
@@ -35,7 +35,7 @@ public class Client
 		{
 		ConnectionToServerLocal serverConn=new ConnectionToServerLocal();
 		this.serverConn=serverConn;
-		ConnectionToClient connToClient=new ConnectionToClient();
+		ConnectionToLocal connToClient=new ConnectionToLocal();
 		connToClient.localClient=this;
 		serverConn.thread.connections.put(0,connToClient);
 		}

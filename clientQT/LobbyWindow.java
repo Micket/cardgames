@@ -14,6 +14,7 @@ import com.trolltech.qt.gui.QMenuBar;
 import com.trolltech.qt.gui.QPushButton;
 import com.trolltech.qt.gui.QTextEdit;
 import com.trolltech.qt.gui.QVBoxLayout;
+import com.trolltech.qt.gui.QHBoxLayout;
 import com.trolltech.qt.gui.QWidget;
 
 public class LobbyWindow extends QWidget implements ServerListener
@@ -59,11 +60,12 @@ public class LobbyWindow extends QWidget implements ServerListener
 		{
 		this.client=client;
 
-		QVBoxLayout layoutV=new QVBoxLayout();
-		setLayout(layoutV);
+		QVBoxLayout chatWindowLayout=new QVBoxLayout();
+		QHBoxLayout chatInputLayout=new QHBoxLayout();
+		setLayout(chatWindowLayout);
 		
 		//layoutV.setMenuBar()
-		
+
 		bNick=new QPushButton("Mahogny: ", this);
 		
 		chatHistory=new QTextEdit(this);
@@ -73,9 +75,10 @@ public class LobbyWindow extends QWidget implements ServerListener
 		tfEditLine=new QLineEdit(this);
 		tfEditLine.returnPressed.connect(this,"actionSendMessage()");
 
-		layoutV.addWidget(chatHistory);
-		layoutV.addWidget(bNick);
-		layoutV.addWidget(tfEditLine);
+		chatWindowLayout.addWidget(chatHistory);
+		chatWindowLayout.addLayout(chatInputLayout);
+		chatInputLayout.addWidget(bNick);
+		chatInputLayout.addWidget(tfEditLine);
 		
 		
 		setWindowTitle(tr("Lobby"));

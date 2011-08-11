@@ -19,7 +19,7 @@ public class ServerOpenPort
 			ServerSocket listener = new ServerSocket(port);
 			Socket newClientSocket = listener.accept();
 	
-			ConnectionToClient connClient=new ConnectionToClient();
+			ConnectionToRemote connClient=new ConnectionToRemote();
 			connClient.socket=newClientSocket;
 	
 			connClient.is=new ObjectInputStream(newClientSocket.getInputStream());
