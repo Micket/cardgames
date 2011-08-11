@@ -1,6 +1,8 @@
 package server;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -20,6 +22,7 @@ public class ServerOpenPort
 			ConnectionToClient connClient=new ConnectionToClient();
 			connClient.socket=newClientSocket;
 	
+			connClient.is=new ObjectInputStream(newClientSocket.getInputStream());
 			
 			//TODO
 			int id=(int)(Math.random()*10000); 

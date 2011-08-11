@@ -1,10 +1,12 @@
 package server;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.net.Socket;
 
 import action.Message;
 
-import client.Client;
+import clientQT.Client;
 
 
 /**
@@ -19,6 +21,7 @@ public class ConnectionToClient extends Thread
 	public Client localClient;
 	
 	public String nick;
+	public ObjectInputStream is;
 	
 	/**
 	 * Random unique ID obtained upon connection. It never changes during a session.
@@ -42,7 +45,25 @@ public class ConnectionToClient extends Thread
 		
 		for(;;)
 			{
-			System.out.println("Get message");
+			
+			try
+				{
+				Message msg=(Message)is.readObject();
+				System.out.println("Get message");
+				
+				
+				
+				}
+			catch (IOException e)
+				{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				}
+			catch (ClassNotFoundException e)
+				{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				}
 			
 			//TODO
 			}

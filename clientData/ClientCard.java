@@ -1,4 +1,4 @@
-package data;
+package clientData;
 
 /**
  * Card, as seen from the client

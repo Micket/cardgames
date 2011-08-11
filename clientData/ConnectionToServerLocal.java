@@ -1,13 +1,13 @@
-package client;
+package clientData;
 
 import action.Message;
 import server.ServerThread;
 
-public class ServerConnectionLocal extends ServerConnection
+public class ConnectionToServerLocal extends ConnectionToServer
 	{
 	public ServerThread thread=new ServerThread();
 	
-	public ServerConnectionLocal()
+	public ConnectionToServerLocal()
 		{
 		thread.start();
 		}

@@ -1,4 +1,4 @@
-package data;
+package serverData;
 
 /**
  * Card, as seen from the server

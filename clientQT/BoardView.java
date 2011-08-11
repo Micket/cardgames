@@ -1,16 +1,18 @@
-package client;
+package clientQT;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+
+import serverData.GameData;
+
+import clientData.ClientCard;
 
 import com.trolltech.qt.core.QPoint;
 import com.trolltech.qt.core.Qt;
 import com.trolltech.qt.core.Qt.MouseButton;
 import com.trolltech.qt.gui.*;
 
-import data.ClientCard;
-import data.GameData;
 
 public class BoardView extends QGraphicsView
 	{

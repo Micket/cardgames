@@ -1,8 +1,10 @@
-package data;
+package serverData;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+
+import clientData.PlayerData;
 
 import com.trolltech.qt.gui.QGraphicsItemInterface;
 import com.trolltech.qt.gui.QGraphicsPixmapItem;

@@ -2,16 +2,18 @@ package games;
 
 import java.lang.Math;
 import java.util.List;
+
+import serverData.CardStack;
+import serverData.PlayingCard;
+import serverData.ServerCard;
+
+import clientData.ClientCard;
 import action.UserAction;
 import action.UserActionClickedButton;
 
 
-import data.CardStack;
-import data.ClientCard;
-import data.PlayingCard;
 // Common things for playing cards here?
 //import data.PlayingCardUtil;
-import data.ServerCard;
 
 /**
  * Logic for the simple card game BlackJack with betting.

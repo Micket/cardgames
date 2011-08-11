@@ -1,8 +1,8 @@
-package client;
+package clientData;
 
 import action.Message;
 
-public abstract class ServerConnection
+public abstract class ConnectionToServer
 	{
 
 	public int thisClientID=0;

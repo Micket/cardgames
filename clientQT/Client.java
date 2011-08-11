@@ -1,4 +1,4 @@
-package client;
+package clientQT;
 
 import games.GameLogic;
 
@@ -11,11 +11,15 @@ import server.ConnectionToClient;
 
 import action.Message;
 
+import clientData.ConnectionToServer;
+import clientData.ConnectionToServerLocal;
+import clientData.ServerListener;
+
 import com.trolltech.qt.gui.QApplication;
 
 public class Client
 	{
-	public ServerConnection serverConn;
+	public ConnectionToServer serverConn;
 	public Map<Integer,GameLogic> sessions=new HashMap<Integer, GameLogic>();
 	public List<ServerListener> serverListeners=new LinkedList<ServerListener>();
 	
@@ -29,7 +33,7 @@ public class Client
 	
 	private void createServer()
 		{
-		ServerConnectionLocal serverConn=new ServerConnectionLocal();
+		ConnectionToServerLocal serverConn=new ConnectionToServerLocal();
 		this.serverConn=serverConn;
 		ConnectionToClient connToClient=new ConnectionToClient();
 		connToClient.localClient=this;

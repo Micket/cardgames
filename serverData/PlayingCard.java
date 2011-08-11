@@ -1,4 +1,6 @@
-package data;
+package serverData;
+
+import clientData.ClientCard;
 
 /**
  * A normal (French) playing card.

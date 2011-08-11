@@ -1,4 +1,4 @@
-package data;
+package serverData;
 
 /**
  * The server should be able to log game state. I believe it is possible to design the system

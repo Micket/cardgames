@@ -1,7 +1,8 @@
-package data;
+package serverData;
 
-import data.CardStack;
 import java.util.EnumSet;
+
+import serverData.CardStack;
 
 /**
  * Helpers for normal playing cards.

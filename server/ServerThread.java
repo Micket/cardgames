@@ -77,7 +77,7 @@ public class ServerThread extends Thread
 					if(action instanceof UserActionLobbyMessage)
 						{
 						UserActionLobbyMessage lm=(UserActionLobbyMessage)action;
-						lm.fromUser=action.fromClientID;
+						lm.fromClientID=action.fromClientID;
 						outMsg.add(lm);
 						broadcast(outMsg);
 						

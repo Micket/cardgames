@@ -1,6 +1,7 @@
-package client;
+package clientQT;
+import clientData.ClientCard;
+
 import com.trolltech.qt.gui.QGraphicsItemInterface;
-import data.ClientCard;
 
 
 public class AnimatedCard

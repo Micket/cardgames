@@ -1,9 +1,11 @@
-package client;
+package clientQT;
 
 
 import action.Message;
 import action.UserAction;
 import action.UserActionLobbyMessage;
+
+import clientData.ServerListener;
 
 import com.trolltech.qt.gui.QAction;
 import com.trolltech.qt.gui.QApplication;
