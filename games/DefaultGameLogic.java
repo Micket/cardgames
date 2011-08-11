@@ -4,8 +4,9 @@ import action.UserActionClickedButton;
 import action.UserActionClickedCard;
 
 /**
+ * Default values for some game logic methods.
  */
-public class DefaultGameLogic extends GameLogic
+abstract public class DefaultGameLogic extends GameLogic
 	{
 
     public boolean userActionClickedCard(int fromUser, UserActionClickedCard s)
@@ -19,6 +20,6 @@ public class DefaultGameLogic extends GameLogic
         return false;
         };
 
-    public String getName() { return "DefaultGameLogic"; }
-
+	public int getMaxPlayers() { return -1; } // -1 means no limit.
+	public int getMinPlayers() { return -1; } // -1 means no limit.
 	}

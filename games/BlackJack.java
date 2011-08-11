@@ -241,6 +241,11 @@ public class BlackJack extends DefaultGameLogic
 		{
 		return "BlackJack";
 		}
+	
+	public String getDescription()
+		{
+		return "BlackJack tournament edition. Bet money until only one remain.";
+		}
 
 	/////////////////////////////////////////////////
 	// 

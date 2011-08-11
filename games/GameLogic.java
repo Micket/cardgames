@@ -26,5 +26,9 @@ abstract public class GameLogic
 
 	abstract public boolean userActionClickedButton(int fromUser, UserActionClickedButton s);
 
+	// General metadata displayed to connected users.
 	abstract public String getName();
+	abstract public String getDescription();
+	abstract public int getMaxPlayers();
+	abstract public int getMinPlayers();
 	}
