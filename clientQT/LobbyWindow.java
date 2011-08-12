@@ -92,13 +92,6 @@ public class LobbyWindow extends QWidget implements ServerListener
 		gameList.setShowGrid(false);
 		
 		// TODO: Real user list
-		List<String> testuserentry = new ArrayList<String>();
-		for(String n:client.mapClientIDtoNick.values())
-			testuserentry.add(n);
-//		testuserentry.add(client.getNick());
-		testuserentry.add("Come at me!");
-		QTreeWidgetItem testUser = new QTreeWidgetItem(testuserentry);
-		userList.insertTopLevelItem(0, testUser);
 		userList.setHeader(null);
 		//userList.setRowCount(1);
 		//userList.setItem(0,1,newUserItem);
@@ -120,28 +113,27 @@ public class LobbyWindow extends QWidget implements ServerListener
 		userAndGameLayout.addWidget(userList);
 		userAndGameLayout.addWidget(gameList);
 		
-		
 		setWindowTitle("Lobby");
 
 		menuBar=new QMenuBar();
 		lobbyLayout.setMenuBar(menuBar);
 		
 		miExit = new QAction(tr("E&xit"), this);
-    //miExit.setShortcuts(QKeySequence.Quit);
-    miExit.setStatusTip(tr("Exit the application"));
-    miExit.triggered.connect(this,"actionExit()");
+		//miExit.setShortcuts(QKeySequence.Quit);
+		miExit.setStatusTip(tr("Exit the application"));
+		miExit.triggered.connect(this, "actionExit()");
 
 		miConnect = new QAction(tr("Connect"), this);
-    //miExit.setShortcuts(QKeySequence.Quit);
-    miConnect.setStatusTip(tr("Connect to server"));
-    miConnect.triggered.connect(this,"actionConnect()");
-		
-		
-		
+		//miExit.setShortcuts(QKeySequence.Quit);
+		miConnect.setStatusTip(tr("Connect to server"));
+		miConnect.triggered.connect(this, "actionConnect()");
+
+
+
 		QMenu fileMenu = menuBar.addMenu(tr("&File"));
-    fileMenu.addAction(miExit);
-    fileMenu.addAction(miConnect);
-    //helpMenu = menuBar()->addMenu(tr("&Help"));
+		fileMenu.addAction(miExit);
+		fileMenu.addAction(miConnect);
+		//helpMenu = menuBar()->addMenu(tr("&Help"));
 		/*
 		
 
@@ -253,12 +245,29 @@ public class LobbyWindow extends QWidget implements ServerListener
 			}
 			});
 		}
+	
+	public void setNickList()
+		{
+		userList.clear();
+		for(String n:client.mapClientIDtoNick.values())
+			{
+			List<String> usertexts = new ArrayList<String>(1); // Just nick (perhaps nick + comment?)
+			usertexts.add(n);
+			QTreeWidgetItem user = new QTreeWidgetItem(usertexts);
+			userList.insertTopLevelItem(0, user);
+			}
+		}
 
 
 	@Override
 	public void eventNewUserList()
 		{
 		System.out.println("list of nicks: "+client.mapClientIDtoNick);
+		QApplication.invokeLater(new Runnable() {
+			public void run() {
+				setNickList();
+			}
+		});
 
 		//Update our nick
 		final String ourNick=client.getNickFor(client.getClientID());
