@@ -116,23 +116,24 @@ public class ServerThread extends Thread
 		
 		}
 	
+	/**
+	 * Pass message on to all clients
+	 */
 	private void broadcastToClients(Message msg)
 		{
-
-		//Pass message on to all clients
-		
 		for(ConnectionToClient conn:connections.values())
 			conn.send(msg);
 		}
-	
+
+	/**
+	 * Send a new list of all users
+	 */
 	void broadcastUserlistToClients()
 		{
-		Message msg=new Message();
 		UserActionListOfUsers action=new UserActionListOfUsers();
 		for(Map.Entry<Integer,ConnectionToClient> c:connections.entrySet())
 			action.nickMap.put(c.getKey(), c.getValue().nick);
-		
-		broadcastToClients(msg);
+		broadcastToClients(new Message(action));
 		}
 	
 	

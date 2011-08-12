@@ -26,10 +26,7 @@ public class ServerOpenPort extends Thread
 			{
 			Socket newClientSocket = listener.accept();
 	
-			ConnectionToClientRemote connClient=new ConnectionToClientRemote(thread);
-			connClient.socket=newClientSocket;
-			connClient.is=new ObjectInputStream(newClientSocket.getInputStream());
-			connClient.os=new ObjectOutputStream(newClientSocket.getOutputStream());
+			ConnectionToClientRemote connClient=new ConnectionToClientRemote(thread, newClientSocket);
 			
 			synchronized (thread)
 				{
@@ -39,7 +36,6 @@ public class ServerOpenPort extends Thread
 				}
 			connClient.start();
 			
-			thread.broadcastUserlistToClients();
 			
 
 			}

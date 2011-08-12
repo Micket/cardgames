@@ -77,19 +77,35 @@ public class BlackJack extends DefaultGameLogic
 	public boolean userActionClickedButton(int fromUser, UserActionClickedButton action)
 		{
 		PlayerState p = players.get(fromUser);
-		if (action.buttonID == 0) // Another card.
-			{
-			return playerDraw(p);
-			}
-		else if (action.buttonID == 1) // Stay
-			{
-			p.done = true;
-			}
-		else if (action.buttonID == 2) // Bet 1
+		if (action.buttonID == 0) // Bet
 			{
 			return playerBetting(p, action.buttonValue);
 			}
-		else
+		if (action.buttonID == 1) // Hit
+			{
+			return playerDraw(p);
+			}
+		else if (action.buttonID == 2) // Stand
+			{
+			p.done = true;
+			}
+		/*else if (action.buttonID == 3) // Split
+			{
+			...
+			}*/
+		/*else if (action.buttonID == 4) // Double
+			{
+			...
+			}*/
+		/*else if (action.buttonID == 5) // Surrender
+			{
+			...
+			}*/
+		/*else if (action.buttonID == 6) // Insurance
+			{
+			...
+			}*/
+		else // split, double, 
 			{
 			return false;
 			}

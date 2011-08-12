@@ -35,6 +35,8 @@ public class Client
 	 */
 	public void gotMessageFromServer(Message msg)
 		{
+		System.out.println(msg);
+		
 		//Handle special messages
 		for(UserAction action:msg.actions)
 			if(action instanceof UserActionListOfUsers)
@@ -51,6 +53,8 @@ public class Client
 	 */
 	private void gotListOfUsers(UserActionListOfUsers action)
 		{
+		System.out.println("---------- userlist ------------");
+		
 		mapClientIDtoNick=action.nickMap;
 		for(ServerListener listener:serverListeners)
 			listener.eventNewUserList();

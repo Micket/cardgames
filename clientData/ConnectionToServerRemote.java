@@ -40,10 +40,10 @@ public class ConnectionToServerRemote extends Thread implements ConnectionToServ
 		for(int i=0;i<checkString.length;i++)
 			{
 			char c=is.readChar();
-			System.out.println(c);
 			if(c!=checkString[i])
 				throw new IOException("This is not a cardgame port");
 			}
+		System.out.println("This is a cardgame server!");
 		
 		//Get the version of the protocol
 		protocolVersionMajor=is.readInt();

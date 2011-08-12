@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.LinkedList;
 
 import action.Message;
 
@@ -15,16 +16,17 @@ import server.ConnectionToClient;
  */
 public class ConnectionToClientRemote extends ConnectionToClient
 	{
-	public Socket socket;
-	public String nick;
-	public ObjectInputStream is;
-	public ObjectOutputStream os;
 	public int clientID;
+
+	private ObjectInputStream is;
+	private ObjectOutputStream os;
 	private ServerThread thread;
 	
-	public ConnectionToClientRemote(ServerThread thread)
+	public ConnectionToClientRemote(ServerThread thread, Socket socket) throws IOException
 		{
 		this.thread=thread;
+		is=new ObjectInputStream(socket.getInputStream());
+		os=new ObjectOutputStream(socket.getOutputStream());
 		}
 	
 	/**
@@ -45,6 +47,46 @@ public class ConnectionToClientRemote extends ConnectionToClient
 			e.printStackTrace();
 			}
 		
+		}
+	
+	private LinkedList<Message> sendQueue=new LinkedList<Message>();
+	
+
+	public void addToSendQueue(Message msg)
+		{
+		synchronized (sendQueue)
+			{
+			sendQueue.addLast(msg);
+			msg.notifyAll();
+			}
+		}
+	
+	private class SendThread extends Thread
+		{
+		@Override
+		public void run()
+			{
+			for(;;)
+				{
+				try
+					{
+					synchronized (sendQueue)
+						{
+						if(sendQueue.isEmpty())
+							sendQueue.wait();
+						else
+							{
+							Message msg=sendQueue.getFirst();
+							os.writeObject(msg);
+							}
+						}
+					}
+				catch (Exception e)
+					{
+					e.printStackTrace();
+					}
+				}
+			}
 		}
 	
 	
@@ -68,6 +110,14 @@ public class ConnectionToClientRemote extends ConnectionToClient
 			if(!thread.getNickSet().contains(preferredNick))
 				nick=preferredNick;
 
+			//Now this connection is ready for normal communication. Allow sending
+			//SendThread sendThread=
+			SendThread sendThread=new SendThread();
+			sendThread.start();
+
+			//Update list of connections
+			thread.broadcastUserlistToClients();
+			
 			for(;;)
 				{
 

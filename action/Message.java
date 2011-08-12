@@ -12,6 +12,21 @@ public class Message implements Serializable
 	public Integer replyTo;
 	public List<UserAction> actions=new LinkedList<UserAction>();
 	
+
+	/**
+	 * Empty message
+	 */
+	public Message()
+		{
+		}
+	
+	/**
+	 * Message with one action added
+	 */
+	public Message(UserAction action)
+		{
+		actions.add(action);
+		}
 	
 	public void add(UserAction action)
 		{
@@ -19,5 +34,9 @@ public class Message implements Serializable
 		}
 	
 	
-	
+	@Override
+	public String toString()
+		{
+		return messageID+","+replyTo+","+actions.toString();
+		}
 	}
