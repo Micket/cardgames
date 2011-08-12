@@ -9,12 +9,15 @@ import clientData.ServerListener;
 
 import com.trolltech.qt.gui.QAction;
 import com.trolltech.qt.gui.QApplication;
+import com.trolltech.qt.gui.QDialog;
 import com.trolltech.qt.gui.QLineEdit;
 import com.trolltech.qt.gui.QMenuBar;
 import com.trolltech.qt.gui.QPushButton;
 import com.trolltech.qt.gui.QTextEdit;
 import com.trolltech.qt.gui.QVBoxLayout;
 import com.trolltech.qt.gui.QHBoxLayout;
+import com.trolltech.qt.gui.QInputDialog;
+import com.trolltech.qt.gui.QSizePolicy;
 import com.trolltech.qt.gui.QWidget;
 
 public class LobbyWindow extends QWidget implements ServerListener
@@ -30,6 +33,8 @@ public class LobbyWindow extends QWidget implements ServerListener
 	private QLineEdit tfEditLine;
 	
 	private QMenuBar menuBar;
+	
+	private String nick; // TODO: Get from server and so on.
 	
 	public void actionExit()
 		{
@@ -54,20 +59,33 @@ public class LobbyWindow extends QWidget implements ServerListener
 			}
 		}
 	
+	public void actionChangeNick()
+		{
+		String text = QInputDialog.getText(this, "New nick", "Nick:", QLineEdit.EchoMode.Normal, nick);
+		if (text != null)
+			{
+			// TODO: Instead of sending this, should send a request to change the nick to the server.
+			nick = text;
+			bNick.setText(nick+":");
+			}
+		}
+	
 	private Client client;
 	
 	public LobbyWindow(Client client)
 		{
 		this.client=client;
 
+		QHBoxLayout lobbyLayout=new QHBoxLayout();
+		QVBoxLayout userAndGameLayout=new QVBoxLayout();
 		QVBoxLayout chatWindowLayout=new QVBoxLayout();
 		QHBoxLayout chatInputLayout=new QHBoxLayout();
-		setLayout(chatWindowLayout);
-		
-		//layoutV.setMenuBar()
 
-		bNick=new QPushButton("Mahogny: ", this);
-		
+		//layoutV.setMenuBar()
+		nick = "Mahogny";
+		bNick=new QPushButton(nick+":", this);
+		bNick.clicked.connect(this, "actionChangeNick()");
+		bNick.setSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum);
 		chatHistory=new QTextEdit(this);
 		chatHistory.setReadOnly(true);
 		
@@ -75,6 +93,9 @@ public class LobbyWindow extends QWidget implements ServerListener
 		tfEditLine=new QLineEdit(this);
 		tfEditLine.returnPressed.connect(this,"actionSendMessage()");
 
+		setLayout(lobbyLayout);
+		lobbyLayout.addLayout(chatWindowLayout);
+		lobbyLayout.addLayout(userAndGameLayout);
 		chatWindowLayout.addWidget(chatHistory);
 		chatWindowLayout.addLayout(chatInputLayout);
 		chatInputLayout.addWidget(bNick);
