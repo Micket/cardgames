@@ -19,6 +19,7 @@ import clientData.ServerListener;
 import com.trolltech.qt.core.Qt;
 import com.trolltech.qt.gui.QAction;
 import com.trolltech.qt.gui.QApplication;
+import com.trolltech.qt.gui.QCloseEvent;
 import com.trolltech.qt.gui.QLineEdit;
 import com.trolltech.qt.gui.QMenu;
 import com.trolltech.qt.gui.QMenuBar;
@@ -225,6 +226,11 @@ public class LobbyWindow extends QWidget implements ServerListener
 			e.printStackTrace();
 			}
 		
+		}
+	
+	public void closeEvent(QCloseEvent e)
+		{
+		actionExit();
 		}
 	
 	

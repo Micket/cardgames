@@ -31,28 +31,6 @@ public class ConnectionToClientLocal extends ConnectionToClient
 	@Override
 	public void run()
 		{
-	/*	
-		for(;;)
-			{
-			
-			try
-				{
-				Message msg=(Message)is.readObject();
-				System.out.println("Get message");
-				}
-			catch (IOException e)
-				{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				}
-			catch (ClassNotFoundException e)
-				{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				}
-			//TODO
-			}
-		*/
 		}
 	
 	}
