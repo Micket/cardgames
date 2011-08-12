@@ -127,6 +127,13 @@ public class Client
 		{
 		return serverConn.getCliendID();
 		}
+
+	public String getNick()
+		{
+		//TODO if there is no connection, show the preferred one?
+		String nick=getNickFor(getClientID());
+		return nick;
+		}
 	
 	
 	

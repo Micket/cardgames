@@ -11,6 +11,7 @@ import action.Message;
 import action.UserAction;
 import action.UserActionListOfUsers;
 import action.UserActionLobbyMessage;
+import action.UserActionSetNick;
 import action.UserActionStartGame;
 import games.GameLogic;
 
@@ -100,11 +101,23 @@ public class ServerThread extends Thread
 							System.out.println("Couldn't find game.");
 							}
 						}
+					else if (action instanceof UserActionSetNick)
+						{
+						UserActionSetNick a=(UserActionSetNick)action;
+						if(!getNickSet().contains(a.nick))
+							{
+							connections.get(a.fromClientID).nick=a.nick;
+							broadcastUserlistToClients();
+							}
+						}
 					else // Pass on message to game.
 						{
+						//TODO
+						/*
 						GameLogic game = null;
 						game.userAction(action.fromClientID, action);
 						System.out.println("Should send actions to game. (But to which)?");
+						*/
 						}
 					}
 				}

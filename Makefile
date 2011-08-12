@@ -8,3 +8,5 @@ gitaddall:
 	git add \
 	*/*.java 
 
+loc:
+	wc -l */*.java

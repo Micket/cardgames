@@ -12,6 +12,7 @@ import server.ServerThread;
 import action.Message;
 import action.UserAction;
 import action.UserActionLobbyMessage;
+import action.UserActionSetNick;
 
 import clientData.ServerListener;
 
@@ -52,7 +53,7 @@ public class LobbyWindow extends QWidget implements ServerListener
 	
 	private QMenuBar menuBar;
 	
-	private String nick; // TODO: Get from server and so on.
+//	private String nick; // TODO: Get from server and so on.
 	
 	
 	private Client client;
@@ -70,8 +71,7 @@ public class LobbyWindow extends QWidget implements ServerListener
 		userAndGameLayout.setOrientation(Qt.Orientation.Vertical);
 
 
-		nick = "Mahogny";
-		bNick=new QPushButton(nick+":", this);
+		bNick=new QPushButton(client.getNick()+":", this);
 		bNick.clicked.connect(this, "actionChangeNick()");
 		bNick.setSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum);
 		chatHistory=new QTextEdit(this);
@@ -92,7 +92,9 @@ public class LobbyWindow extends QWidget implements ServerListener
 		
 		// TODO: Real user list
 		List<String> testuserentry = new ArrayList<String>();
-		testuserentry.add(nick);
+		for(String n:client.mapClientIDtoNick.values())
+			testuserentry.add(n);
+//		testuserentry.add(client.getNick());
 		testuserentry.add("Come at me!");
 		QTreeWidgetItem testUser = new QTreeWidgetItem(testuserentry);
 		userList.insertTopLevelItem(0, testUser);
@@ -186,12 +188,16 @@ public class LobbyWindow extends QWidget implements ServerListener
 	
 	public void actionChangeNick()
 		{
-		String text = QInputDialog.getText(this, "New nick", "Nick:", QLineEdit.EchoMode.Normal, nick);
+		String text = QInputDialog.getText(this, "New nick", "Nick:", QLineEdit.EchoMode.Normal, client.getNick());
 		if (text != null)
 			{
+			Message msg=new Message(new UserActionSetNick(text));
+			client.serverConn.send(msg);
+			/*
+			
 			// TODO: Instead of sending this, should send a request to change the nick to the server.
 			nick = text;
-			bNick.setText(nick+":");
+			bNick.setText(nick+":");*/
 			}
 		}
 	
