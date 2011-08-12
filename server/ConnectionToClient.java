@@ -10,6 +10,7 @@ import action.Message;
 abstract public class ConnectionToClient extends Thread
 	{
 
+	public String nick=""+Math.random();
 	abstract public void send(Message msg);
 	
 	@Override

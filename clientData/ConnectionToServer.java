@@ -1,12 +1,13 @@
 package clientData;
 
+
 import action.Message;
 
-public abstract class ConnectionToServer
+public interface ConnectionToServer
 	{
 
-	public int thisClientID=0;
-	public abstract void send(Message msg);
+	public void send(Message msg);
+	public int getCliendID();
+//	public Map<Integer, String> getMapClientIDtoNick();
 
-	
 	}

@@ -39,7 +39,7 @@ public class GameData
 
 		imageMap.put("poker back","pokerbackside.svg");
 
-		System.out.println(imageMap);
+		//System.out.println(imageMap);
 		}
 	
 

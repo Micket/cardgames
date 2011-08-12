@@ -8,10 +8,7 @@ import serverData.CardStack;
 import serverData.PlayingCard;
 import serverData.ServerCard;
 
-import server.ConnectionToClient;
-
 import clientData.ClientCard;
-import action.UserAction;
 import action.UserActionClickedButton;
 
 

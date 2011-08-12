@@ -6,29 +6,41 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class ServerOpenPort
+public class ServerOpenPort extends Thread
 	{
+	ServerThread thread;
+	ServerSocket listener;
 	
-	
-	
-	public ServerOpenPort(ServerThread thread, int port)
+	public ServerOpenPort(ServerThread thread, int port) throws IOException
 		{
+		this.thread=thread;
+		listener = new ServerSocket(port);
+		}
 	
+	
+	@Override
+	public void run()
+		{
+		for(;;)
 		try
 			{
-			ServerSocket listener = new ServerSocket(port);
 			Socket newClientSocket = listener.accept();
 	
-			ConnectionToRemote connClient=new ConnectionToRemote();
+			ConnectionToClientRemote connClient=new ConnectionToClientRemote(thread);
 			connClient.socket=newClientSocket;
-	
 			connClient.is=new ObjectInputStream(newClientSocket.getInputStream());
+			connClient.os=new ObjectOutputStream(newClientSocket.getOutputStream());
 			
-			//TODO
-			int id=(int)(Math.random()*10000); 
-			thread.connections.put(id, connClient);
-			
+			synchronized (thread)
+				{
+				connClient.clientID=thread.getFreeClientID();
+				connClient.nick=thread.getFreeNick();
+				thread.connections.put(connClient.clientID, connClient);
+				}
 			connClient.start();
+			
+			thread.broadcastUserlistToClients();
+			
 
 			}
 		catch (IOException ioe) 

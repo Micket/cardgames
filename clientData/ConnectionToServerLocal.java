@@ -1,11 +1,15 @@
 package clientData;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import action.Message;
 import server.ServerThread;
 
-public class ConnectionToServerLocal extends ConnectionToServer
+public class ConnectionToServerLocal implements ConnectionToServer
 	{
 	public ServerThread thread=new ServerThread();
+	public int thisClientID=0;
 	
 	public ConnectionToServerLocal()
 		{
@@ -14,6 +18,14 @@ public class ConnectionToServerLocal extends ConnectionToServer
 	
 	public void send(Message msg)
 		{
-		thread.localSend(thisClientID, msg);
+		thread.addIncomingMessage(thisClientID, msg);
 		}
+
+	@Override
+	public int getCliendID()
+		{
+		return thisClientID;
+		}
+	
+
 	}

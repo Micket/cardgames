@@ -1,9 +1,5 @@
 package server;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.net.Socket;
-
 import action.Message;
 
 import clientQT.Client;
@@ -11,30 +7,31 @@ import clientQT.Client;
 import server.ConnectionToClient;
 
 /**
- * Player - Either a remote connection or an AI
+ * Connection to a local player.
  * @author mahogny
+ * @author Micket
  */
-public class ConnectionToRemote extends ConnectionToClient
+public class ConnectionToClientLocal extends ConnectionToClient
 	{
-	public Socket socket;
+	public Client localClient;
 	public String nick;
-	public ObjectInputStream is;
+	//public ObjectInputStream is;
 	
 	/**
 	 * Random unique ID obtained upon connection. It never changes during a session.
 	 */
 	//public int connectionID;
 	
+	
 	public void send(Message msg)
 		{
-		//TODO
+		localClient.gotMessageFromServer(msg);
 		}
-	
 	
 	@Override
 	public void run()
 		{
-		
+	/*	
 		for(;;)
 			{
 			
@@ -42,9 +39,6 @@ public class ConnectionToRemote extends ConnectionToClient
 				{
 				Message msg=(Message)is.readObject();
 				System.out.println("Get message");
-				
-				
-				
 				}
 			catch (IOException e)
 				{
@@ -56,13 +50,9 @@ public class ConnectionToRemote extends ConnectionToClient
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				}
-			
 			//TODO
 			}
-		
-		//socket.
-		
-		
+		*/
 		}
 	
 	}

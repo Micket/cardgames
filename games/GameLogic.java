@@ -6,8 +6,6 @@ import action.UserActionClickedCard;
 
 import games.BlackJack;
 
-import server.ConnectionToClient;
-
 /**
  * www.pagat.com for many many games.
  * @author mahogny

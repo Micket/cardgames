@@ -2,6 +2,8 @@ package action;
 
 public class UserActionClickedButton extends UserAction
 	{
-    public int buttonID;
-    public int buttonValue;
+	private static final long serialVersionUID = 1L;
+	
+	public int buttonID;
+	public int buttonValue;
 	}

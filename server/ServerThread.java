@@ -1,5 +1,6 @@
 package server;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -8,12 +9,17 @@ import java.util.Set;
 
 import action.Message;
 import action.UserAction;
+import action.UserActionListOfUsers;
 import action.UserActionLobbyMessage;
 import action.UserActionStartGame;
 import games.GameLogic;
 
 public class ServerThread extends Thread
 	{
+	public static final int defaultServerPort=4445;
+	
+	
+	
 	
 	//from ID
 	public Map<Integer,ConnectionToClient> connections=new HashMap<Integer, ConnectionToClient>();
@@ -25,21 +31,16 @@ public class ServerThread extends Thread
 	
 	private Set<ServerOpenPort> openPorts=new HashSet<ServerOpenPort>();
 	
-	
-	public void localSend(int fromClientID, Message msg)
+	/**
+	 * Add an incoming message to the message queue
+	 */
+	public void addIncomingMessage(int fromClientID, Message msg)
 		{
 		synchronized (messages)
 			{
 			for(UserAction action:msg.actions)
 				action.fromClientID=fromClientID;
-			/*
-			public int fromClientID; //Filled in by server
 
-			//Problem: not all actions might be from the same client
-
-			
-			msg.fromClientID=fromClientID;
-			*/
 			messages.addLast(msg);
 			messages.notifyAll();
 			}
@@ -79,7 +80,7 @@ public class ServerThread extends Thread
 						UserActionLobbyMessage lm=(UserActionLobbyMessage)action;
 						lm.fromClientID=action.fromClientID;
 						outMsg.add(lm);
-						broadcast(outMsg);
+						broadcastToClients(outMsg);
 						
 						System.out.println("got message "+lm.message);
 						
@@ -115,7 +116,7 @@ public class ServerThread extends Thread
 		
 		}
 	
-	private void broadcast(Message msg)
+	private void broadcastToClients(Message msg)
 		{
 
 		//Pass message on to all clients
@@ -124,10 +125,57 @@ public class ServerThread extends Thread
 			conn.send(msg);
 		}
 	
-	
-	public void openPort()
+	void broadcastUserlistToClients()
 		{
-		openPorts.add(new ServerOpenPort(this, 4444));
+		Message msg=new Message();
+		UserActionListOfUsers action=new UserActionListOfUsers();
+		for(Map.Entry<Integer,ConnectionToClient> c:connections.entrySet())
+			action.nickMap.put(c.getKey(), c.getValue().nick);
+		
+		broadcastToClients(msg);
 		}
 	
+	
+	public boolean openPort(int port)
+		{
+		try
+			{
+			ServerOpenPort p=new ServerOpenPort(this, port);
+			openPorts.add(p);
+			p.start();
+			return true;
+			}
+		catch (IOException e)
+			{
+			e.printStackTrace();
+			return false;
+			}
+		}
+	
+	public int getFreeClientID()
+		{
+		int id=1;
+		while(connections.containsKey(id))
+			id++;
+		return id;
+		}
+
+	
+	public Set<String> getNickSet()
+		{
+		Set<String> nicks=new HashSet<String>();
+		for(ConnectionToClient c:connections.values())
+			nicks.add(c.nick);
+		return nicks;
+		}
+	
+	public String getFreeNick()
+		{
+		Set<String> nicks=getNickSet();
+		int id=1;
+		while(nicks.contains("Guest"+id))
+			id++;
+		return "Guest"+id;
+		}
+
 	}

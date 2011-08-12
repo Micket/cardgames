@@ -1,7 +1,8 @@
 package clientQT;
 
+import java.util.Map;
+
 import action.Message;
-import action.UserAction;
 
 import clientData.ServerListener;
 
@@ -46,6 +47,11 @@ public class BoardWindow extends QMainWindow implements ServerListener
 	public void eventServerMessage(Message msg)
 		{
 		
+		}
+
+	@Override
+	public void eventNewUserList()
+		{
 		}
 
 

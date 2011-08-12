@@ -1,7 +1,9 @@
 package action;
 
-public class UserActionDragCard
+public class UserActionDragCard extends UserAction
 	{
+	private static final long serialVersionUID = 1L;
+	
 	public Integer fromPlayer; //if null then common area
 	public String fromStackName; //which stack
 	public int fromPos; //which card in stack
