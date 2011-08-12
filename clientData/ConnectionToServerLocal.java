@@ -1,8 +1,5 @@
 package clientData;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import action.Message;
 import server.ServerThread;
 

@@ -1,7 +1,5 @@
 package clientQT;
 
-import java.util.Map;
-
 import action.Message;
 
 import clientData.ServerListener;
@@ -22,7 +20,7 @@ public class BoardWindow extends QMainWindow implements ServerListener
 		//setFixedSize(250, 250);
 
 
-		BoardView view=new BoardView(this);
+		BoardView view=new BoardView(client, this);
 		
 		/*
 		QPushButton quit = new QPushButton(tr("Quit"), this);

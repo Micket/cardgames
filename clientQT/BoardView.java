@@ -6,6 +6,8 @@ import java.util.List;
 
 import serverData.GameData;
 
+import action.Message;
+import action.UserActionClickedButton;
 import clientData.ClientCard;
 
 import com.trolltech.qt.core.QPoint;
@@ -22,10 +24,12 @@ public class BoardView extends QGraphicsView
 
 	public GameData gameData=new GameData(); 
 
-	public BoardView(QWidget parent)
+	private Client client;
+	
+	public BoardView(Client client, QWidget parent)
 		{
 		super(parent);
-
+		this.client=client;
 		
 		
 		for(int i=1;i<=10;i++)
@@ -52,14 +56,30 @@ public class BoardView extends QGraphicsView
 
 		setMouseTracking(true);
 		setEnabled(true);
-		
-		
-		
-		
+		}
+
+	
+	private AnimatedCard getCardUnderPress(QMouseEvent event)
+		{
+		QGraphicsItemInterface picked=scene().itemAt(event.posF());
+		if(picked!=null)
+			for(AnimatedCard card:cards)
+				if(card.imageFront==picked || card.imageBack==picked)
+					return card;
+		return null;
 		}
 	
 	protected void mouseDoubleClickEvent(QMouseEvent event)
 		{
+		if(event.button()==MouseButton.LeftButton)
+			{
+			AnimatedCard card=getCardUnderPress(event);
+			if(card!=null)
+				{
+				Message msg=new Message(new UserActionClickedButton());
+				client.serverConn.send(msg);
+				}
+			}
 		System.out.println("here!");
 		}
 	
@@ -97,43 +117,14 @@ public class BoardView extends QGraphicsView
 		{
 		if(event.button()==MouseButton.LeftButton)
 			{
-			
-			
-			QGraphicsItemInterface picked=scene().itemAt(event.posF());
-			if(picked!=null)
+			AnimatedCard card=getCardUnderPress(event);
+			if(card!=null)
 				{
-				for(AnimatedCard card:cards)
-					{
-					if(card.imageFront==picked || card.imageBack==picked)
-					//if(card.image.contains(pos))
-						{
-//						System.out.println("drag");
-						card.isBeingDragged=true;
-						//TODO sometimes there are cards on top to move as well
-						
-						}
-					}
+				card.isBeingDragged=true;
+				//TODO sometimes there are cards on top to move as well
 				}
-			
-			
-
-			/*
-			System.out.println("hello");
-			
-			for(Card card:cards)
-				{
-				QPointF pos=event.posF();
-				
-				if(card.image.contains(pos))
-					{
-//					System.out.println("drag");
-					card.isBeingDragged=true;
-					//TODO sometimes there are cards on top to move as well
-					
-					}
-				}*/
 			}
-			
+		System.out.println("here!");
 		}
 	
 	@Override
