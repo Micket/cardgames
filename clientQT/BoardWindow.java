@@ -31,7 +31,7 @@ public class BoardWindow extends QMainWindow implements ServerListener
 		quit.clicked.connect(QApplication.instance(), "quit()");
 		*/
 		
-		view.setGeometry(10, 10, 200, 200);
+		view.setGeometry(10, 10, 400, 400);
 		setFixedSize(400, 400);
 		//setCentralWidget(view);
 		

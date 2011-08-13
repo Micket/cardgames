@@ -6,7 +6,7 @@ import java.util.Map;
 import serverData.CardStack;
 
 
-public class PlayerData
+public class ClientPlayerData
 	{
 	public Map<String, CardStack<ClientCard>> stackMap=new HashMap<String, CardStack<ClientCard>>();
 	

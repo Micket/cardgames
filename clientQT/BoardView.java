@@ -4,11 +4,11 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
-import serverData.GameData;
 
 import action.Message;
 import action.UserActionClickedButton;
 import clientData.ClientCard;
+import clientData.ClientGameData;
 
 import com.trolltech.qt.core.QPoint;
 import com.trolltech.qt.core.Qt;
@@ -22,33 +22,16 @@ public class BoardView extends QGraphicsView
 	
 	public double zoom=0.3;
 
-	public GameData gameData=new GameData(); 
-
+	public ClientGameData gameData=new ClientGameData(); 
+	private BoardLayout layout=new BoardLayout();
+	
 	private Client client;
 	
 	public BoardView(Client client, QWidget parent)
 		{
 		super(parent);
-		this.client=client;
-		
-		
-		for(int i=1;i<=10;i++)
-			{
-			ClientCard cdata=new ClientCard();
-			cdata.front="poker Spades "+i;
-			cdata.back="poker back";
-			
-			AnimatedCard c=new AnimatedCard(cdata);
-			//c.loadImageFront("cards/spades"+i+".png");
-			//c.loadImage("cards/spades"+i+".svg");
-			c.posX=40+i*20;
-			c.posY=40+i*20;
-			c.posZ=10-i;
-			cards.add(c);
-			}
-	
-		
-		redoLayout();
+		this.client=client;	
+
 		
     setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff);
@@ -56,6 +39,11 @@ public class BoardView extends QGraphicsView
 
 		setMouseTracking(true);
 		setEnabled(true);
+
+		//Place cards on board
+		layout.doLayout(this, client);
+		redoLayout();
+
 		}
 
 	
