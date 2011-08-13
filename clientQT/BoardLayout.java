@@ -1,8 +1,6 @@
 package clientQT;
 
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 import serverData.CardStack;
@@ -39,7 +37,7 @@ public class BoardLayout
 				}
 			first=false;
 			
-			System.out.println("---------here!");
+			System.out.println("---------layout1!");
 			}
 
 		

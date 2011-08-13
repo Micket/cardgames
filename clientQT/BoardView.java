@@ -7,7 +7,6 @@ import java.util.List;
 
 import action.Message;
 import action.UserActionClickedButton;
-import clientData.ClientCard;
 import clientData.ClientGameData;
 
 import com.trolltech.qt.core.QPoint;
@@ -31,11 +30,9 @@ public class BoardView extends QGraphicsView
 		{
 		super(parent);
 		this.client=client;	
-
 		
     setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff);
-		setFixedSize(sizeHint());
 
 		setMouseTracking(true);
 		setEnabled(true);
@@ -68,7 +65,6 @@ public class BoardView extends QGraphicsView
 				client.serverConn.send(msg);
 				}
 			}
-		System.out.println("here!");
 		}
 	
 	
@@ -81,14 +77,8 @@ public class BoardView extends QGraphicsView
 		for(AnimatedCard card:cards)
 			if(card.isBeingDragged) //A separate list of dragged cards would make this faster and scale better!
 				{
-
-				//card.posX+=1;
-
 				card.posX+=dx.x()/zoom;
 				card.posY+=dx.y()/zoom;
-
-//				card.posX+=dx.x()*zoom;
-	//			card.posY+=dx.y()*zoom;
 				needRedraw=true;
 				}
 		
@@ -133,11 +123,9 @@ public class BoardView extends QGraphicsView
 	
 	public void redoLayout()
 		{
-
 		QGraphicsScene s=new QGraphicsScene();
 		setScene(s);
-		//s.setSceneRect(0, 0, width(), height());
-		s.setSceneRect(0, 0, 400,400);
+		s.setSceneRect(0, 0, width()+4000,height()+4000); //this is, at best, a hack
 		
 		//Sort the cards in Z to ensure the right drawing order
 		Collections.sort(cards, new Comparator<AnimatedCard>()
@@ -188,75 +176,13 @@ public class BoardView extends QGraphicsView
 			//card.image.setPos(card.posX*zoom, card.posY*zoom);
 			cardImage.setTransform(QTransform.fromScale(zoom, zoom), true);
 			cardImage.setTransform(QTransform.fromTranslate(card.posX, card.posY), true);
-
-			
-			//TODO some way of finding the object?
 			
 			s.addItem(cardImage);
 
 			curz++;
 			}
 		
-		//repaint();
-//		show();
 		}
 	
-	
-	//protected void drawForeground(QPainter painter, QRectF rect) 
-	//protected void paintEvent(QPaintEvent event) //{};
-	//protected void drawBackground(QPainter painter, QRectF rect)
-	/*
-		{
-		System.out.println("here");
-		//painter.save();
-		//painter.resetTransform();
-		
-		painter.setBrush(new QBrush(QColor.blue));
-		painter.drawLine(0, 0, 30,30);
-		
-//		QGraphicsScene s=new QGraphicsScene();
-
-
-		
-		//Sort the cards in Z to ensure the right drawing order
-		Collections.sort(cards, new Comparator<Card>()
-			{
-			public int compare(Card o1, Card o2)
-				{
-				//If cards are being dragged then they should be above all other cards.
-				//But dragged cards in turn have an order
-				int o1level=o1.posZ;
-				int o2level=o2.posZ;
-				if(o1.isBeingDragged)
-					o1level+=1000;
-				if(o2.isBeingDragged)
-					o2level+=1000;				
-				
-				if(o1level<o2level)
-					return -1;
-				else if(o1level>o2level)
-					return 1;
-				else
-					return 0;
-				}
-			});
-		
-		//Render cards, in order
-		for(Card card:cards)
-			{
-			//card.image.resetTransform();
-			//card.image.setTransform(QTransform.fromScale(zoom, zoom), false);
-//			card.image.setPos(card.posX*zoom, card.posY*zoom);
-
-			
-		//	card.image.paint(painter, null, this);
-		
-			//TODO some way of finding the object?
-			
-			//s.addItem(card.image);
-
-			}
-		
-		}*/
 	
 	}
