@@ -10,11 +10,15 @@ import action.UserActionClickedButton;
 import clientData.ClientGameData;
 
 import com.trolltech.qt.core.QPoint;
+import com.trolltech.qt.core.QTimer;
 import com.trolltech.qt.core.Qt;
 import com.trolltech.qt.core.Qt.MouseButton;
 import com.trolltech.qt.gui.*;
 
-
+/**
+ * One ongoing game playfield
+ * 
+ */
 public class BoardView extends QGraphicsView
 	{
 	public List<AnimatedCard> cards=new LinkedList<AnimatedCard>();
@@ -36,6 +40,10 @@ public class BoardView extends QGraphicsView
 
 		setMouseTracking(true);
 		setEnabled(true);
+		
+		QTimer timer = new QTimer(this);
+		timer.timeout.connect(this,"eventTimer()");
+    timer.start(1000/50);
 
 		//Place cards on board
 		layout.doLayout(this, client);
@@ -43,6 +51,15 @@ public class BoardView extends QGraphicsView
 
 		}
 
+	
+	public void eventTimer()
+		{
+		if(layout.doLayout(this, client))
+			{
+			redoLayout();
+			//System.out.println("timer req update");
+			}
+		}
 	
 	private AnimatedCard getCardUnderPress(QMouseEvent event)
 		{

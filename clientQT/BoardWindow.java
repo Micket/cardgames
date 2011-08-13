@@ -6,7 +6,10 @@ import clientData.ServerListener;
 
 import com.trolltech.qt.gui.*;
 
-
+/**
+ * Window showing one ongoing game
+ * 
+ */
 public class BoardWindow extends QWidget implements ServerListener
 	{
 	
