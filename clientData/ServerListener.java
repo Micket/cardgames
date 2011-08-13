@@ -8,4 +8,6 @@ public interface ServerListener
 	public void eventServerMessage(Message msg);
 	
 	public void eventNewUserList();
+	
+	public void eventNewGameList();
 	}

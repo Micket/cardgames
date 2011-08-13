@@ -15,11 +15,13 @@ import server.ServerThread;
 import action.Message;
 import action.UserAction;
 import action.UserActionListOfUsers;
+import action.UserActionListOfGames;
 
 import clientData.ConnectionToServer;
 import clientData.ConnectionToServerLocal;
 import clientData.ConnectionToServerRemote;
 import clientData.ServerListener;
+import clientData.GameMetaData;
 
 import com.trolltech.qt.gui.QApplication;
 
@@ -29,6 +31,7 @@ public class Client
 	public Map<Integer,GameLogic> sessions=new HashMap<Integer, GameLogic>();
 	public List<ServerListener> serverListeners=new LinkedList<ServerListener>();
 	public Map<Integer, String> mapClientIDtoNick=new HashMap<Integer, String>();
+	public Map<Integer, GameMetaData>  serverGameList=new HashMap<Integer, GameMetaData>();
 
 	/**
 	 * Add a message from the server to the incoming queue
@@ -39,8 +42,12 @@ public class Client
 		
 		//Handle special messages
 		for(UserAction action:msg.actions)
+			{
 			if(action instanceof UserActionListOfUsers)
 				gotListOfUsers((UserActionListOfUsers)action);
+			else if(action instanceof UserActionListOfGames)
+				gotListOfGames((UserActionListOfGames)action);
+			}
 		
 		//Send raw copies of messages
 		for(ServerListener listener:serverListeners)
@@ -59,8 +66,19 @@ public class Client
 		for(ServerListener listener:serverListeners)
 			listener.eventNewUserList();
 		}
-	
 
+	/**
+	 * Handle incoming list of games
+	 */
+	private void gotListOfGames(UserActionListOfGames action)
+		{
+		System.out.println("---------- gamelist ------------");
+		
+		serverGameList=action.gameList;
+		for(ServerListener listener:serverListeners)
+			listener.eventNewGameList();
+		}
+	
 	/**
 	 * Get the nick for a given client ID
 	 */

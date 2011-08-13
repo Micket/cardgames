@@ -50,5 +50,9 @@ public class BoardWindow extends QWidget implements ServerListener
 		{
 		}
 
+	@Override
+	public void eventNewGameList()
+		{
+		}
 
 	}

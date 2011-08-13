@@ -10,10 +10,13 @@ import java.util.Set;
 import action.Message;
 import action.UserAction;
 import action.UserActionListOfUsers;
+import action.UserActionListOfGames;
 import action.UserActionLobbyMessage;
 import action.UserActionSetNick;
 import action.UserActionStartGame;
 import games.GameLogic;
+
+import clientData.GameMetaData;
 
 public class ServerThread extends Thread
 	{
@@ -24,12 +27,9 @@ public class ServerThread extends Thread
 	
 	//from ID
 	public Map<Integer,ConnectionToClient> connections=new HashMap<Integer, ConnectionToClient>();
-	
-	
-	public Set<GameLogic> sessions=new HashSet<GameLogic>();
+	public Map<Integer,GameLogic> sessions=new HashMap<Integer,GameLogic>();
 	private LinkedList<Message> messages=new LinkedList<Message>();
 
-	
 	private Set<ServerOpenPort> openPorts=new HashSet<ServerOpenPort>();
 	
 	/**
@@ -93,7 +93,7 @@ public class ServerThread extends Thread
 						GameLogic game = GameLogic.GameFactory(((UserActionStartGame)action).gameID);
 						if (game != null)
 							{
-							sessions.add(game);
+							sessions.put(0, game); // TODO: Generate game ID's.
 							System.out.println("Starting game.");
 							}
 						else
@@ -108,6 +108,7 @@ public class ServerThread extends Thread
 							{
 							connections.get(a.fromClientID).nick=a.nick;
 							broadcastUserlistToClients();
+							broadcastGamelistToClients(); // TODO: Remove this. Just for debugging.
 							}
 						}
 					else // Pass on message to game.
@@ -139,7 +140,7 @@ public class ServerThread extends Thread
 		}
 
 	/**
-	 * Send a new list of all users
+	 * Send a new user list of all users
 	 */
 	void broadcastUserlistToClients()
 		{
@@ -148,7 +149,25 @@ public class ServerThread extends Thread
 			action.nickMap.put(c.getKey(), c.getValue().nick);
 		broadcastToClients(new Message(action));
 		}
-	
+
+	/**
+	 * Send a new game list of all users
+	 */
+	void broadcastGamelistToClients()
+		{
+		System.out.println("Sending game list");
+		UserActionListOfGames action=new UserActionListOfGames();
+		for(Map.Entry<Integer,GameLogic> s:sessions.entrySet())
+			{
+			GameMetaData gmd = new GameMetaData();
+			gmd.name = s.getValue().getName();
+			gmd.maxusers = s.getValue().getMaxPlayers();
+			gmd.minusers = s.getValue().getMinPlayers();
+			//gmd.joinedUsers = s.getValue().getPlayers();
+			action.gameList.put(s.getKey(), null);
+			}
+		broadcastToClients(new Message(action));
+		}
 	
 	public boolean openPort(int port)
 		{

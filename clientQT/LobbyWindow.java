@@ -15,6 +15,7 @@ import action.UserActionLobbyMessage;
 import action.UserActionSetNick;
 
 import clientData.ServerListener;
+import clientData.GameMetaData;
 
 import com.trolltech.qt.core.Qt;
 import com.trolltech.qt.gui.QAction;
@@ -145,7 +146,7 @@ public class LobbyWindow extends QWidget implements ServerListener
 	
 	public void actionExit()
 		{
-		System.out.println("hello");
+		System.out.println("Exiting...");
 		System.exit(0);
 		//TODO handle connections
 		}
@@ -249,14 +250,17 @@ public class LobbyWindow extends QWidget implements ServerListener
 		{
 		gameList.clear();
 		// TODO: Real game list
-		//client.sessions;
-		gameList.setRowCount(1);
-		QTableWidgetItem newGameItem=new QTableWidgetItem("BlackJack");
-		QTableWidgetItem newGameUsersItem=new QTableWidgetItem("1/6");
-		gameList.setItem(0,0,newGameUsersItem);
-		gameList.setItem(0,1,newGameItem);
+		gameList.setRowCount(client.serverGameList.size());
+		for(GameMetaData g:client.serverGameList.values())
+			{
+			// TODO: More metadata to present.
+			QTableWidgetItem newGameItem=new QTableWidgetItem(g.name);
+			QTableWidgetItem newGameUsersItem=new QTableWidgetItem(""+g.joinedUsers.size());
+			gameList.setItem(0,0,newGameUsersItem);
+			gameList.setItem(0,1,newGameItem);
+			}
 		}
-
+	
 	@Override
 	public void eventNewUserList()
 		{
@@ -276,7 +280,18 @@ public class LobbyWindow extends QWidget implements ServerListener
 		});
 
 		}
-	
+
+	@Override
+	public void eventNewGameList()
+		{
+		System.out.println("New game list...");
+		QApplication.invokeLater(new Runnable() {
+			public void run() {
+				setGameList();
+			}
+		});
+		}
+
 	
 	//TODO on exit, stop the thread and properly shut down the game
 	}
