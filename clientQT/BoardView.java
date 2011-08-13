@@ -10,14 +10,20 @@ import action.UserActionClickedButton;
 import clientData.ClientGameData;
 
 import com.trolltech.qt.core.QPoint;
+import com.trolltech.qt.core.QRectF;
+import com.trolltech.qt.core.QSize;
 import com.trolltech.qt.core.QTimer;
 import com.trolltech.qt.core.Qt;
 import com.trolltech.qt.core.Qt.MouseButton;
 import com.trolltech.qt.gui.*;
+import com.trolltech.qt.svg.QGraphicsSvgItem;
 
 /**
  * One ongoing game playfield
  * 
+ * 
+ * see http://doc.trolltech.com/latest/qsvgwidget.html
+ * for a maybe better base class
  */
 public class BoardView extends QGraphicsView
 	{
@@ -66,7 +72,7 @@ public class BoardView extends QGraphicsView
 		QGraphicsItemInterface picked=scene().itemAt(event.posF());
 		if(picked!=null)
 			for(AnimatedCard card:cards)
-				if(card.imageFront==picked || card.imageBack==picked)
+				if(card.imageFront==picked || card.imageBack==picked) //TODO. bug. what if a card exists multiple times?
 					return card;
 		return null;
 		}
@@ -138,6 +144,39 @@ public class BoardView extends QGraphicsView
 		}
 
 	
+	public QGraphicsItemInterface rasterizeSvg(QGraphicsSvgItem g)
+		{
+		QRectF bb=g.boundingRect();
+
+		double scale=zoom*0.5;
+
+		int w=(int)(bb.width()*scale)+1;
+		int h=(int)(bb.height()*scale)+1;
+		System.out.println("wh "+w+"  "+h);
+		QPixmap pm=new QPixmap(new QSize(w,h));
+		pm.fill(QColor.red);
+//		pm.fill(QColor.transparent);
+		QPainter painter=new QPainter(pm);
+
+//		painter.setBrush(QColor.black);
+//		pm.fill(QColor.red);
+
+		System.out.println(painter.combinedMatrix());
+		
+//		painter.scale(scale,scale);
+		painter.scale(0.1,0.1);
+//		QRectF b2=g.renderer().viewBoxF();
+		QRectF b2=g.boundingRect();
+		System.out.println(b2);
+//		g.translate(-b2.left(), -b2.top());
+//		g.renderer().render(painter);
+		g.paint(painter, new QStyleOptionGraphicsItem(), null);  
+		painter.end();
+
+		return new QGraphicsPixmapItem(pm);
+		}
+	
+	
 	public void redoLayout()
 		{
 		QGraphicsScene s=new QGraphicsScene();
@@ -187,6 +226,8 @@ public class BoardView extends QGraphicsView
 				}
 				
 			
+			//QGraphicsItemInterface item=
+			//cardImage=rasterizeSvg(new QGraphicsSvgItem("cards/spades9.svg"));
 			
 			cardImage.setZValue(curz);
 			cardImage.resetTransform();

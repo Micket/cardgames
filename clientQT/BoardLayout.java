@@ -38,7 +38,7 @@ public class BoardLayout
 			CardStack<ClientCard> onestack=new CardStack<ClientCard>();
 			pdata.stackMap.put("os", onestack);
 
-			for(int i=1;i<=10;i++)
+			for(int i=1;i<=1;i++)
 				{
 				ClientCard cdata=new ClientCard();
 				cdata.front="poker Spades "+i;
@@ -72,8 +72,10 @@ public class BoardLayout
 					ClientCard cc=onestack.getCard(i);
 					AnimatedCard ac=mapCC_AC.get(cc);
 
-					double shouldBeX=40+i*20;
-					double shouldBeY=40+i*20;
+					double shouldBeX=i*20;
+					double shouldBeY=i*20;
+//					double shouldBeX=40+i*20;
+	//				double shouldBeY=40+i*20;
 
 					//If a card does not have an animated card, then just create it in the right location
 					if(ac==null)
