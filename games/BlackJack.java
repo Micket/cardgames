@@ -1,19 +1,16 @@
 package games;
 
-import java.lang.Math;
 import java.util.Map;
 import java.util.HashMap;
 
 import serverData.CardStack;
 import serverData.PlayingCard;
 import serverData.ServerCard;
+//import serverData.PlayingCardUtil; // Common things for playing cards here?
 
 import clientData.ClientCard;
+
 import action.UserActionClickedButton;
-
-
-// Common things for playing cards here?
-//import data.PlayingCardUtil;
 
 /**
  * Logic for the simple card game BlackJack with betting.
@@ -57,7 +54,7 @@ public class BlackJack extends DefaultGameLogic
 	
 	public boolean userJoined(int userID)
 		{
-		if (players.size() >= this.getMaxPlayers())
+		if (!super.userJoined(userID))
 			return false;
 		players.put(userID, new PlayerState());
 		return true;
@@ -65,8 +62,9 @@ public class BlackJack extends DefaultGameLogic
 	
 	public boolean userLeft(int userID)
 		{
-		if (!players.containsKey(userID))
+		if (!super.userLeft(userID))
 			return false;
+
 		if (gameOn)
 			players.get(userID).quit = true;
 		else
