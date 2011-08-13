@@ -20,6 +20,22 @@ abstract public class DefaultGameLogic extends GameLogic
         return false;
         };
 
+	public boolean userJoined(int userID)
+		{
+		if (getMaxPlayers() > 0 && players.size() >= getMaxPlayers())
+			return false;
+		players.add(userID);
+		return true;
+		}
+
+	public boolean userLeft(int userID)
+		{
+		if (!players.contains(userID))
+			return false;
+		players.remove(userID);
+		return true;
+		}
+
 	public int getMaxPlayers() { return -1; } // -1 means no limit.
 	public int getMinPlayers() { return -1; } // -1 means no limit.
 	}
