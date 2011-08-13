@@ -253,9 +253,9 @@ public class LobbyWindow extends QWidget implements ServerListener
 		gameList.setRowCount(client.serverGameList.size());
 		for(GameMetaData g:client.serverGameList.values())
 			{
-			// TODO: More metadata to present.
+			// TODO: Store metadata in some way to allow sorting and such.. (perhaps use a tree view)
 			QTableWidgetItem newGameItem=new QTableWidgetItem(g.name);
-			QTableWidgetItem newGameUsersItem=new QTableWidgetItem(""+g.joinedUsers.size());
+			QTableWidgetItem newGameUsersItem=new QTableWidgetItem( g.maxusers < 0 ? ""+g.joinedUsers.size() : ""+g.joinedUsers.size()+"/"+g.maxusers);
 			gameList.setItem(0,0,newGameUsersItem);
 			gameList.setItem(0,1,newGameItem);
 			}

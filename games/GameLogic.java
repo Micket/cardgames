@@ -1,6 +1,7 @@
 package games;
 
 import java.util.Set;
+import java.util.HashSet;
 
 import action.UserAction;
 import action.UserActionClickedButton;
@@ -14,7 +15,7 @@ import action.UserActionClickedCard;
 abstract public class GameLogic
 	{
 	public boolean gameOn = false;
-	public Set<Integer> players;
+	public Set<Integer> players = new HashSet<Integer>();
 	
 	abstract void startGame();
 	

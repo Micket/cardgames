@@ -93,6 +93,7 @@ public class ServerThread extends Thread
 						GameLogic game = GameLogic.GameFactory(((UserActionStartGame)action).gameID);
 						if (game != null)
 							{
+							game.userJoined(action.fromClientID);
 							sessions.put(0, game); // TODO: Generate game ID's.
 							System.out.println("Starting game.");
 							}
@@ -163,7 +164,7 @@ public class ServerThread extends Thread
 			gmd.name = s.getValue().getName();
 			gmd.maxusers = s.getValue().getMaxPlayers();
 			gmd.minusers = s.getValue().getMinPlayers();
-			//gmd.joinedUsers = s.getValue().getPlayers();
+			gmd.joinedUsers = s.getValue().players;
 			action.gameList.put(s.getKey(), null);
 			}
 		broadcastToClients(new Message(action));
