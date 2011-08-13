@@ -4,60 +4,62 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
-import serverData.GameData;
 
 import action.Message;
 import action.UserActionClickedButton;
-import clientData.ClientCard;
+import clientData.ClientGameData;
 
 import com.trolltech.qt.core.QPoint;
+import com.trolltech.qt.core.QTimer;
 import com.trolltech.qt.core.Qt;
 import com.trolltech.qt.core.Qt.MouseButton;
 import com.trolltech.qt.gui.*;
 
-
+/**
+ * One ongoing game playfield
+ * 
+ */
 public class BoardView extends QGraphicsView
 	{
 	public List<AnimatedCard> cards=new LinkedList<AnimatedCard>();
 	
 	public double zoom=0.3;
 
-	public GameData gameData=new GameData(); 
-
+	public ClientGameData gameData=new ClientGameData(); 
+	private BoardLayout layout=new BoardLayout();
+	
 	private Client client;
 	
 	public BoardView(Client client, QWidget parent)
 		{
 		super(parent);
-		this.client=client;
-		
-		
-		for(int i=1;i<=10;i++)
-			{
-			ClientCard cdata=new ClientCard();
-			cdata.front="poker Spades "+i;
-			cdata.back="poker back";
-			
-			AnimatedCard c=new AnimatedCard(cdata);
-			//c.loadImageFront("cards/spades"+i+".png");
-			//c.loadImage("cards/spades"+i+".svg");
-			c.posX=40+i*20;
-			c.posY=40+i*20;
-			c.posZ=10-i;
-			cards.add(c);
-			}
-	
-		
-		redoLayout();
+		this.client=client;	
 		
     setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff);
-		setFixedSize(sizeHint());
 
 		setMouseTracking(true);
 		setEnabled(true);
+		
+		QTimer timer = new QTimer(this);
+		timer.timeout.connect(this,"eventTimer()");
+    timer.start(1000/50);
+
+		//Place cards on board
+		layout.doLayout(this, client);
+		redoLayout();
+
 		}
 
+	
+	public void eventTimer()
+		{
+		if(layout.doLayout(this, client))
+			{
+			redoLayout();
+			//System.out.println("timer req update");
+			}
+		}
 	
 	private AnimatedCard getCardUnderPress(QMouseEvent event)
 		{
@@ -80,7 +82,6 @@ public class BoardView extends QGraphicsView
 				client.serverConn.send(msg);
 				}
 			}
-		System.out.println("here!");
 		}
 	
 	
@@ -93,14 +94,8 @@ public class BoardView extends QGraphicsView
 		for(AnimatedCard card:cards)
 			if(card.isBeingDragged) //A separate list of dragged cards would make this faster and scale better!
 				{
-
-				//card.posX+=1;
-
 				card.posX+=dx.x()/zoom;
 				card.posY+=dx.y()/zoom;
-
-//				card.posX+=dx.x()*zoom;
-	//			card.posY+=dx.y()*zoom;
 				needRedraw=true;
 				}
 		
@@ -145,11 +140,9 @@ public class BoardView extends QGraphicsView
 	
 	public void redoLayout()
 		{
-
 		QGraphicsScene s=new QGraphicsScene();
 		setScene(s);
-		//s.setSceneRect(0, 0, width(), height());
-		s.setSceneRect(0, 0, 400,400);
+		s.setSceneRect(0, 0, width()+4000,height()+4000); //this is, at best, a hack
 		
 		//Sort the cards in Z to ensure the right drawing order
 		Collections.sort(cards, new Comparator<AnimatedCard>()
@@ -200,75 +193,13 @@ public class BoardView extends QGraphicsView
 			//card.image.setPos(card.posX*zoom, card.posY*zoom);
 			cardImage.setTransform(QTransform.fromScale(zoom, zoom), true);
 			cardImage.setTransform(QTransform.fromTranslate(card.posX, card.posY), true);
-
-			
-			//TODO some way of finding the object?
 			
 			s.addItem(cardImage);
 
 			curz++;
 			}
 		
-		//repaint();
-//		show();
 		}
 	
-	
-	//protected void drawForeground(QPainter painter, QRectF rect) 
-	//protected void paintEvent(QPaintEvent event) //{};
-	//protected void drawBackground(QPainter painter, QRectF rect)
-	/*
-		{
-		System.out.println("here");
-		//painter.save();
-		//painter.resetTransform();
-		
-		painter.setBrush(new QBrush(QColor.blue));
-		painter.drawLine(0, 0, 30,30);
-		
-//		QGraphicsScene s=new QGraphicsScene();
-
-
-		
-		//Sort the cards in Z to ensure the right drawing order
-		Collections.sort(cards, new Comparator<Card>()
-			{
-			public int compare(Card o1, Card o2)
-				{
-				//If cards are being dragged then they should be above all other cards.
-				//But dragged cards in turn have an order
-				int o1level=o1.posZ;
-				int o2level=o2.posZ;
-				if(o1.isBeingDragged)
-					o1level+=1000;
-				if(o2.isBeingDragged)
-					o2level+=1000;				
-				
-				if(o1level<o2level)
-					return -1;
-				else if(o1level>o2level)
-					return 1;
-				else
-					return 0;
-				}
-			});
-		
-		//Render cards, in order
-		for(Card card:cards)
-			{
-			//card.image.resetTransform();
-			//card.image.setTransform(QTransform.fromScale(zoom, zoom), false);
-//			card.image.setPos(card.posX*zoom, card.posY*zoom);
-
-			
-		//	card.image.paint(painter, null, this);
-		
-			//TODO some way of finding the object?
-			
-			//s.addItem(card.image);
-
-			}
-		
-		}*/
 	
 	}

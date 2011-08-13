@@ -1,17 +1,16 @@
-package serverData;
+package clientData;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import clientData.PlayerData;
 
 import com.trolltech.qt.gui.QGraphicsItemInterface;
 import com.trolltech.qt.gui.QGraphicsPixmapItem;
 import com.trolltech.qt.gui.QPixmap;
 import com.trolltech.qt.svg.QGraphicsSvgItem;
 
-public class GameData
+public class ClientGameData
 	{
 
 	/**
@@ -21,12 +20,14 @@ public class GameData
 	
 	
 	
-	//Separate?: common heaps, heaps for each player
-	public Map<String, PlayerData> playerMap=new HashMap<String, PlayerData>();
+	/**
+	 * Heaps for each player. Common heap is -1. This ID is reserved, all user IDs are positive
+	 */
+	public Map<Integer, ClientPlayerData> playerMap=new HashMap<Integer, ClientPlayerData>();
 
 	
 	
-	public GameData()
+	public ClientGameData()
 		{
 		//This is the default deck of cards. It can be extended with custom cards
 		for(int i=1;i<=12;i++)
