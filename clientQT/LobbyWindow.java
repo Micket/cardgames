@@ -45,7 +45,7 @@ public class LobbyWindow extends QWidget implements ServerListener
 
 	private QPushButton bNick;
 	
-	private QTreeWidget userList;
+	private QTreeWidget nickList;
 	private QTableWidget gameList;
 	
 	private QTextEdit chatHistory;
@@ -68,8 +68,8 @@ public class LobbyWindow extends QWidget implements ServerListener
 		//lobbyLayout.setOrientation(Qt.Orientation.Horizontal);
 		QVBoxLayout chatWindowLayout=new QVBoxLayout();
 		QHBoxLayout chatInputLayout=new QHBoxLayout();
-		QSplitter userAndGameLayout = new QSplitter();
-		userAndGameLayout.setOrientation(Qt.Orientation.Vertical);
+		QSplitter nickAndGameLayout = new QSplitter();
+		nickAndGameLayout.setOrientation(Qt.Orientation.Vertical);
 
 
 		bNick=new QPushButton(client.getNick()+":", this);
@@ -81,37 +81,24 @@ public class LobbyWindow extends QWidget implements ServerListener
 		tfEditLine=new QLineEdit(this);
 		tfEditLine.returnPressed.connect(this,"actionSendMessage()");
 
-		userList=new QTreeWidget();
+		nickList=new QTreeWidget();
+		nickList.header().close();
 		
-		//userList.setColumnCount(2);
-		//userList.setColumnWidth(0,30);
-
 		gameList=new QTableWidget();
 		gameList.setColumnCount(2);
 		gameList.setColumnWidth(0,30);
 		gameList.setShowGrid(false);
 		
-		// TODO: Real user list
-		userList.setHeader(null);
-		//userList.setRowCount(1);
-		//userList.setItem(0,1,newUserItem);
-		// TODO: Real game list
-		QTableWidgetItem newGameItem=new QTableWidgetItem("BlackJack");
-		QTableWidgetItem newGameUsersItem=new QTableWidgetItem("1/6");
-		gameList.setRowCount(1);
-		gameList.setItem(0,0,newGameUsersItem);
-		gameList.setItem(0,1,newGameItem);
-
 		// Lobby layout
 		setLayout(lobbyLayout);
 		lobbyLayout.addLayout(chatWindowLayout);
-		lobbyLayout.addWidget(userAndGameLayout);
+		lobbyLayout.addWidget(nickAndGameLayout);
 		chatWindowLayout.addWidget(chatHistory);
 		chatWindowLayout.addLayout(chatInputLayout);
 		chatInputLayout.addWidget(bNick);
 		chatInputLayout.addWidget(tfEditLine);
-		userAndGameLayout.addWidget(userList);
-		userAndGameLayout.addWidget(gameList);
+		nickAndGameLayout.addWidget(nickList);
+		nickAndGameLayout.addWidget(gameList);
 		
 		setWindowTitle("Lobby");
 
@@ -248,16 +235,27 @@ public class LobbyWindow extends QWidget implements ServerListener
 	
 	public void setNickList()
 		{
-		userList.clear();
+		nickList.clear();
 		for(String n:client.mapClientIDtoNick.values())
 			{
 			List<String> usertexts = new ArrayList<String>(1); // Just nick (perhaps nick + comment?)
 			usertexts.add(n);
 			QTreeWidgetItem user = new QTreeWidgetItem(usertexts);
-			userList.insertTopLevelItem(0, user);
+			nickList.insertTopLevelItem(0, user);
 			}
 		}
 
+	public void setGameList()
+		{
+		gameList.clear();
+		// TODO: Real game list
+		//client.sessions;
+		gameList.setRowCount(1);
+		QTableWidgetItem newGameItem=new QTableWidgetItem("BlackJack");
+		QTableWidgetItem newGameUsersItem=new QTableWidgetItem("1/6");
+		gameList.setItem(0,0,newGameUsersItem);
+		gameList.setItem(0,1,newGameItem);
+		}
 
 	@Override
 	public void eventNewUserList()
