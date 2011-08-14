@@ -18,6 +18,7 @@ import com.trolltech.qt.core.Qt;
 import com.trolltech.qt.core.Qt.MouseButton;
 import com.trolltech.qt.gui.*;
 import com.trolltech.qt.svg.QGraphicsSvgItem;
+import com.trolltech.qt.svg.QSvgRenderer;
 
 /**
  * One ongoing game playfield
@@ -29,6 +30,7 @@ import com.trolltech.qt.svg.QGraphicsSvgItem;
 public class BoardView extends QGraphicsView
 	{
 	public List<AnimatedCard> cards=new LinkedList<AnimatedCard>();
+	public List<QPoint> emptyPosList=new LinkedList<QPoint>();
 	
 	public double zoom=0.3;
 
@@ -187,6 +189,7 @@ public class BoardView extends QGraphicsView
 	
 	//private QImage bg;
 	private QPixmap bg;
+	private QSvgRenderer emptyPic;
 	
 	public void redoLayout()
 		{
@@ -204,7 +207,7 @@ public class BoardView extends QGraphicsView
 			for(int ay=0;ay<4;ay++)
 				{
 				QGraphicsPixmapItem g=new QGraphicsPixmapItem(bg);
-				g.setZValue(-1);
+				g.setZValue(-1000);
 				g.resetTransform();
 				g.setTransform(QTransform.fromScale(zoom, zoom), true);
 				g.translate(bg.width()*ax, bg.height()*ay);
@@ -217,6 +220,20 @@ public class BoardView extends QGraphicsView
  //   QBrush bgbrush = new QBrush(bg);
 //    setBackgroundBrush(bgbrush);
 
+		
+		//Draw all empty positions
+		if(emptyPic==null)
+			emptyPic=new QSvgRenderer("cards/empty.svg");
+		for(QPoint p:emptyPosList)
+			{
+			QGraphicsSvgItem item=new QGraphicsSvgItem();
+			item.setSharedRenderer(emptyPic);
+			item.setZValue(-900);
+			item.resetTransform();
+			item.setTransform(QTransform.fromScale(zoom, zoom), true);
+			item.setTransform(QTransform.fromTranslate(p.x(), p.y()), true);
+			s.addItem(item);
+			}
 		
 		//Sort the cards in Z to ensure the right drawing order
 		Collections.sort(cards, new Comparator<AnimatedCard>()

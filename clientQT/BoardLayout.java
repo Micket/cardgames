@@ -3,6 +3,8 @@ package clientQT;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.trolltech.qt.core.QPoint;
+
 import serverData.CardStack;
 
 import clientData.Client;
@@ -63,11 +65,17 @@ public class BoardLayout
 			for(AnimatedCard ac:view.cards)
 				mapCC_AC.put(ac.cardData, ac);
 			
+			view.emptyPosList.clear();
+			
 			//For each stack
 			for(String stackName:pdata.stackMap.keySet())
 				{
 				CardStack<ClientCard> onestack=pdata.stackMap.get(stackName);
 				
+				//Place position beneath
+				view.emptyPosList.add(new QPoint(0,0));
+				
+				//Place cards
 				for(int i=0;i<onestack.size();i++)
 					{
 					ClientCard cc=onestack.getCard(i);
