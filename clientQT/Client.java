@@ -23,7 +23,7 @@ import clientData.ConnectionToServer;
 import clientData.ConnectionToServerLocal;
 import clientData.ConnectionToServerRemote;
 import clientData.ServerListener;
-import clientData.GameMetaData;
+import clientData.GameSession;
 
 import com.trolltech.qt.gui.QApplication;
 
@@ -33,7 +33,7 @@ public class Client
 	public Map<Integer,GameLogic> sessions=new HashMap<Integer, GameLogic>();
 	public List<ServerListener> serverListeners=new LinkedList<ServerListener>();
 	public Map<Integer, String> mapClientIDtoNick=new HashMap<Integer, String>();
-	public Map<Integer, GameMetaData>  serverGameList=new HashMap<Integer, GameMetaData>();
+	public Map<Integer, GameSession>  serverGameList=new HashMap<Integer, GameSession>();
 	public Map<Class<? extends GameLogic>, GameType> availableGames=new HashMap<Class<? extends GameLogic>, GameType>();
 
 	/**
