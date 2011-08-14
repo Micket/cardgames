@@ -6,12 +6,11 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
-import java.util.List;
-
 import action.Message;
 import action.UserAction;
+import action.UserActionListOfGameTypes;
 import action.UserActionListOfUsers;
-import action.UserActionListOfGames;
+import action.UserActionListOfGameSessions;
 import action.UserActionListOfAvailableGames;
 import action.UserActionLobbyMessage;
 import action.UserActionSetNick;
@@ -26,7 +25,7 @@ public class ServerThread extends Thread
 	public static final int defaultServerPort=4445;
 	
 	
-	private List<GameType> availableGames = GameLogic.AvailableGames();
+	private Map<Class<? extends GameLogic>, GameType> availableGames = GameLogic.availableGames();
 	
 	//from ID
 	public Map<Integer,ConnectionToClient> connections=new HashMap<Integer, ConnectionToClient>();
@@ -112,7 +111,7 @@ public class ServerThread extends Thread
 							{
 							connections.get(a.fromClientID).nick=a.nick;
 							broadcastUserlistToClients();
-							broadcastGamelistToClients(); // TODO: Remove this. Just for debugging.
+//							broadcastGamelistToClients(); // TODO: Remove this. Just for debugging.
 							}
 						}
 					else // Pass on message to game.
@@ -142,7 +141,7 @@ public class ServerThread extends Thread
 	/**
 	 * Send a new user list of all users
 	 */
-	void broadcastUserlistToClients()
+	public void broadcastUserlistToClients()
 		{
 		UserActionListOfUsers action=new UserActionListOfUsers();
 		for(Map.Entry<Integer,ConnectionToClient> c:connections.entrySet())
@@ -150,33 +149,56 @@ public class ServerThread extends Thread
 		broadcastToClients(new Message(action));
 		}
 
+	
 	/**
-	 * Send a new game list of all users
+	 * Get the type of a game, given ID
 	 */
-	void broadcastGamelistToClients()
+	public Class<? extends GameLogic> getGameType(int sessionID)
+		{
+		return sessions.get(sessionID).getClass();
+		}
+	
+	
+	/**
+	 * Create message: list of all game types
+	 */
+	public Message createMessageGameTypesToClients()
+		{
+		System.out.println("Sending game type list");
+		UserActionListOfGameTypes action=new UserActionListOfGameTypes();
+		action.availableGames=new HashMap<Class<? extends GameLogic>, GameType>(availableGames);
+		return new Message(action);
+		}
+	
+	
+	/**
+	 * Create message: list of all game sessions
+	 */
+	public Message createMessageGameSessionsToClients()
 		{
 		System.out.println("Sending game list");
-		UserActionListOfGames action=new UserActionListOfGames();
+		UserActionListOfGameSessions action=new UserActionListOfGameSessions();
 		for(Map.Entry<Integer,GameLogic> s:sessions.entrySet())
 			{
 			GameMetaData gmd = new GameMetaData();
-			gmd.name = s.getValue().getName();
-			gmd.maxusers = s.getValue().getMaxPlayers();
-			gmd.minusers = s.getValue().getMinPlayers();
+			gmd.maxusers=s.getValue().getMaxPlayers();
+			gmd.minusers=s.getValue().getMinPlayers();
+			gmd.type=s.getValue().getClass();
 			gmd.joinedUsers = s.getValue().players;
 			action.gameList.put(s.getKey(), gmd);
 			}
-		broadcastToClients(new Message(action));
+		return new Message(action);
 		}
+
 	
 	/**
 	 * Send a list of available games.
 	 */
-	void sendGamelistToClients(int userID)
+	public void sendGamelistToClients(int userID)
 		{
 		System.out.println("Sending game list");
 		UserActionListOfAvailableGames action=new UserActionListOfAvailableGames();
-		action.gameList = availableGames;
+		action.gameList = new LinkedList<GameType>(availableGames.values());
 		broadcastToClients(new Message(action));
 		}
 	

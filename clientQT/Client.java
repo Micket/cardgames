@@ -1,6 +1,7 @@
 package clientQT;
 
 import games.GameLogic;
+import games.GameType;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -14,8 +15,9 @@ import server.ServerThread;
 
 import action.Message;
 import action.UserAction;
+import action.UserActionListOfGameSessions;
+import action.UserActionListOfGameTypes;
 import action.UserActionListOfUsers;
-import action.UserActionListOfGames;
 
 import clientData.ConnectionToServer;
 import clientData.ConnectionToServerLocal;
@@ -32,6 +34,7 @@ public class Client
 	public List<ServerListener> serverListeners=new LinkedList<ServerListener>();
 	public Map<Integer, String> mapClientIDtoNick=new HashMap<Integer, String>();
 	public Map<Integer, GameMetaData>  serverGameList=new HashMap<Integer, GameMetaData>();
+	public Map<Class<? extends GameLogic>, GameType> availableGames=new HashMap<Class<? extends GameLogic>, GameType>();
 
 	/**
 	 * Add a message from the server to the incoming queue
@@ -45,14 +48,28 @@ public class Client
 			{
 			if(action instanceof UserActionListOfUsers)
 				gotListOfUsers((UserActionListOfUsers)action);
-			else if(action instanceof UserActionListOfGames)
-				gotListOfGames((UserActionListOfGames)action);
+			else if(action instanceof UserActionListOfGameTypes)
+				gotListOfGameTypes((UserActionListOfGameTypes)action);
+			else if(action instanceof UserActionListOfGameSessions)
+				gotListOfGames((UserActionListOfGameSessions)action);
 			}
 		
 		//Send raw copies of messages
 		for(ServerListener listener:serverListeners)
 			listener.eventServerMessage(msg);
 		
+		}
+
+	/**
+	 * Handle incoming list of game types
+	 */
+	private void gotListOfGameTypes(UserActionListOfGameTypes action)
+		{
+		System.out.println("------------ game type list----------");
+		availableGames=action.availableGames;
+		System.out.println(availableGames);
+		for(ServerListener listener:serverListeners)
+			listener.eventNewGameList();
 		}
 
 	/**
@@ -70,7 +87,7 @@ public class Client
 	/**
 	 * Handle incoming list of games
 	 */
-	private void gotListOfGames(UserActionListOfGames action)
+	private void gotListOfGames(UserActionListOfGameSessions action)
 		{
 		System.out.println("---------- gamelist ------------");
 		

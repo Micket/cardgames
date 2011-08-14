@@ -1,11 +1,10 @@
 package games;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.HashSet;
-import java.util.List;
-import java.util.ArrayList;
-
 import util.ClassHandling;
 
 import action.UserAction;
@@ -42,16 +41,17 @@ abstract public class GameLogic
 	//abstract public boolean joinAI(); // False if full, or if AI can't join?
 
 	// General metadata displayed to connected users.
-	abstract public String getName();
-	abstract public String getDescription();
+//	abstract public String getName();
+//	abstract public String getDescription();
 	abstract public int getMaxPlayers();
 	abstract public int getMinPlayers();
 	
 	@SuppressWarnings("unchecked")
-	public static List<GameType> AvailableGames()
+	public static Map<Class<? extends GameLogic>, GameType> availableGames()
 		{
-		List<GameType> games = new ArrayList<GameType>();
-
+//		List<GameType> games = new ArrayList<GameType>();
+		Map<Class<? extends GameLogic>, GameType> games=new HashMap<Class<? extends GameLogic>, GameType>();
+		
 		try
 			{
 			for(Class<?> cl:ClassHandling.getClasses("games"))
@@ -61,7 +61,7 @@ abstract public class GameLogic
 					{
 					System.out.println("Adding game: "+cl);
 					GameType gt=new GameType(plugin, (Class<? extends GameLogic>)cl);
-					games.add(gt);
+					games.put((Class<? extends GameLogic>)cl,gt);
 					}
 				}
 			}

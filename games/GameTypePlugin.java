@@ -15,6 +15,7 @@ import java.lang.annotation.RetentionPolicy;
 public @interface GameTypePlugin 
 	{
 	public String name();
+	public String category();
 	public String description();
 	public int maxplayers();
 	public int minplayers();

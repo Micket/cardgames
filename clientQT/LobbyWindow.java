@@ -1,5 +1,7 @@
 package clientQT;
 
+import games.GameType;
+
 import java.util.Map;
 import java.util.HashMap;
 import java.io.IOException;
@@ -246,17 +248,20 @@ public class LobbyWindow extends QWidget implements ServerListener
 		{
 		gameList.clear();
 		gameList.setRowCount(client.serverGameList.size());
+		System.out.println("----: "+client.serverGameList);
 		for(GameMetaData g:client.serverGameList.values())
 			{
+			GameType gt=client.availableGames.get(g.type);
+			
 			// TODO: Store metadata in some way to allow sorting and such.. (perhaps use a tree view)
-			QTableWidgetItem newGameItem=new QTableWidgetItem(g.name);
+			QTableWidgetItem newGameItem=new QTableWidgetItem(gt.name);
 			QTableWidgetItem newGameUsersItem=new QTableWidgetItem( g.maxusers < 0 ? ""+g.joinedUsers.size() : ""+g.joinedUsers.size()+"/"+g.maxusers);
 			gameList.setItem(0,0,newGameUsersItem);
 			gameList.setItem(0,1,newGameItem);
 
 			// Maybe something like this?
 			List<String> temptext = new ArrayList<String>(1);
-			temptext.add(g.name);
+			temptext.add(gt.name);
 			QTreeWidgetItem temp=new QTreeWidgetItem(temptext);
 			for(Integer u:g.joinedUsers)
 				nicks.get(u).addChild(temp);

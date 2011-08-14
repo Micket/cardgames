@@ -57,7 +57,7 @@ public class ConnectionToClientRemote extends ConnectionToClient
 		synchronized (sendQueue)
 			{
 			sendQueue.addLast(msg);
-			msg.notifyAll();
+			sendQueue.notifyAll();
 			}
 		}
 	
@@ -76,8 +76,9 @@ public class ConnectionToClientRemote extends ConnectionToClient
 							sendQueue.wait();
 						else
 							{
-							Message msg=sendQueue.getFirst();
+							Message msg=sendQueue.poll();
 							os.writeObject(msg);
+							System.out.println("writing to client "+msg);
 							}
 						}
 					}
@@ -117,6 +118,8 @@ public class ConnectionToClientRemote extends ConnectionToClient
 
 			//Update list of connections
 			thread.broadcastUserlistToClients();
+			addToSendQueue(thread.createMessageGameTypesToClients());
+			addToSendQueue(thread.createMessageGameSessionsToClients());
 			
 			for(;;)
 				{

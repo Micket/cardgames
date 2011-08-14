@@ -21,7 +21,9 @@ import action.UserActionClickedButton;
 		description = "bla bla bla desc",
 		maxplayers = -1,
 		minplayers = 0,
-		name = "Black Jack")
+		name = "Black Jack",
+		category = "uuuh"
+		)
 public class BlackJack extends DefaultGameLogic
 	{
 
@@ -330,6 +332,7 @@ public class BlackJack extends DefaultGameLogic
 		return points;
 		}
 
+	/*
 	public String getName()
 		{
 		return "BlackJack";
@@ -339,6 +342,7 @@ public class BlackJack extends DefaultGameLogic
 		{
 		return "BlackJack tournament edition. Bet money until only one remain.";
 		}
+	*/
 
 	/////////////////////////////////////////////////
 	// 

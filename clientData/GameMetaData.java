@@ -1,5 +1,7 @@
 package clientData;
 
+import games.GameLogic;
+
 import java.util.Set;
 
 /**
@@ -8,8 +10,9 @@ import java.util.Set;
  */
 public class GameMetaData
 	{
-	public String name;
-	public String type;
+	public Class<? extends GameLogic> type; //Maybe better to keep this as a string?
+//	public String name;
+//	public String category;
 	
 	public int maxusers;
 	public int minusers;

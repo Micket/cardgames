@@ -15,11 +15,13 @@ public class GameType implements Serializable
 	private static final long serialVersionUID = 1L;
 	
 	public String name;
+	public String category;
 	public String description;
 	public int maxplayers;
 	public int minplayers;
 	
-	public Class<? extends GameLogic> game;
+//	public Class<? extends GameLogic> game;
+
 	
 	public GameType()
 		{
@@ -28,9 +30,16 @@ public class GameType implements Serializable
 	public GameType(GameTypePlugin p, Class<? extends GameLogic> game)
 		{
 		name=p.name();
+		category=p.category();
 		description=p.description();
 		maxplayers=p.maxplayers();
 		minplayers=p.minplayers();
-		this.game=game;
+//		this.game=game;
+		}
+	
+	@Override
+	public String toString()
+		{
+		return category+"."+name;
 		}
 	}
