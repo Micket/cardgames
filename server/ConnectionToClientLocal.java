@@ -2,7 +2,7 @@ package server;
 
 import action.Message;
 
-import clientQT.Client;
+import clientData.Client;
 
 import server.ConnectionToClient;
 

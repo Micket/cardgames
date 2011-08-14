@@ -5,6 +5,7 @@ import java.util.Map;
 
 import serverData.CardStack;
 
+import clientData.Client;
 import clientData.ClientCard;
 import clientData.ClientGameData;
 import clientData.ClientPlayerData;

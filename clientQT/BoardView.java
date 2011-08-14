@@ -7,6 +7,7 @@ import java.util.List;
 
 import action.Message;
 import action.UserActionClickedButton;
+import clientData.Client;
 import clientData.ClientGameData;
 
 import com.trolltech.qt.core.QPoint;

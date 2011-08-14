@@ -2,6 +2,7 @@ package clientQT;
 
 import action.Message;
 
+import clientData.Client;
 import clientData.ServerListener;
 
 import com.trolltech.qt.gui.*;

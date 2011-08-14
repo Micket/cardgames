@@ -5,13 +5,8 @@ import games.GameLogic;
 
 import java.util.Map;
 import java.util.HashMap;
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
-
-import server.ServerThread;
 
 import action.Message;
 import action.UserAction;
@@ -19,6 +14,7 @@ import action.UserActionLobbyMessage;
 import action.UserActionSetNick;
 import action.UserActionStartGame;
 
+import clientData.Client;
 import clientData.ServerListener;
 import clientData.GameSession;
 
@@ -175,6 +171,8 @@ public class LobbyWindow extends QWidget implements ServerListener
 	
 	public void actionConnect()
 		{
+		new ConnectToServerDialog(client).show();
+		/*
 		//TODO dialog
 		
 		String hostName="localhost";
@@ -195,7 +193,7 @@ public class LobbyWindow extends QWidget implements ServerListener
 			showStatusMessage("Could not connect to server");
 			e.printStackTrace();
 			}
-		
+		*/
 		}
 	
 	

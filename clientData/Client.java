@@ -1,4 +1,4 @@
-package clientQT;
+package clientData;
 
 import games.GameLogic;
 import games.GameType;
@@ -19,14 +19,13 @@ import action.UserActionListOfGameSessions;
 import action.UserActionListOfGameTypes;
 import action.UserActionListOfUsers;
 
-import clientData.ConnectionToServer;
-import clientData.ConnectionToServerLocal;
-import clientData.ConnectionToServerRemote;
-import clientData.ServerListener;
-import clientData.GameSession;
 
-import com.trolltech.qt.gui.QApplication;
-
+/**
+ * Central client data
+ * 
+ * @author mahogny
+ *
+ */
 public class Client
 	{
 	public ConnectionToServer serverConn;
@@ -111,7 +110,7 @@ public class Client
 	/**
 	 * Create a local server
 	 */
-	private void createServer()
+	public void createServer()
 		{
 		ConnectionToServerLocal serverConn=new ConnectionToServerLocal();
 		this.serverConn=serverConn;
@@ -133,32 +132,11 @@ public class Client
 		ConnectionToServerRemote sc=new ConnectionToServerRemote(this, address, port);
 		serverConn=sc;
 		sc.start();
+		
+		//TODO is there a need to update the GUI here?
 		}
 	
 
-	/**
-	 * Entry point
-	 */
-	public static void main(String args[])
-		{
-		QApplication.initialize(args);
-		
-		Client client=new Client();
-		
-		client.createServer();
-		
-		BoardWindow boardWindow = new BoardWindow(client);
-		client.serverListeners.add(boardWindow); //TODO on close, unregister
-		boardWindow.show();
-		
-		LobbyWindow lobbyWindow = new LobbyWindow(client);
-		client.serverListeners.add(lobbyWindow); //TODO on close, unregister
-		lobbyWindow.show();
-		
-		new ConnectToServerDialog().show();
-		
-		QApplication.exec();
-		}
 
 	public int getClientID()
 		{
