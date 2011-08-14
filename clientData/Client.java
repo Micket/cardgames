@@ -28,7 +28,7 @@ import action.UserActionListOfUsers;
  */
 public class Client
 	{
-	public ConnectionToServer serverConn;
+	private ConnectionToServer serverConn;
 	public Map<Integer,GameLogic> sessions=new HashMap<Integer, GameLogic>();
 	public List<ServerListener> serverListeners=new LinkedList<ServerListener>();
 	public Map<Integer, String> mapClientIDtoNick=new HashMap<Integer, String>();
@@ -148,6 +148,11 @@ public class Client
 		//TODO if there is no connection, show the preferred one?
 		String nick=getNickFor(getClientID());
 		return nick;
+		}
+
+	public void send(Message msg)
+		{
+		serverConn.send(msg);
 		}
 	
 	

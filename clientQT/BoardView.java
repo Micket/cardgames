@@ -86,7 +86,7 @@ public class BoardView extends QGraphicsView
 			if(card!=null)
 				{
 				Message msg=new Message(new UserActionClickedButton());
-				client.serverConn.send(msg);
+				client.send(msg);
 				}
 			}
 		}

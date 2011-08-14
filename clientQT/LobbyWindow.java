@@ -50,8 +50,6 @@ public class LobbyWindow extends QWidget implements ServerListener
 	
 	private QMenuBar menuBar;
 	private QMenu miNewGame;
-	private QAction miExit;
-	private QAction miConnect;
 	
 	private Client client;
 	
@@ -97,34 +95,37 @@ public class LobbyWindow extends QWidget implements ServerListener
 		nickAndGameLayout.addWidget(gameList);
 		
 		setWindowTitle("Lobby");
-
-		/////////////////////////////////////// Menu bar:
+		
 		menuBar=new QMenuBar();
 		lobbyLayout.setMenuBar(menuBar);
-		
-		miNewGame = menuBar.addMenu("&New game");
-		miExit = new QAction(tr("E&xit"), this);
+		buildMenuBar();
+		}
+
+	public void buildMenuBar()
+		{
+		QAction miExit = new QAction(tr("E&xit"), this);
 		//miExit.setShortcuts(QKeySequence.Quit);
 		miExit.setStatusTip(tr("Exit the application"));
 		miExit.triggered.connect(this, "actionExit()");
 
-		miConnect = new QAction(tr("Connect"), this);
-		//miExit.setShortcuts(QKeySequence.Quit);
+		QAction miConnect = new QAction(tr("Connect"), this);
 		miConnect.setStatusTip(tr("Connect to server"));
 		miConnect.triggered.connect(this, "actionConnect()");
 
-		QMenu fileMenu = menuBar.addMenu("&File");
-		fileMenu.addAction(miExit);
-		fileMenu.addAction(miConnect);
+		QAction miAbout = new QAction(tr("About"), this);
+		miAbout.setStatusTip(tr("About this program"));
+		miAbout.triggered.connect(this, "actionAbout()");
+
+		QMenu mGame = menuBar.addMenu("&Game");
+		miNewGame = mGame.addMenu("&New");
+		mGame.addAction(miConnect);
+		mGame.addAction(miExit);
+
+
+		QMenu helpMenu = menuBar.addMenu(tr("&Help"));
+		helpMenu.addAction(miAbout);
 		
-		//helpMenu = menuBar()->addMenu(tr("&Help"));
-		/*
-		setFixedSize(400, 400);
-		//setCentralWidget(view);
-		//view.ensureVisible(0, 0, view.width(), view.height());
-		*/
 		}
-	
 
 	public void eventServerMessage(Message msg)
 		{
@@ -141,7 +142,11 @@ public class LobbyWindow extends QWidget implements ServerListener
 		System.exit(0);
 		//TODO handle connections
 		}
-	
+
+	public void actionAbout()
+		{
+		//TODO
+		}
 	
 	public void actionSendMessage()
 		{
@@ -149,12 +154,7 @@ public class LobbyWindow extends QWidget implements ServerListener
 		if(!text.equals(""))
 			{
 			tfEditLine.setText("");
-			
-			UserActionLobbyMessage lm=new UserActionLobbyMessage(text);
-			
-			Message msg=new Message();
-			msg.add(lm);
-			client.serverConn.send(msg);
+			client.send(new Message(new UserActionLobbyMessage(text)));
 			}
 		}
 	
@@ -162,47 +162,13 @@ public class LobbyWindow extends QWidget implements ServerListener
 		{
 		String text = QInputDialog.getText(this, "New nick", "Nick:", QLineEdit.EchoMode.Normal, client.getNick());
 		if (text != null)
-			{
-			Message msg=new Message(new UserActionSetNick(text));
-			client.serverConn.send(msg);
-			}
+			client.send(new Message(new UserActionSetNick(text)));
 		}
 	
 	
 	public void actionConnect()
 		{
 		new ConnectToServerDialog(client).show();
-		/*
-		//TODO dialog
-		
-		String hostName="localhost";
-		int port=ServerThread.defaultServerPort;
-		
-		try
-			{
-			InetAddress addr=InetAddress.getByName(hostName);
-			client.connectToServer(addr, port);
-			showStatusMessage("Connected to  "+hostName+":"+port);
-			}
-		catch (UnknownHostException e)
-			{
-			showStatusMessage("Unknown host: "+hostName);
-			}
-		catch (IOException e)
-			{
-			showStatusMessage("Could not connect to server");
-			e.printStackTrace();
-			}
-		*/
-		}
-	
-	
-	public void actionStartGame()
-		{
-		UserActionStartGame a = new UserActionStartGame();
-		a.customName = "Foobar";
-		//a.game = ...;  // TODO How to i obtain this from the data set on the action?
-		client.serverConn.send(new Message(a));
 		}
 	
 	
@@ -285,6 +251,12 @@ public class LobbyWindow extends QWidget implements ServerListener
 						{
 						System.out.println("new game "+cl);
 						// TODO Auto-generated method stub
+						
+						UserActionStartGame a=new UserActionStartGame();
+						a.game=cl;
+						client.send(new Message(a));
+						
+						
 						}
 				}, "run()");
 			menuaction.setIconVisibleInMenu(false); // TODO: Make some icons perhaps?

@@ -6,9 +6,12 @@ import java.net.UnknownHostException;
 
 import server.ServerThread;
 
+import action.Message;
+
 import com.trolltech.qt.gui.QApplication;
 
 import clientData.Client;
+import clientData.ServerListener;
 
 /**
  * Client with QT-based GUI
@@ -16,8 +19,28 @@ import clientData.Client;
  * @author mahogny
  *
  */
-public class ClientQT 
+public class ClientQT extends Client implements ServerListener
 	{
+	@Override
+	public void eventNewGameSessions()
+		{
+		// TODO Auto-generated method stub
+		
+		}
+
+	@Override
+	public void eventNewUserList()
+		{
+		// TODO Auto-generated method stub
+		
+		}
+
+	@Override
+	public void eventServerMessage(Message msg)
+		{
+		// TODO Auto-generated method stub
+		
+		}
 
 	
 
@@ -28,7 +51,7 @@ public class ClientQT
 		{
 		QApplication.initialize(args);
 		
-		Client client=new Client();
+		ClientQT client=new ClientQT();
 		client.createServer();
 		
 		BoardWindow boardWindow = new BoardWindow(client);
@@ -76,4 +99,5 @@ public class ClientQT
 		
 		QApplication.exec();
 		}
+
 	}
