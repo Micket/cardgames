@@ -250,11 +250,11 @@ public class LobbyWindow extends QWidget implements ServerListener
 	public void setGameList()
 		{
 		gameList.clear();
-		gameList.setRowCount(client.serverGameList.size());
-		System.out.println("----: "+client.serverGameList);
-		for(GameSession g:client.serverGameList.values())
+		gameList.setRowCount(client.gameSessions.size());
+		System.out.println("----: "+client.gameSessions);
+		for(GameSession g:client.gameSessions.values())
 			{
-			GameType gt=client.availableGames.get(g.type);
+			GameType gt=client.gameTypes.get(g.type);
 			
 			// TODO: Store metadata in some way to allow sorting and such.. (perhaps use a tree view)
 			QTableWidgetItem newGameItem=new QTableWidgetItem(gt.name);
@@ -273,9 +273,9 @@ public class LobbyWindow extends QWidget implements ServerListener
 	
 	public void setAvailableGameList()
 		{
-		System.out.println("Filling in the list of available games. ("+client.availableGames.size()+" in total).");
+		System.out.println("Filling in the list of available games. ("+client.gameTypes.size()+" in total).");
 		miNewGame.clear();
-		for(Map.Entry<Class<? extends GameLogic>, GameType> g:client.availableGames.entrySet())
+		for(Map.Entry<Class<? extends GameLogic>, GameType> g:client.gameTypes.entrySet())
 			{
 			GameType gt=g.getValue();
 			QAction menuaction = new QAction(gt.name, miNewGame);

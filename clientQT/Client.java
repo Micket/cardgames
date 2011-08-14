@@ -33,8 +33,8 @@ public class Client
 	public Map<Integer,GameLogic> sessions=new HashMap<Integer, GameLogic>();
 	public List<ServerListener> serverListeners=new LinkedList<ServerListener>();
 	public Map<Integer, String> mapClientIDtoNick=new HashMap<Integer, String>();
-	public Map<Integer, GameSession>  serverGameList=new HashMap<Integer, GameSession>();
-	public Map<Class<? extends GameLogic>, GameType> availableGames=new HashMap<Class<? extends GameLogic>, GameType>();
+	public Map<Integer, GameSession>  gameSessions=new HashMap<Integer, GameSession>();
+	public Map<Class<? extends GameLogic>, GameType> gameTypes=new HashMap<Class<? extends GameLogic>, GameType>();
 
 	/**
 	 * Add a message from the server to the incoming queue
@@ -51,7 +51,7 @@ public class Client
 			else if(action instanceof UserActionListOfGameTypes)
 				gotListOfGameTypes((UserActionListOfGameTypes)action);
 			else if(action instanceof UserActionListOfGameSessions)
-				gotListOfGames((UserActionListOfGameSessions)action);
+				gotListOfGameSessions((UserActionListOfGameSessions)action);
 			}
 		
 		//Send raw copies of messages
@@ -66,8 +66,8 @@ public class Client
 	private void gotListOfGameTypes(UserActionListOfGameTypes action)
 		{
 		System.out.println("------------ game type list----------");
-		availableGames=action.availableGames;
-		System.out.println(availableGames);
+		gameTypes=action.availableGames;
+		System.out.println(gameTypes);
 		for(ServerListener listener:serverListeners)
 			listener.eventNewGameList();
 		}
@@ -87,11 +87,11 @@ public class Client
 	/**
 	 * Handle incoming list of games
 	 */
-	private void gotListOfGames(UserActionListOfGameSessions action)
+	private void gotListOfGameSessions(UserActionListOfGameSessions action)
 		{
 		System.out.println("---------- gamelist ------------");
 		
-		serverGameList=action.gameList;
+		gameSessions=action.gameList;
 		for(ServerListener listener:serverListeners)
 			listener.eventNewGameList();
 		}
@@ -154,6 +154,8 @@ public class Client
 		LobbyWindow lobbyWindow = new LobbyWindow(client);
 		client.serverListeners.add(lobbyWindow); //TODO on close, unregister
 		lobbyWindow.show();
+		
+		new ConnectToServerDialog().show();
 		
 		QApplication.exec();
 		}
