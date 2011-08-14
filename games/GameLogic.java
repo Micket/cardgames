@@ -2,6 +2,8 @@ package games;
 
 import java.util.Set;
 import java.util.HashSet;
+import java.util.List;
+import java.util.ArrayList;
 
 import action.UserAction;
 import action.UserActionClickedButton;
@@ -42,8 +44,19 @@ abstract public class GameLogic
 	abstract public int getMaxPlayers();
 	abstract public int getMinPlayers();
 	
-	public static GameLogic GameFactory(String game)
+	public static List<GameType> AvailableGames()
 		{
-		return new BlackJack();
+		GameType type;
+		List<GameType> games = new ArrayList<GameType>(1);
+		type = new GameType();
+		// TODO: Static methods? Any other convenient way to do this? (Probably not)
+		type.name = "TODO";
+		type.description = "TODO";
+		type.maxplayers = -1;
+		type.minplayers = -1;
+		type.game = BlackJack.class;
+		games.add(type);
+		return games;
 		}
+	
 	}

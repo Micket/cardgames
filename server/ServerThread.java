@@ -6,15 +6,18 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
+import java.util.List;
 
 import action.Message;
 import action.UserAction;
 import action.UserActionListOfUsers;
 import action.UserActionListOfGames;
+import action.UserActionListOfAvailableGames;
 import action.UserActionLobbyMessage;
 import action.UserActionSetNick;
 import action.UserActionStartGame;
 import games.GameLogic;
+import games.GameType;
 
 import clientData.GameMetaData;
 
@@ -23,7 +26,7 @@ public class ServerThread extends Thread
 	public static final int defaultServerPort=4445;
 	
 	
-	
+	private List<GameType> availableGames = GameLogic.AvailableGames();
 	
 	//from ID
 	public Map<Integer,ConnectionToClient> connections=new HashMap<Integer, ConnectionToClient>();
@@ -90,16 +93,16 @@ public class ServerThread extends Thread
 						}
 					else if (action instanceof UserActionStartGame)
 						{
-						GameLogic game = GameLogic.GameFactory(((UserActionStartGame)action).gameID);
-						if (game != null)
+						try
 							{
+							GameLogic game = ((UserActionStartGame)action).game.newInstance();
 							game.userJoined(action.fromClientID);
 							sessions.put(0, game); // TODO: Generate game ID's.
 							System.out.println("Starting game.");
 							}
-						else
+						catch (Exception e)
 							{
-							System.out.println("Couldn't find game.");
+							System.out.println("Can't instanciate game!");
 							}
 						}
 					else if (action instanceof UserActionSetNick)
@@ -114,12 +117,8 @@ public class ServerThread extends Thread
 						}
 					else // Pass on message to game.
 						{
-						//TODO
-						/*
-						GameLogic game = null;
+						GameLogic game = sessions.get(action.gameID);
 						game.userAction(action.fromClientID, action);
-						System.out.println("Should send actions to game. (But to which)?");
-						*/
 						}
 					}
 				}
@@ -165,8 +164,19 @@ public class ServerThread extends Thread
 			gmd.maxusers = s.getValue().getMaxPlayers();
 			gmd.minusers = s.getValue().getMinPlayers();
 			gmd.joinedUsers = s.getValue().players;
-			action.gameList.put(s.getKey(), null);
+			action.gameList.put(s.getKey(), gmd);
 			}
+		broadcastToClients(new Message(action));
+		}
+	
+	/**
+	 * Send a list of available games.
+	 */
+	void sendGamelistToClients(int userID)
+		{
+		System.out.println("Sending game list");
+		UserActionListOfAvailableGames action=new UserActionListOfAvailableGames();
+		action.gameList = availableGames;
 		broadcastToClients(new Message(action));
 		}
 	

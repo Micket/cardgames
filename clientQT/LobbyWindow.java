@@ -1,6 +1,7 @@
 package clientQT;
 
-
+import java.util.Map;
+import java.util.HashMap;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -47,6 +48,7 @@ public class LobbyWindow extends QWidget implements ServerListener
 	private QPushButton bNick;
 	
 	private QTreeWidget nickList;
+	private Map<Integer,QTreeWidgetItem> nicks = new HashMap<Integer, QTreeWidgetItem>();
 	private QTableWidget gameList;
 	
 	private QTextEdit chatHistory;
@@ -54,9 +56,6 @@ public class LobbyWindow extends QWidget implements ServerListener
 	private QLineEdit tfEditLine;
 	
 	private QMenuBar menuBar;
-	
-//	private String nick; // TODO: Get from server and so on.
-	
 	
 	private Client client;
 	
@@ -174,11 +173,6 @@ public class LobbyWindow extends QWidget implements ServerListener
 			{
 			Message msg=new Message(new UserActionSetNick(text));
 			client.serverConn.send(msg);
-			/*
-			
-			// TODO: Instead of sending this, should send a request to change the nick to the server.
-			nick = text;
-			bNick.setText(nick+":");*/
 			}
 		}
 	
@@ -237,19 +231,20 @@ public class LobbyWindow extends QWidget implements ServerListener
 	public void setNickList()
 		{
 		nickList.clear();
-		for(String n:client.mapClientIDtoNick.values())
+		nicks.clear();
+		for(Map.Entry<Integer,String> u:client.mapClientIDtoNick.entrySet())
 			{
 			List<String> usertexts = new ArrayList<String>(1); // Just nick (perhaps nick + comment?)
-			usertexts.add(n);
+			usertexts.add(u.getValue());
 			QTreeWidgetItem user = new QTreeWidgetItem(usertexts);
 			nickList.insertTopLevelItem(0, user);
+			nicks.put(u.getKey(), user);
 			}
 		}
 
 	public void setGameList()
 		{
 		gameList.clear();
-		// TODO: Real game list
 		gameList.setRowCount(client.serverGameList.size());
 		for(GameMetaData g:client.serverGameList.values())
 			{
@@ -258,6 +253,13 @@ public class LobbyWindow extends QWidget implements ServerListener
 			QTableWidgetItem newGameUsersItem=new QTableWidgetItem( g.maxusers < 0 ? ""+g.joinedUsers.size() : ""+g.joinedUsers.size()+"/"+g.maxusers);
 			gameList.setItem(0,0,newGameUsersItem);
 			gameList.setItem(0,1,newGameItem);
+
+			// Maybe something like this?
+			List<String> temptext = new ArrayList<String>(1);
+			temptext.add(g.name);
+			QTreeWidgetItem temp=new QTreeWidgetItem(temptext);
+			for(Integer u:g.joinedUsers)
+				nicks.get(u).addChild(temp);
 			}
 		}
 	
