@@ -19,4 +19,5 @@ public @interface GameTypePlugin
 	public String description();
 	public int maxplayers();
 	public int minplayers();
+	public String instructions();
 	}

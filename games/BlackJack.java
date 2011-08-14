@@ -22,7 +22,8 @@ import action.UserActionClickedButton;
 		maxplayers = -1,
 		minplayers = 0,
 		name = "Black Jack",
-		category = "uuuh"
+		category = "uuuh",
+		instructions = "Play to win etc." // Good idea to have some rich text player instructions here?
 		)
 public class BlackJack extends DefaultGameLogic
 	{

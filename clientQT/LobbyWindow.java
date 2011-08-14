@@ -31,12 +31,14 @@ import com.trolltech.qt.gui.QSplitter;
 import com.trolltech.qt.gui.QVBoxLayout;
 import com.trolltech.qt.gui.QHBoxLayout;
 import com.trolltech.qt.gui.QInputDialog;
+import com.trolltech.qt.gui.QPixmap;
 import com.trolltech.qt.gui.QSizePolicy;
 import com.trolltech.qt.gui.QTableWidget;
 import com.trolltech.qt.gui.QTableWidgetItem;
 import com.trolltech.qt.gui.QTreeWidget;
 import com.trolltech.qt.gui.QTreeWidgetItem;
 import com.trolltech.qt.gui.QWidget;
+import com.trolltech.qt.gui.*; // Fuck it..
 
 public class LobbyWindow extends QWidget implements ServerListener
 	{
@@ -116,11 +118,10 @@ public class LobbyWindow extends QWidget implements ServerListener
 		miAbout.setStatusTip(tr("About this program"));
 		miAbout.triggered.connect(this, "actionAbout()");
 
-		QMenu mGame = menuBar.addMenu("&Game");
-		miNewGame = mGame.addMenu("&New");
-		mGame.addAction(miConnect);
-		mGame.addAction(miExit);
-
+		miNewGame = menuBar.addMenu("&New");
+		QMenu mClient = menuBar.addMenu("&Client");
+		mClient.addAction(miConnect);
+		mClient.addAction(miExit);
 
 		QMenu helpMenu = menuBar.addMenu(tr("&Help"));
 		helpMenu.addAction(miAbout);
@@ -255,14 +256,18 @@ public class LobbyWindow extends QWidget implements ServerListener
 						// TODO Auto-generated method stub
 						
 						UserActionStartGame a=new UserActionStartGame();
+						a.sessionName = QInputDialog.getText(null, "Session name", "Session name", QLineEdit.EchoMode.Normal, "My game");
+						if (a.sessionName == null)
+							return; // Then no new game!
 						a.game=cl;
 						client.send(new Message(a));
 						
 						
 						}
 				}, "run()");
-			menuaction.setIconVisibleInMenu(false); // TODO: Make some icons perhaps?
-			menuaction.setToolTip(gt.description); // Doesn't seem to show up?
+			menuaction.setIconVisibleInMenu(true); // TODO: Make some icons perhaps?
+			menuaction.setToolTip(gt.description); // TODO: Doesn't seem to show up?
+			menuaction.setIcon(QPixmap.fromImage(new QImage("./cards/playingcard_icon.png")));
 			}
 		}
 
