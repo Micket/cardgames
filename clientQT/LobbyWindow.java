@@ -37,10 +37,8 @@ import com.trolltech.qt.gui.QInputDialog;
 import com.trolltech.qt.gui.QSizePolicy;
 import com.trolltech.qt.gui.QTableWidget;
 import com.trolltech.qt.gui.QTableWidgetItem;
-
 import com.trolltech.qt.gui.QTreeWidget;
 import com.trolltech.qt.gui.QTreeWidgetItem;
-
 import com.trolltech.qt.gui.QWidget;
 
 public class LobbyWindow extends QWidget implements ServerListener
@@ -285,7 +283,8 @@ public class LobbyWindow extends QWidget implements ServerListener
 			GameType gt=g.getValue();
 			miNewGame.addAction(gt.name);
 			QAction menuaction = miNewGame.activeAction();
-			//menuaction.riggered.connect(...); // What do?!
+			menuaction.setData(gt);
+			menuaction.triggered.connect(this, "actionStartGame()");
 			menuaction.setToolTip(gt.description);
 			}
 		}
