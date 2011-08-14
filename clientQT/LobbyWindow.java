@@ -1,6 +1,7 @@
 package clientQT;
 
 import games.GameType;
+import games.GameLogic;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -44,20 +45,18 @@ import com.trolltech.qt.gui.QWidget;
 
 public class LobbyWindow extends QWidget implements ServerListener
 	{
-	private QAction miExit;
-	private QAction miConnect;
-
 	private QPushButton bNick;
 	
 	private QTreeWidget nickList;
 	private Map<Integer,QTreeWidgetItem> nicks = new HashMap<Integer, QTreeWidgetItem>();
 	private QTableWidget gameList;
-	
 	private QTextEdit chatHistory;
-	
 	private QLineEdit tfEditLine;
 	
 	private QMenuBar menuBar;
+	private QMenu miNewGame;
+	private QAction miExit;
+	private QAction miConnect;
 	
 	private Client client;
 	
@@ -104,9 +103,11 @@ public class LobbyWindow extends QWidget implements ServerListener
 		
 		setWindowTitle("Lobby");
 
+		/////////////////////////////////////// Menu bar:
 		menuBar=new QMenuBar();
 		lobbyLayout.setMenuBar(menuBar);
 		
+		miNewGame = menuBar.addMenu("&New game");
 		miExit = new QAction(tr("E&xit"), this);
 		//miExit.setShortcuts(QKeySequence.Quit);
 		miExit.setStatusTip(tr("Exit the application"));
@@ -117,11 +118,10 @@ public class LobbyWindow extends QWidget implements ServerListener
 		miConnect.setStatusTip(tr("Connect to server"));
 		miConnect.triggered.connect(this, "actionConnect()");
 
-
-
-		QMenu fileMenu = menuBar.addMenu(tr("&File"));
+		QMenu fileMenu = menuBar.addMenu("&File");
 		fileMenu.addAction(miExit);
 		fileMenu.addAction(miConnect);
+		
 		//helpMenu = menuBar()->addMenu(tr("&Help"));
 		/*
 		
@@ -204,6 +204,15 @@ public class LobbyWindow extends QWidget implements ServerListener
 		
 		}
 	
+	public void actionNewGame()
+		{
+		// TODO: Open some window with a listing of all the game types.
+		//client.availableGames
+		
+		//Message msg=new Message(new UserActionStartGame(null));
+		//client.serverConn.send(msg);
+		}
+	
 	public void closeEvent(QCloseEvent e)
 		{
 		actionExit();
@@ -268,6 +277,20 @@ public class LobbyWindow extends QWidget implements ServerListener
 			}
 		}
 	
+	public void setAvailableGameList()
+		{
+		System.out.println("Filling in the list of available games. ("+client.availableGames.size()+" in total).");
+		for(Map.Entry<Class<? extends GameLogic>, GameType> g:client.availableGames.entrySet())
+			{
+			GameType gt=g.getValue();
+			miNewGame.addAction(gt.name);
+			QAction menuaction = miNewGame.activeAction();
+			//menuaction.riggered.connect(...); // What do?!
+			menuaction.setToolTip(gt.description);
+			}
+		}
+
+	
 	@Override
 	public void eventNewUserList()
 		{
@@ -275,6 +298,7 @@ public class LobbyWindow extends QWidget implements ServerListener
 		QApplication.invokeLater(new Runnable() {
 			public void run() {
 				setNickList();
+				setAvailableGameList();
 			}
 		});
 
