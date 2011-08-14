@@ -18,7 +18,7 @@ import action.UserActionStartGame;
 import games.GameLogic;
 import games.GameType;
 
-import clientData.GameMetaData;
+import clientData.GameSession;
 
 public class ServerThread extends Thread
 	{
@@ -180,7 +180,7 @@ public class ServerThread extends Thread
 		UserActionListOfGameSessions action=new UserActionListOfGameSessions();
 		for(Map.Entry<Integer,GameLogic> s:sessions.entrySet())
 			{
-			GameMetaData gmd = new GameMetaData();
+			GameSession gmd = new GameSession();
 			gmd.maxusers=s.getValue().getMaxPlayers();
 			gmd.minusers=s.getValue().getMinPlayers();
 			gmd.type=s.getValue().getClass();

@@ -19,7 +19,7 @@ import action.UserActionLobbyMessage;
 import action.UserActionSetNick;
 
 import clientData.ServerListener;
-import clientData.GameMetaData;
+import clientData.GameSession;
 
 import com.trolltech.qt.core.Qt;
 import com.trolltech.qt.gui.QAction;
@@ -256,7 +256,7 @@ public class LobbyWindow extends QWidget implements ServerListener
 		gameList.clear();
 		gameList.setRowCount(client.serverGameList.size());
 		System.out.println("----: "+client.serverGameList);
-		for(GameMetaData g:client.serverGameList.values())
+		for(GameSession g:client.serverGameList.values())
 			{
 			GameType gt=client.availableGames.get(g.type);
 			
