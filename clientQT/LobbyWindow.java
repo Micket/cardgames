@@ -277,11 +277,18 @@ public class LobbyWindow extends QWidget implements ServerListener
 		miNewGame.clear();
 		for(Map.Entry<Class<? extends GameLogic>, GameType> g:client.gameTypes.entrySet())
 			{
+			final Class<? extends GameLogic> cl=g.getKey();
 			GameType gt=g.getValue();
 			QAction menuaction = new QAction(gt.name, miNewGame);
 			miNewGame.addAction(menuaction);
-			menuaction.setData(g.getKey());
-			menuaction.triggered.connect(this, "actionStartGame()");
+			menuaction.triggered.connect(new Runnable()
+				{
+					public void run()
+						{
+						System.out.println("new game "+cl);
+						// TODO Auto-generated method stub
+						}
+				}, "run()");
 			menuaction.setIconVisibleInMenu(false); // TODO: Make some icons perhaps?
 			menuaction.setToolTip(gt.description); // Doesn't seem to show up?
 			}
