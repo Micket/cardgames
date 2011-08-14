@@ -18,6 +18,8 @@ abstract public class ConnectionToClient extends Thread
 
 	public void doFinalHandshake(ServerThread thread)
 		{
+		//Problem! these things might be sent too late. is there a need to put them earlier in queue?
+		
 		//Update list of connections
 		thread.broadcastUserlistToClients();
 		send(thread.createMessageGameTypesToClients());

@@ -14,9 +14,6 @@ import server.ConnectionToClient;
 public class ConnectionToClientLocal extends ConnectionToClient
 	{
 	public Client localClient;
-	public String nick;
-	//public ObjectInputStream is;
-	
 	private ServerThread thread;
 	
 	/**
