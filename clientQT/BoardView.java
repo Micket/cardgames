@@ -185,11 +185,24 @@ public class BoardView extends QGraphicsView
 		}
 	
 	
+	private QImage bg;
+	
 	public void redoLayout()
 		{
 		QGraphicsScene s=new QGraphicsScene();
 		setScene(s);
 		s.setSceneRect(0, 0, width()+4000,height()+4000); //this is, at best, a hack
+		
+		//Place background
+		if(bg==null)
+			bg=new QImage("cards/tiledtable.png");
+		/*bg.setZValue(-1);
+		bg.resetTransform();
+		bg.setTransform(QTransform.fromScale(zoom, zoom), true);
+		s.addItem(bg);*/
+    QBrush bgbrush = new QBrush(bg);
+    setBackgroundBrush(bgbrush);
+
 		
 		//Sort the cards in Z to ensure the right drawing order
 		Collections.sort(cards, new Comparator<AnimatedCard>()
