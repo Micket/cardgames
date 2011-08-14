@@ -17,6 +17,7 @@ import action.Message;
 import action.UserAction;
 import action.UserActionLobbyMessage;
 import action.UserActionSetNick;
+import action.UserActionStartGame;
 
 import clientData.ServerListener;
 import clientData.GameSession;
@@ -122,15 +123,10 @@ public class LobbyWindow extends QWidget implements ServerListener
 		
 		//helpMenu = menuBar()->addMenu(tr("&Help"));
 		/*
-		
-
 		setFixedSize(400, 400);
 		//setCentralWidget(view);
-		
 		//view.ensureVisible(0, 0, view.width(), view.height());
-*/
-		
-		
+		*/
 		}
 	
 
@@ -202,20 +198,20 @@ public class LobbyWindow extends QWidget implements ServerListener
 		
 		}
 	
-	public void actionNewGame()
+	
+	public void actionStartGame()
 		{
-		// TODO: Open some window with a listing of all the game types.
-		//client.availableGames
-		
-		//Message msg=new Message(new UserActionStartGame(null));
-		//client.serverConn.send(msg);
+		UserActionStartGame a = new UserActionStartGame();
+		a.customName = "Foobar";
+		//a.game = ...;  // TODO How to i obtain this from the data set on the action?
+		client.serverConn.send(new Message(a));
 		}
+	
 	
 	public void closeEvent(QCloseEvent e)
 		{
 		actionExit();
 		}
-	
 	
 
 	public void showStatusMessage(final String str)
@@ -278,14 +274,16 @@ public class LobbyWindow extends QWidget implements ServerListener
 	public void setAvailableGameList()
 		{
 		System.out.println("Filling in the list of available games. ("+client.availableGames.size()+" in total).");
+		miNewGame.clear();
 		for(Map.Entry<Class<? extends GameLogic>, GameType> g:client.availableGames.entrySet())
 			{
 			GameType gt=g.getValue();
-			miNewGame.addAction(gt.name);
-			QAction menuaction = miNewGame.activeAction();
-			menuaction.setData(gt);
+			QAction menuaction = new QAction(gt.name, miNewGame);
+			miNewGame.addAction(menuaction);
+			menuaction.setData(g.getKey());
 			menuaction.triggered.connect(this, "actionStartGame()");
-			menuaction.setToolTip(gt.description);
+			menuaction.setIconVisibleInMenu(false); // TODO: Make some icons perhaps?
+			menuaction.setToolTip(gt.description); // Doesn't seem to show up?
 			}
 		}
 
