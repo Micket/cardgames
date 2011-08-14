@@ -1,5 +1,7 @@
 package server;
 
+import util.CardGameInfo;
+
 /**
  * Stand-alone server
  * @author mahogny
@@ -11,6 +13,6 @@ public class ServerMain
 		{
 		ServerThread server=new ServerThread();
 		
-		server.openPort(ServerThread.defaultServerPort);
+		server.openPort(CardGameInfo.defaultServerPort);
 		}
 	}

@@ -36,6 +36,12 @@ public class ConnectionToClientRemote extends ConnectionToClient
 	
 	public void send(Message msg)
 		{
+		synchronized (sendQueue)
+			{
+			sendQueue.addLast(msg);
+			sendQueue.notifyAll();
+			}
+		/*
 		try
 			{
 			os.writeObject(msg);
@@ -46,21 +52,16 @@ public class ConnectionToClientRemote extends ConnectionToClient
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			}
-		
+*/		
 		}
 	
 	private LinkedList<Message> sendQueue=new LinkedList<Message>();
 	
-
+/*
 	public void addToSendQueue(Message msg)
 		{
-		synchronized (sendQueue)
-			{
-			sendQueue.addLast(msg);
-			sendQueue.notifyAll();
-			}
 		}
-	
+	*/
 	private class SendThread extends Thread
 		{
 		@Override
@@ -89,6 +90,8 @@ public class ConnectionToClientRemote extends ConnectionToClient
 				}
 			}
 		}
+
+	
 	
 	
 	@Override
@@ -116,10 +119,7 @@ public class ConnectionToClientRemote extends ConnectionToClient
 			SendThread sendThread=new SendThread();
 			sendThread.start();
 
-			//Update list of connections
-			thread.broadcastUserlistToClients();
-			addToSendQueue(thread.createMessageGameTypesToClients());
-			addToSendQueue(thread.createMessageGameSessionsToClients());
+			doFinalHandshake(thread);
 			
 			for(;;)
 				{

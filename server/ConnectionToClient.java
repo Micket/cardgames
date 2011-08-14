@@ -15,5 +15,12 @@ abstract public class ConnectionToClient extends Thread
 	
 	@Override
 	abstract public void run();
-	
+
+	public void doFinalHandshake(ServerThread thread)
+		{
+		//Update list of connections
+		thread.broadcastUserlistToClients();
+		send(thread.createMessageGameTypesToClients());
+		send(thread.createMessageGameSessionsToClients());
+		}
 	}

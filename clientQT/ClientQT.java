@@ -3,14 +3,18 @@ package clientQT;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
-import server.ServerThread;
+import util.CardGameInfo;
 
 import action.Message;
 
 import com.trolltech.qt.gui.QApplication;
 
 import clientData.Client;
+import clientData.GameSession;
 import clientData.ServerListener;
 
 /**
@@ -21,9 +25,31 @@ import clientData.ServerListener;
  */
 public class ClientQT extends Client implements ServerListener
 	{
+	public Set<Integer> boardViewsExistFor=new HashSet<Integer>();
+	
 	@Override
 	public void eventNewGameSessions()
 		{
+		for(final Map.Entry<Integer, GameSession> e:gameSessions.entrySet())
+			{
+			if(e.getValue().joinedUsers.contains(getClientID()))
+				{
+				if(!boardViewsExistFor.contains(e.getKey()))
+					{
+					boardViewsExistFor.add(e.getKey());
+			
+					QApplication.invokeAndWait(new Runnable() {
+					public void run() {
+						BoardWindow boardWindow = new BoardWindow(ClientQT.this, e.getKey());
+						ClientQT.this.serverListeners.add(boardWindow); //TODO on close, unregister
+						boardWindow.show();
+					}
+					});
+
+
+					}
+				}
+			}
 		// TODO Auto-generated method stub
 		
 		}
@@ -51,16 +77,23 @@ public class ClientQT extends Client implements ServerListener
 		{
 		QApplication.initialize(args);
 		
+		
 		ClientQT client=new ClientQT();
-		client.createServer();
 		
-		BoardWindow boardWindow = new BoardWindow(client);
-		client.serverListeners.add(boardWindow); //TODO on close, unregister
-		boardWindow.show();
-		
+		client.serverListeners.add(client);
+
+				
 		LobbyWindow lobbyWindow = new LobbyWindow(client);
 		client.serverListeners.add(lobbyWindow); //TODO on close, unregister
 		lobbyWindow.show();
+
+		//temp
+		BoardWindow boardWindow = new BoardWindow(client, 666);
+		client.serverListeners.add(boardWindow); //TODO on close, unregister
+		boardWindow.show();
+/////
+
+		client.createServer();
 
 		int ca=0;
 		while(ca<args.length)
@@ -70,7 +103,7 @@ public class ClientQT extends Client implements ServerListener
 				//Connect to a server
 				ca++;
 				String url=args[ca];
-				int port=ServerThread.defaultServerPort;
+				int port=CardGameInfo.defaultServerPort;
 				int colon=url.lastIndexOf(":");
 				if(colon!=-1)
 					{
@@ -96,7 +129,8 @@ public class ClientQT extends Client implements ServerListener
 				}
 			ca++;
 			}
-		
+
+
 		QApplication.exec();
 		}
 

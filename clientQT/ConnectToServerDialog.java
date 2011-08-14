@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-import server.ServerThread;
+import util.CardGameInfo;
 
 import clientData.Client;
 
@@ -37,7 +37,7 @@ public class ConnectToServerDialog extends QDialog
 		editPort = new QLineEdit(this);
 
 		editAddress.setText("localhost");
-		editPort.setText(""+ServerThread.defaultServerPort);
+		editPort.setText(""+CardGameInfo.defaultServerPort);
 
 		QPushButton bConnect=new QPushButton(tr("Connect"));
 		QPushButton bCancel=new QPushButton(tr("Cancel"));

@@ -17,10 +17,17 @@ public class ConnectionToClientLocal extends ConnectionToClient
 	public String nick;
 	//public ObjectInputStream is;
 	
+	private ServerThread thread;
+	
 	/**
 	 * Random unique ID obtained upon connection. It never changes during a session.
 	 */
 	//public int connectionID;
+	
+	public ConnectionToClientLocal(ServerThread thread)
+		{
+		this.thread=thread;
+		}
 	
 	
 	public void send(Message msg)
@@ -32,5 +39,7 @@ public class ConnectionToClientLocal extends ConnectionToClient
 	public void run()
 		{
 		}
+
+
 	
 	}

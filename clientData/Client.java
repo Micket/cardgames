@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import server.ConnectionToClientLocal;
-import server.ServerThread;
+import util.CardGameInfo;
 
 import action.Message;
 import action.UserAction;
@@ -36,6 +36,8 @@ public class Client
 	public Map<Integer, GameSession> gameSessions=new HashMap<Integer, GameSession>();
 	public Map<Class<? extends GameLogic>, GameType> gameTypes=new HashMap<Class<? extends GameLogic>, GameType>();
 
+	public String tryToGetNick="Igotnick";
+	
 	/**
 	 * Add a message from the server to the incoming queue
 	 */
@@ -94,7 +96,7 @@ public class Client
 	private void gotListOfGameSessions(UserActionListOfGameSessions action)
 		{
 		gameSessions=action.gameList;
-		for(ServerListener listener:serverListeners)
+		for(ServerListener listener:new LinkedList<ServerListener>(serverListeners))
 			listener.eventNewGameSessions();
 		}
 
@@ -107,7 +109,8 @@ public class Client
 			gameSessions.remove(action.gameID);
 		else
 			gameSessions.put(action.gameID,action.session);
-		for(ServerListener listener:serverListeners)
+		
+		for(ServerListener listener:new LinkedList<ServerListener>(serverListeners))
 			listener.eventNewGameSessions();
 
 		
@@ -134,13 +137,18 @@ public class Client
 		{
 		ConnectionToServerLocal serverConn=new ConnectionToServerLocal();
 		this.serverConn=serverConn;
-		ConnectionToClientLocal connToClient=new ConnectionToClientLocal();
+		
+		ConnectionToClientLocal connToClient=new ConnectionToClientLocal(serverConn.thread);
+		connToClient.nick=tryToGetNick;
 		connToClient.localClient=this;
-		serverConn.thread.connections.put(0,connToClient);
+		
+		int userID=0;
+		serverConn.thread.connections.put(userID,connToClient);
+		
+		connToClient.doFinalHandshake(serverConn.thread);
 		
 		//TODO temp
-		serverConn.thread.openPort(ServerThread.defaultServerPort);
-		
+		serverConn.thread.openPort(CardGameInfo.defaultServerPort);		
 		}
 	
 	/**
@@ -160,19 +168,27 @@ public class Client
 
 	public int getClientID()
 		{
-		return serverConn.getCliendID();
+		if(serverConn!=null)
+			return serverConn.getCliendID();
+		else
+			return 0;
 		}
 
 	public String getNick()
 		{
-		//TODO if there is no connection, show the preferred one?
-		String nick=getNickFor(getClientID());
-		return nick;
+		//If there is no connection, show the nick it will try to get upon connecting
+		if(serverConn!=null)
+			return getNickFor(getClientID());
+		else
+			return tryToGetNick;
 		}
 
 	public void send(Message msg)
 		{
-		serverConn.send(msg);
+		if(serverConn!=null)
+			serverConn.send(msg);
+		else
+			System.out.println("Error: Trying to send message but there is no connection");
 		}
 	
 	

@@ -30,9 +30,6 @@ import clientData.GameSession;
  */
 public class ServerThread extends Thread
 	{
-	public static final int defaultServerPort=4445;
-	
-	
 	private Map<Class<? extends GameLogic>, GameType> availableGames = GameLogic.availableGames();
 	
 	/** from clientID */

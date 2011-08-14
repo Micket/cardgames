@@ -219,6 +219,8 @@ public class LobbyWindow extends QWidget implements ServerListener
 		for(GameSession g:client.gameSessions.values())
 			{
 			GameType gt=client.gameTypes.get(g.type);
+			if(gt==null)
+				System.out.println("Error: gametype does not exist "+gt); //This is a problem with the local connection
 			
 			// TODO: Store metadata in some way to allow sorting and such.. (perhaps use a tree view)
 			QTableWidgetItem newGameItem=new QTableWidgetItem(gt.name);

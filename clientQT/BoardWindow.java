@@ -14,24 +14,14 @@ import com.trolltech.qt.gui.*;
 public class BoardWindow extends QWidget implements ServerListener
 	{
 	
-	private Client client;
+	private ClientQT client;
+	private BoardView view;
 	
-	public BoardWindow(Client client)
+	public BoardWindow(ClientQT client, int gameID)
 		{
 		this.client=client;
-
 		
-		/*
-		QPushButton quit = new QPushButton(tr("Quit"), this);
-		quit.setGeometry(62, 40, 75, 30);
-		quit.setFont(new QFont("Times", 18, QFont.Weight.Bold.value()));
-		quit.clicked.connect(QApplication.instance(), "quit()");
-		*/
-		
-
-		
-		BoardView view=new BoardView(client, this);
-		view.setSizePolicy(QSizePolicy.Policy.Ignored,QSizePolicy.Policy.Ignored);
+		view=new BoardView(client, this, gameID);
 
 		QHBoxLayout lobbyLayout=new QHBoxLayout();
 		setLayout(lobbyLayout);
@@ -56,4 +46,11 @@ public class BoardWindow extends QWidget implements ServerListener
 		{
 		}
 
+	@Override
+	protected void closeEvent(QCloseEvent arg)
+		{
+		client.serverListeners.remove(this);
+		client.boardViewsExistFor.remove(view.gameID);
+		}
+	
 	}

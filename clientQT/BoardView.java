@@ -36,11 +36,15 @@ public class BoardView extends QGraphicsView
 	private BoardLayout layout=new BoardLayout();
 	
 	private Client client;
-	
-	public BoardView(Client client, QWidget parent)
+
+	private QPoint oldMousePos=new QPoint();
+	public Object gameID;
+
+	public BoardView(Client client, QWidget parent, int gameID)
 		{
 		super(parent);
 		this.client=client;	
+		this.gameID=gameID;
 		
     setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff);
@@ -56,6 +60,7 @@ public class BoardView extends QGraphicsView
 		layout.doLayout(this, client);
 		redoLayout();
 
+		setSizePolicy(QSizePolicy.Policy.Ignored,QSizePolicy.Policy.Ignored);
 		}
 
 	
@@ -92,7 +97,7 @@ public class BoardView extends QGraphicsView
 		}
 	
 	
-	QPoint oldMousePos=new QPoint();
+	
 	@Override
 	protected void mouseMoveEvent(QMouseEvent event)
 		{		
@@ -144,7 +149,9 @@ public class BoardView extends QGraphicsView
 		
 		}
 
-	
+	/**
+	 * Turn an SVG graphics item into pixmap graphics item
+	 */
 	public QGraphicsItemInterface rasterizeSvg(QGraphicsSvgItem g)
 		{
 		QRectF bb=g.boundingRect();
