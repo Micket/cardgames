@@ -271,33 +271,24 @@ public class LobbyWindow extends QWidget implements ServerListener
 			}
 		}
 	
-	public class NewGame
-		{
-		private final Class<? extends GameLogic> cl;
-		public NewGame(Class<? extends GameLogic> cl)
-			{
-			this.cl=cl;
-			}
-		public void newGame()
-			{
-			//TODO
-			System.out.println("new game "+cl);
-
-			}
-		}
-		
 	public void setGameTypes()
 		{
 		System.out.println("Filling in the list of available games. ("+client.gameTypes.size()+" in total).");
 		miNewGame.clear();
 		for(Map.Entry<Class<? extends GameLogic>, GameType> g:client.gameTypes.entrySet())
 			{
-			NewGame ng=new NewGame(g.getKey());
-			
+			final Class<? extends GameLogic> cl=g.getKey();
 			GameType gt=g.getValue();
 			QAction menuaction = new QAction(gt.name, miNewGame);
 			miNewGame.addAction(menuaction);
-			menuaction.triggered.connect(ng, "newGame()");
+			menuaction.triggered.connect(new Runnable()
+				{
+					public void run()
+						{
+						System.out.println("new game "+cl);
+						// TODO Auto-generated method stub
+						}
+				}, "run()");
 			menuaction.setIconVisibleInMenu(false); // TODO: Make some icons perhaps?
 			menuaction.setToolTip(gt.description); // Doesn't seem to show up?
 			}
