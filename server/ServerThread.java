@@ -14,6 +14,7 @@ import action.UserActionGameSessionUpdate;
 import action.UserActionListOfGameTypes;
 import action.UserActionListOfUsers;
 import action.UserActionListOfGameSessions;
+import action.UserActionListOfAvailableGames;
 import action.UserActionLobbyMessage;
 import action.UserActionSetNick;
 import action.UserActionStartGame;
@@ -213,6 +214,18 @@ public class ServerThread extends Thread
 		return new Message(action);
 		}
 
+	
+	/**
+	 * Send a list of available games.
+	 */
+	public void sendGamelistToClients(int userID)
+		{
+		System.out.println("Sending game list");
+		UserActionListOfAvailableGames action=new UserActionListOfAvailableGames();
+		action.gameList = new LinkedList<GameType>(availableGames.values());
+		broadcastToClients(new Message(action));
+		}
+	
 	public boolean openPort(int port)
 		{
 		try
