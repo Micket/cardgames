@@ -15,6 +15,7 @@ import server.ServerThread;
 
 import action.Message;
 import action.UserAction;
+import action.UserActionGameSessionUpdate;
 import action.UserActionListOfGameSessions;
 import action.UserActionListOfGameTypes;
 import action.UserActionListOfUsers;
@@ -32,7 +33,7 @@ public class Client
 	public Map<Integer,GameLogic> sessions=new HashMap<Integer, GameLogic>();
 	public List<ServerListener> serverListeners=new LinkedList<ServerListener>();
 	public Map<Integer, String> mapClientIDtoNick=new HashMap<Integer, String>();
-	public Map<Integer, GameSession>  gameSessions=new HashMap<Integer, GameSession>();
+	public Map<Integer, GameSession> gameSessions=new HashMap<Integer, GameSession>();
 	public Map<Class<? extends GameLogic>, GameType> gameTypes=new HashMap<Class<? extends GameLogic>, GameType>();
 
 	/**
@@ -45,12 +46,18 @@ public class Client
 		//Handle special messages
 		for(UserAction action:msg.actions)
 			{
+			System.out.println("Getting action ---- "+action.getClass());
 			if(action instanceof UserActionListOfUsers)
 				gotListOfUsers((UserActionListOfUsers)action);
 			else if(action instanceof UserActionListOfGameTypes)
 				gotListOfGameTypes((UserActionListOfGameTypes)action);
 			else if(action instanceof UserActionListOfGameSessions)
 				gotListOfGameSessions((UserActionListOfGameSessions)action);
+			else if(action instanceof UserActionGameSessionUpdate)
+				gotGameSessionUpdate((UserActionGameSessionUpdate)action);
+			
+			//TODO in so many ways it would be nice with a general "else"
+			
 			}
 		
 		//Send raw copies of messages
@@ -59,12 +66,12 @@ public class Client
 		
 		}
 
+
 	/**
 	 * Handle incoming list of game types
 	 */
 	private void gotListOfGameTypes(UserActionListOfGameTypes action)
 		{
-		System.out.println("------------ game type list----------");
 		gameTypes=action.availableGames;
 		System.out.println(gameTypes);
 		for(ServerListener listener:serverListeners)
@@ -76,8 +83,6 @@ public class Client
 	 */
 	private void gotListOfUsers(UserActionListOfUsers action)
 		{
-		System.out.println("---------- userlist ------------");
-		
 		mapClientIDtoNick=action.nickMap;
 		for(ServerListener listener:serverListeners)
 			listener.eventNewUserList();
@@ -88,12 +93,27 @@ public class Client
 	 */
 	private void gotListOfGameSessions(UserActionListOfGameSessions action)
 		{
-		System.out.println("---------- gamelist ------------");
-		
 		gameSessions=action.gameList;
 		for(ServerListener listener:serverListeners)
 			listener.eventNewGameSessions();
 		}
+
+	/**
+	 * One updated game session
+	 */
+	private void gotGameSessionUpdate(UserActionGameSessionUpdate action)
+		{
+		if(action.session==null)
+			gameSessions.remove(action.gameID);
+		else
+			gameSessions.put(action.gameID,action.session);
+		for(ServerListener listener:serverListeners)
+			listener.eventNewGameSessions();
+
+		
+		//TODO here detect if there is a need to join the channel? or leave it to somewhere else? quitting?
+		}
+
 	
 	/**
 	 * Get the nick for a given client ID

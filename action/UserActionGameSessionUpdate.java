@@ -7,8 +7,14 @@ import clientData.GameSession;
  * @author mahogny
  *
  */
-public class UserActionGameSessionUpdate
+public class UserActionGameSessionUpdate extends GameAction
 	{
-	public int sessionID;
+	private static final long serialVersionUID = 1L;
 	public GameSession session;
+	
+	public UserActionGameSessionUpdate(int sessionID, GameSession session)
+		{
+		this.gameID=sessionID;
+		this.session=session;
+		}
 	}

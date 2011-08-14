@@ -7,7 +7,7 @@ import java.util.Set;
 import java.util.HashSet;
 import util.ClassHandling;
 
-import action.UserAction;
+import action.GameAction;
 import action.UserActionClickedButton;
 import action.UserActionClickedCard;
 
@@ -23,7 +23,7 @@ abstract public class GameLogic
 	
 	abstract void startGame();
 	
-	public boolean userAction(int fromUser, UserAction s)
+	public boolean userAction(int fromUser, GameAction s)
 		{
 		if (s instanceof UserActionClickedCard)
 			return userActionClickedCard(fromUser, (UserActionClickedCard) s);
