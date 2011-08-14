@@ -9,5 +9,5 @@ public interface ServerListener
 	
 	public void eventNewUserList();
 	
-	public void eventNewGameList();
+	public void eventNewGameSessions();
 	}

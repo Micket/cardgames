@@ -69,7 +69,7 @@ public class Client
 		gameTypes=action.availableGames;
 		System.out.println(gameTypes);
 		for(ServerListener listener:serverListeners)
-			listener.eventNewGameList();
+			listener.eventNewGameSessions();
 		}
 
 	/**
@@ -93,7 +93,7 @@ public class Client
 		
 		gameSessions=action.gameList;
 		for(ServerListener listener:serverListeners)
-			listener.eventNewGameList();
+			listener.eventNewGameSessions();
 		}
 	
 	/**

@@ -247,11 +247,11 @@ public class LobbyWindow extends QWidget implements ServerListener
 			}
 		}
 
-	public void setGameList()
+	public void setGameSessions()
 		{
 		gameList.clear();
 		gameList.setRowCount(client.gameSessions.size());
-		System.out.println("----: "+client.gameSessions);
+		System.out.println("game sessions: "+client.gameSessions);
 		for(GameSession g:client.gameSessions.values())
 			{
 			GameType gt=client.gameTypes.get(g.type);
@@ -271,7 +271,7 @@ public class LobbyWindow extends QWidget implements ServerListener
 			}
 		}
 	
-	public void setAvailableGameList()
+	public void setGameTypes()
 		{
 		System.out.println("Filling in the list of available games. ("+client.gameTypes.size()+" in total).");
 		miNewGame.clear();
@@ -295,7 +295,6 @@ public class LobbyWindow extends QWidget implements ServerListener
 		QApplication.invokeLater(new Runnable() {
 			public void run() {
 				setNickList();
-				setAvailableGameList();
 			}
 		});
 
@@ -310,12 +309,13 @@ public class LobbyWindow extends QWidget implements ServerListener
 		}
 
 	@Override
-	public void eventNewGameList()
+	public void eventNewGameSessions()
 		{
 		System.out.println("New game list...");
 		QApplication.invokeLater(new Runnable() {
 			public void run() {
-				setGameList();
+				setGameTypes();
+				setGameSessions();
 			}
 		});
 		}
