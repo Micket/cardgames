@@ -2,7 +2,6 @@ package action;
 
 import java.util.ArrayList;
 import java.util.List;
-import clientData.GameMetaData;
 import games.GameType;
 
 public class UserActionListOfAvailableGames extends UserAction

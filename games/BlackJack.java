@@ -17,6 +17,11 @@ import action.UserActionClickedButton;
  * Real BlackJack rules are a bit more complicated than this, but I'm leaving that out for now.
  * @author Micket
  */
+@GameTypePlugin(
+		description = "bla bla bla desc",
+		maxplayers = -1,
+		minplayers = 0,
+		name = "Black Jack")
 public class BlackJack extends DefaultGameLogic
 	{
 

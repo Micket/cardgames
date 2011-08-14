@@ -4,16 +4,33 @@
  */
 package games;
 
+import java.io.Serializable;
+
 /**
  *
  * @author micket
  */
-public class GameType
+public class GameType implements Serializable
 	{
-	String name;
-	String description;
-	int maxplayers;
-	int minplayers;
+	private static final long serialVersionUID = 1L;
 	
-	Class<? extends GameLogic> game;
+	public String name;
+	public String description;
+	public int maxplayers;
+	public int minplayers;
+	
+	public Class<? extends GameLogic> game;
+	
+	public GameType()
+		{
+		}
+	
+	public GameType(GameTypePlugin p, Class<? extends GameLogic> game)
+		{
+		name=p.name();
+		description=p.description();
+		maxplayers=p.maxplayers();
+		minplayers=p.minplayers();
+		this.game=game;
+		}
 	}

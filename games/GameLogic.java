@@ -1,9 +1,12 @@
 package games;
 
+import java.io.IOException;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.List;
 import java.util.ArrayList;
+
+import util.ClassHandling;
 
 import action.UserAction;
 import action.UserActionClickedButton;
@@ -44,18 +47,33 @@ abstract public class GameLogic
 	abstract public int getMaxPlayers();
 	abstract public int getMinPlayers();
 	
+	@SuppressWarnings("unchecked")
 	public static List<GameType> AvailableGames()
 		{
-		GameType type;
-		List<GameType> games = new ArrayList<GameType>(1);
-		type = new GameType();
-		// TODO: Static methods? Any other convenient way to do this? (Probably not)
-		type.name = "TODO";
-		type.description = "TODO";
-		type.maxplayers = -1;
-		type.minplayers = -1;
-		type.game = BlackJack.class;
-		games.add(type);
+		List<GameType> games = new ArrayList<GameType>();
+
+		try
+			{
+			for(Class<?> cl:ClassHandling.getClasses("games"))
+				{
+				GameTypePlugin plugin=cl.getAnnotation(GameTypePlugin.class);
+				if(plugin!=null)
+					{
+					System.out.println("Adding game: "+cl);
+					GameType gt=new GameType(plugin, (Class<? extends GameLogic>)cl);
+					games.add(gt);
+					}
+				}
+			}
+		catch (ClassNotFoundException e)
+			{
+			e.printStackTrace();
+			}
+		catch (IOException e)
+			{
+			e.printStackTrace();
+			}
+		
 		return games;
 		}
 	
