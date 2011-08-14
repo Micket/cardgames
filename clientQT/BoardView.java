@@ -185,7 +185,8 @@ public class BoardView extends QGraphicsView
 		}
 	
 	
-	private QImage bg;
+	//private QImage bg;
+	private QPixmap bg;
 	
 	public void redoLayout()
 		{
@@ -195,13 +196,26 @@ public class BoardView extends QGraphicsView
 		
 		//Place background
 		if(bg==null)
-			bg=new QImage("cards/tiledtable.png");
+		//	bg=new QImage("cards/tiledtable.png");
+		bg=new QPixmap("cards/tiledtable.png");
+		
+//		for(int ax=0;bg.width()*zoom*(ax+1)<width();ax++)
+		for(int ax=0;ax<4;ax++)
+			for(int ay=0;ay<4;ay++)
+				{
+				QGraphicsPixmapItem g=new QGraphicsPixmapItem(bg);
+				g.setZValue(-1);
+				g.resetTransform();
+				g.setTransform(QTransform.fromScale(zoom, zoom), true);
+				g.translate(bg.width()*ax, bg.height()*ay);
+				s.addItem(g);
+				}
 		/*bg.setZValue(-1);
 		bg.resetTransform();
 		bg.setTransform(QTransform.fromScale(zoom, zoom), true);
 		s.addItem(bg);*/
-    QBrush bgbrush = new QBrush(bg);
-    setBackgroundBrush(bgbrush);
+ //   QBrush bgbrush = new QBrush(bg);
+//    setBackgroundBrush(bgbrush);
 
 		
 		//Sort the cards in Z to ensure the right drawing order

@@ -88,9 +88,10 @@ public class ClientQT extends Client implements ServerListener
 		lobbyWindow.show();
 
 		//temp
+		/*
 		BoardWindow boardWindow = new BoardWindow(client, 666);
 		client.serverListeners.add(boardWindow); //TODO on close, unregister
-		boardWindow.show();
+		boardWindow.show();*/
 /////
 
 		client.createServer();
