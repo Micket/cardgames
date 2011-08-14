@@ -19,6 +19,7 @@ import action.UserActionGameSessionUpdate;
 import action.UserActionListOfGameSessions;
 import action.UserActionListOfGameTypes;
 import action.UserActionListOfUsers;
+import action.UserActionDisconnect;
 
 
 /**
@@ -156,12 +157,13 @@ public class Client
 	 */
 	public void connectToServer(InetAddress address, int port) throws IOException
 		{
-		//TODO cleanly close connection to the previous server first
+		if (serverConn != null)
+			{
+			serverConn.send(new Message(new UserActionDisconnect()));
+			}
 		ConnectionToServerRemote sc=new ConnectionToServerRemote(this, address, port);
 		serverConn=sc;
 		sc.start();
-		
-		//TODO is there a need to update the GUI here?
 		}
 	
 

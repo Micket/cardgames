@@ -18,6 +18,7 @@ import action.UserActionListOfAvailableGames;
 import action.UserActionLobbyMessage;
 import action.UserActionSetNick;
 import action.UserActionStartGame;
+import action.UserActionDisconnect;
 import games.GameLogic;
 import games.GameType;
 
@@ -87,7 +88,17 @@ public class ServerThread extends Thread
 				
 				for(UserAction action:msg.actions)
 					{
-					if(action instanceof UserActionLobbyMessage)
+					if(action instanceof GameAction)// Pass on message to game session
+						{
+						GameAction ga=(GameAction)action;
+						
+						GameLogic game = gameSessions.get(ga.gameID);
+						if(game!=null)
+							game.userAction(action.fromClientID, ga);
+						else
+							System.out.println("Error: Trying to pass message to non-existing game session "+ga.gameID);
+						}
+					else if(action instanceof UserActionLobbyMessage)
 						{
 						UserActionLobbyMessage lm=(UserActionLobbyMessage)action;
 						lm.fromClientID=action.fromClientID;
@@ -124,16 +135,12 @@ public class ServerThread extends Thread
 							broadcastUserlistToClients();
 							}
 						}
-					else if(action instanceof GameAction)// Pass on message to game session
+					else if (action instanceof UserActionDisconnect)
 						{
-						GameAction ga=(GameAction)action;
-						
-						GameLogic game = gameSessions.get(ga.gameID);
-						if(game!=null)
-							game.userAction(action.fromClientID, ga);
-						else
-							System.out.println("Error: Trying to pass message to non-existing game session "+ga.gameID);
+						disconnectClient(action.fromClientID);
 						}
+					else 
+						System.out.println("Unrecognized action");
 					}
 				}
 			
@@ -241,6 +248,26 @@ public class ServerThread extends Thread
 			return false;
 			}
 		}
+	
+	public void disconnectClient(int clientID)
+		{
+		if (connections.containsKey(clientID))
+			{
+			// TODO: Remove client from all games as well.
+			connections.remove(clientID);
+			for(GameLogic g:gameSessions.values())
+				{
+				if (g.players.contains(clientID))
+					{
+					g.userLeft(clientID);
+					}
+				}
+			broadcastUserlistToClients();
+			}
+		else
+			System.out.println("Can't disconnect nonconnected user");
+		}
+
 	
 	public int getFreeClientID()
 		{
