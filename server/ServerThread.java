@@ -160,6 +160,7 @@ public class ServerThread extends Thread
 		UserActionListOfUsers action=new UserActionListOfUsers();
 		for(Map.Entry<Integer,ConnectionToClient> c:connections.entrySet())
 			action.nickMap.put(c.getKey(), c.getValue().nick);
+		System.out.println("----- "+action.nickMap);
 		broadcastToClients(new Message(action));
 		}
 

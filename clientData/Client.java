@@ -145,7 +145,7 @@ public class Client
 		int userID=0;
 		serverConn.thread.connections.put(userID,connToClient);
 		
-		connToClient.doFinalHandshake(serverConn.thread);
+		connToClient.doFinalHandshake(serverConn.thread); //TODO bug: nick not the one sent!!!
 		
 		//TODO temp
 		serverConn.thread.openPort(CardGameInfo.defaultServerPort);		
