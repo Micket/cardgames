@@ -1,37 +1,28 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-<svg id="svg2" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" height="244.55" viewBox="-0.2 -236 169.07499 244.54905" width="169.01" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/">
- <metadata id="metadata2101">
-  <rdf:RDF>
-   <cc:Work rdf:about="">
-    <dc:format>image/svg+xml</dc:format>
-    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
-   </cc:Work>
-  </rdf:RDF>
- </metadata>
- <defs id="defs4">
-  <g id="heart-4">
-   <path id="path63621" d="m-7.67 3.93c0.01-4.71 5.91-8.14 7.64-11.87 1.75 3.72 7.66 7.12 7.7 11.83 0.01 2.22-1.71 4.03-3.82 4.03-2.12 0-3.85-1.79-3.85-4.01 0 2.23-1.71 4.03-3.82 4.03-2.12 0.01-3.84-1.79-3.85-4.01z" fill="#e6180a"/>
+<svg xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" height="244.55" viewBox="-0.2 -236 169.07499 244.54905" width="169.01" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/">
+ <defs>
+  <g id="a">
+   <path fill="#e6180a" d="m-7.67 3.93c0.01-4.71 5.91-8.14 7.64-11.87 1.75 3.72 7.66 7.12 7.7 11.83 0.01 2.22-1.71 4.03-3.82 4.03-2.12 0-3.85-1.79-3.85-4.01 0 2.23-1.71 4.03-3.82 4.03-2.12 0.01-3.84-1.79-3.85-4.01z"/>
   </g>
-  <g id="base-67">
-   <path id="path63600" stroke="#000" stroke-width="2.5" fill="#fff" d="m0 0c0 3.78 3.09 6.87 6.87 6.87h152.84c3.77 0 6.86-3.09 6.86-6.87v-228.4c0-3.78-3.09-6.87-6.86-6.87h-152.84c-3.78 0-6.87 3.09-6.87 6.87v228.4z"/>
+  <g id="c">
+   <path d="m0 0c0 3.78 3.09 6.87 6.87 6.87h152.84c3.77 0 6.86-3.09 6.86-6.87v-228.4c0-3.78-3.09-6.87-6.86-6.87h-152.84c-3.78 0-6.87 3.09-6.87 6.87v228.4z" stroke="#000" stroke-width="2.5" fill="#fff"/>
   </g>
-  <g id="n_7-5">
-   <text id="text63579" font-size="43px" font-weight="bold" font-family="Bitstream Vera Serif" transform="scale(.56453 1.0574)">7</text>
+  <g id="b">
+   <text font-size="43px" font-weight="bold" font-family="Bitstream Vera Serif" transform="scale(.56453 1.0574)">7</text>
   </g>
  </defs>
- <g id="7_heart" transform="translate(-1004.4 -485.8)">
-  <use id="use65589" xlink:href="#base-67" height="1" width="1" y="486.27499" x="1005.45"/>
-  <use id="use65591" xlink:href="#n_7-5" height="1" width="1" y="287.15701" x="1009.45" fill="#e6180a"/>
-  <use id="use65593" xlink:href="#n_7-5" transform="matrix(-1 0 0 -1 2338 911.99)" height="1" width="1" y="455.995" x="1169.02" fill="#e6180a"/>
-  <use id="use65595" xlink:href="#heart-4" transform="matrix(-1 0 0 -1 2038.2 602.31)" height="1" width="1" y="301.15701" x="1019.1"/>
-  <use id="use65597" xlink:href="#heart-4" height="1" width="1" y="441.995" x="1159.37"/>
-  <use id="use65599" xlink:href="#heart-4" transform="matrix(-2.4 0 0 -2.4 2098.6 575.53)" height="1" width="1" y="119.902" x="437.21201"/>
-  <use id="use65601" xlink:href="#heart-4" transform="matrix(-2.4 0 0 -2.4 2098.6 729.41)" height="1" width="1" y="151.961" x="437.21201"/>
-  <use id="use65603" xlink:href="#heart-4" transform="scale(2.4)" height="1" width="1" y="188.01601" x="437.21201"/>
-  <use id="use65605" xlink:href="#heart-4" transform="matrix(-2.4 0 0 -2.4 2258.3 575.53)" height="1" width="1" y="119.902" x="470.48599"/>
-  <use id="use65607" xlink:href="#heart-4" transform="matrix(-2.4 0 0 -2.4 2258.3 729.41)" height="1" width="1" y="151.961" x="470.48599"/>
-  <use id="use65609" xlink:href="#heart-4" transform="scale(2.4)" height="1" width="1" y="188.01601" x="470.48599"/>
-  <use id="use65611" xlink:href="#heart-4" transform="matrix(-2.4 0 0 -2.4 2178.5 683.84)" height="1" width="1" y="142.467" x="453.849"/>
+ <g transform="translate(-1004.4 -485.8)">
+  <use xlink:href="#c" height="1" width="1" y="486.27499" x="1005.45"/>
+  <use xlink:href="#b" height="1" width="1" y="287.15701" x="1009.45" fill="#e6180a"/>
+  <use xlink:href="#b" transform="matrix(-1 0 0 -1 2338 911.99)" height="1" width="1" y="455.995" x="1169.02" fill="#e6180a"/>
+  <use xlink:href="#a" transform="matrix(-1 0 0 -1 2038.2 602.31)" height="1" width="1" y="301.15701" x="1019.1"/>
+  <use xlink:href="#a" height="1" width="1" y="441.995" x="1159.37"/>
+  <use xlink:href="#a" transform="matrix(-2.4 0 0 -2.4 2098.6 575.53)" height="1" width="1" y="119.902" x="437.21201"/>
+  <use xlink:href="#a" transform="matrix(-2.4 0 0 -2.4 2098.6 729.41)" height="1" width="1" y="151.961" x="437.21201"/>
+  <use xlink:href="#a" transform="scale(2.4)" height="1" width="1" y="188.01601" x="437.21201"/>
+  <use xlink:href="#a" transform="matrix(-2.4 0 0 -2.4 2258.3 575.53)" height="1" width="1" y="119.902" x="470.48599"/>
+  <use xlink:href="#a" transform="matrix(-2.4 0 0 -2.4 2258.3 729.41)" height="1" width="1" y="151.961" x="470.48599"/>
+  <use xlink:href="#a" transform="scale(2.4)" height="1" width="1" y="188.01601" x="470.48599"/>
+  <use xlink:href="#a" transform="matrix(-2.4 0 0 -2.4 2178.5 683.84)" height="1" width="1" y="142.467" x="453.849"/>
  </g>
 </svg>

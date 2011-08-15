@@ -1,36 +1,27 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-<svg id="svg2" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" height="244.55" viewBox="-0.2 -236 169.07501 244.54905" width="169.01" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/">
- <metadata id="metadata1753">
-  <rdf:RDF>
-   <cc:Work rdf:about="">
-    <dc:format>image/svg+xml</dc:format>
-    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
-   </cc:Work>
-  </rdf:RDF>
- </metadata>
- <defs id="defs4">
-  <g id="diamond-3">
-   <path id="path46815" d="m0 0h-7.68c0.8747 0.039 1.619 0.605 2.322 1.0728 1.579 1.1912 3.058 2.5572 4.226 4.1552 0.545 0.804 1.1176 1.708 1.132 2.712m-7.68-7.94c1.11-0.035 2.058-0.7413 2.904-1.393 1.495-1.255 2.789-2.748 3.881-4.364 0.401-0.669 0.873-1.378 0.895-2.183v7.94m0-7.94c0.038 1.182 0.758 2.206 1.438 3.12 1.212 1.51 2.648 2.846 4.228 3.963 0.614 0.383 1.266 0.8385 2.014 0.857h-7.68m7.68 0c-1.11 0.035-2.058 0.741-2.904 1.392-1.495 1.256-2.789 2.749-3.881 4.365-0.401 0.669-0.8725 1.378-0.895 2.183v-7.94" fill="#e6180a"/>
+<svg xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" height="244.55" viewBox="-0.2 -236 169.07501 244.54905" width="169.01" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/">
+ <defs>
+  <g id="a">
+   <path fill="#e6180a" d="m0 0h-7.68c0.8747 0.039 1.619 0.605 2.322 1.0728 1.579 1.1912 3.058 2.5572 4.226 4.1552 0.545 0.804 1.1176 1.708 1.132 2.712m-7.68-7.94c1.11-0.035 2.058-0.7413 2.904-1.393 1.495-1.255 2.789-2.748 3.881-4.364 0.401-0.669 0.873-1.378 0.895-2.183v7.94m0-7.94c0.038 1.182 0.758 2.206 1.438 3.12 1.212 1.51 2.648 2.846 4.228 3.963 0.614 0.383 1.266 0.8385 2.014 0.857h-7.68m7.68 0c-1.11 0.035-2.058 0.741-2.904 1.392-1.495 1.256-2.789 2.749-3.881 4.365-0.401 0.669-0.8725 1.378-0.895 2.183v-7.94"/>
   </g>
-  <g id="base-6">
-   <path id="path46797" stroke="#000" stroke-width="2.5" fill="#fff" d="m0 0c0 3.78 3.09 6.87 6.87 6.87h152.84c3.77 0 6.86-3.09 6.86-6.87v-228.4c0-3.78-3.09-6.87-6.86-6.87h-152.84c-3.78 0-6.87 3.09-6.87 6.87v228.4z"/>
+  <g id="c">
+   <path d="m0 0c0 3.78 3.09 6.87 6.87 6.87h152.84c3.77 0 6.86-3.09 6.86-6.87v-228.4c0-3.78-3.09-6.87-6.86-6.87h-152.84c-3.78 0-6.87 3.09-6.87 6.87v228.4z" stroke="#000" stroke-width="2.5" fill="#fff"/>
   </g>
-  <g id="n_6-2">
-   <text id="text46773" font-size="43px" font-weight="bold" font-family="Bitstream Vera Serif" transform="scale(.56453 1.0574)">6</text>
+  <g id="b">
+   <text font-size="43px" font-weight="bold" font-family="Bitstream Vera Serif" transform="scale(.56453 1.0574)">6</text>
   </g>
  </defs>
- <g id="6_diamond" transform="translate(-836.82 -242.66)">
-  <use id="use48138" xlink:href="#base-6" height="1" width="1" y="243.13699" x="837.875"/>
-  <use id="use48140" xlink:href="#n_6-2" height="1" width="1" y="44.02" x="841.875" fill="#e6180a"/>
-  <use id="use48142" xlink:href="#n_6-2" transform="matrix(-1 0 0 -1 2002.9 425.71)" height="1" width="1" y="212.85699" x="1001.45" fill="#e6180a"/>
-  <use id="use48144" xlink:href="#diamond-3" transform="matrix(-1 0 0 -1 1703 116.04)" height="1" width="1" y="58.02" x="851.52502"/>
-  <use id="use48146" xlink:href="#diamond-3" height="1" width="1" y="198.85699" x="991.79999"/>
-  <use id="use48148" xlink:href="#diamond-3" transform="matrix(-2.4 0 0 -2.4 1763.5 89.255)" height="1" width="1" y="18.594801" x="367.38901"/>
-  <use id="use48150" xlink:href="#diamond-3" transform="matrix(-2.4 0 0 -2.4 1763.5 243.14)" height="1" width="1" y="50.653599" x="367.38901"/>
-  <use id="use48152" xlink:href="#diamond-3" transform="scale(2.4)" height="1" width="1" y="86.708298" x="367.38901"/>
-  <use id="use48154" xlink:href="#diamond-3" transform="matrix(-2.4 0 0 -2.4 1923.2 89.255)" height="1" width="1" y="18.594801" x="400.66299"/>
-  <use id="use48156" xlink:href="#diamond-3" transform="matrix(-2.4 0 0 -2.4 1923.2 243.14)" height="1" width="1" y="50.653599" x="400.66299"/>
-  <use id="use48158" xlink:href="#diamond-3" transform="scale(2.4)" height="1" width="1" y="86.708298" x="400.66299"/>
+ <g transform="translate(-836.82 -242.66)">
+  <use xlink:href="#c" height="1" width="1" y="243.13699" x="837.875"/>
+  <use xlink:href="#b" height="1" width="1" y="44.02" x="841.875" fill="#e6180a"/>
+  <use xlink:href="#b" transform="matrix(-1 0 0 -1 2002.9 425.71)" height="1" width="1" y="212.85699" x="1001.45" fill="#e6180a"/>
+  <use xlink:href="#a" transform="matrix(-1 0 0 -1 1703 116.04)" height="1" width="1" y="58.02" x="851.52502"/>
+  <use xlink:href="#a" height="1" width="1" y="198.85699" x="991.79999"/>
+  <use xlink:href="#a" transform="matrix(-2.4 0 0 -2.4 1763.5 89.255)" height="1" width="1" y="18.594801" x="367.38901"/>
+  <use xlink:href="#a" transform="matrix(-2.4 0 0 -2.4 1763.5 243.14)" height="1" width="1" y="50.653599" x="367.38901"/>
+  <use xlink:href="#a" transform="scale(2.4)" height="1" width="1" y="86.708298" x="367.38901"/>
+  <use xlink:href="#a" transform="matrix(-2.4 0 0 -2.4 1923.2 89.255)" height="1" width="1" y="18.594801" x="400.66299"/>
+  <use xlink:href="#a" transform="matrix(-2.4 0 0 -2.4 1923.2 243.14)" height="1" width="1" y="50.653599" x="400.66299"/>
+  <use xlink:href="#a" transform="scale(2.4)" height="1" width="1" y="86.708298" x="400.66299"/>
  </g>
 </svg>

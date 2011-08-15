@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" height="244.55" width="169.02" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="-0.2 -236 169.08 244.5493" xmlns:dc="http://purl.org/dc/elements/1.1/">
+<svg xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" height="244.55" viewBox="-0.2 -236 169.08 244.5493" width="169.02" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/">
  <defs>
   <g id="b">
-   <text font-weight="bold" transform="scale(.56453 1.0574)" font-size="43px">9</text>
+   <text font-size="43px" font-weight="bold" transform="scale(.56453 1.0574)">9</text>
   </g>
   <g id="c">
-   <path d="m0 0c0 3.78 3.09 6.87 6.87 6.87h152.85c3.76 0 6.86-3.09 6.86-6.87v-228.4c0-3.78-3.1-6.87-6.86-6.87h-152.85c-3.78 0-6.87 3.09-6.87 6.87v228.4z" stroke="#000" stroke-width="2.5" fill="#fff"/>
+   <path stroke="#000" stroke-width="2.5" fill="#fff" d="m0 0c0 3.78 3.09 6.87 6.87 6.87h152.85c3.76 0 6.86-3.09 6.86-6.87v-228.4c0-3.78-3.1-6.87-6.86-6.87h-152.85c-3.78 0-6.87 3.09-6.87 6.87v228.4z"/>
   </g>
   <g id="a">
    <path d="m3.92-7.93c-1.67 0-2.55 1.78-3.01 3.56s-0.5 3.56-0.5 3.56l-0.85 0.01s-0.16-7.13-3.5-7.13h7.86z"/>
