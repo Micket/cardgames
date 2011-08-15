@@ -37,7 +37,7 @@ public class Client
 	public Map<Integer, GameSession> gameSessions=new HashMap<Integer, GameSession>();
 	public Map<Class<? extends GameLogic>, GameType> gameTypes=new HashMap<Class<? extends GameLogic>, GameType>();
 
-	public String tryToGetNick="Igotnick";
+	public String tryToGetNick=System.getProperty("user.name");
 	
 	/**
 	 * Add a message from the server to the incoming queue
