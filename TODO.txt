@@ -4,6 +4,8 @@
 * mac port - can get java starter from endrov
 * windows port
 * android port
+* debian package
+* fedora package
 * svg rasterizer, faster rendering. any way to speed up more? the problem is likely slow clipping.
   also, can try and not recreate entire scene all the time
 * card placement: as a hand
@@ -16,7 +18,6 @@
 * AI connections
 * make AIs. I suggest using GAs
 * plugin loader - support classes being inside a jar-file
-* documentation
 * graphics theme system
 * way for server to provide missing graphics
 * how to present buttons for user, and user to click them
@@ -28,6 +29,8 @@
 * config file for client
 * dice support
 * random number generation
+* website
+* translation
+* documentation
 
 * more games
-
