@@ -1,0 +1,24 @@
+* about menu
+* disconnect from server, menu item
+* handle lost connections. IOExceptions. common function to tear down client connection
+* mac port - can get java starter from endrov
+* windows port
+* svg rasterizer, faster rendering. any way to speed up more? the problem is likely slow clipping.
+  also, can try and not recreate entire scene all the time
+* card placement: as a hand
+* move card from one heap to another, send signal
+* layout of cards on board.
+  in particular, how to display other players cards? and common cards?
+* chat within game session
+* GUI for user to flag that it wishes to participate in game
+* optional system to allow users to register, and only allow registered connections
+* AI connections
+* make AIs. I suggest using GAs
+* plugin loader - support classes being inside a jar-file
+* documentation
+* graphics theme system
+* way for server to provide missing graphics
+* how to present buttons for user, and user to click them
+* sound events (and visual)
+
+* more games

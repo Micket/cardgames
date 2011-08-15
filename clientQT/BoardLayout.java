@@ -41,7 +41,7 @@ public class BoardLayout
 			CardStack<ClientCard> onestack=new CardStack<ClientCard>();
 			pdata.stackMap.put("os", onestack);
 
-			for(int i=1;i<=1;i++)
+			for(int i=1;i<=10;i++)
 				{
 				ClientCard cdata=new ClientCard();
 				cdata.front="poker Spades "+i;

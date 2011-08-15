@@ -17,6 +17,7 @@ import com.trolltech.qt.core.QTimer;
 import com.trolltech.qt.core.Qt;
 import com.trolltech.qt.core.Qt.MouseButton;
 import com.trolltech.qt.gui.*;
+import com.trolltech.qt.opengl.QGLWidget;
 import com.trolltech.qt.svg.QGraphicsSvgItem;
 import com.trolltech.qt.svg.QSvgRenderer;
 
@@ -48,6 +49,9 @@ public class BoardView extends QGraphicsView
 		this.client=client;	
 		this.gameID=gameID;
 		
+		//Use OpenGL for rendering
+		setViewport(new QGLWidget());
+
     setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff);
 
