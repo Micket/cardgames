@@ -5,9 +5,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.HashSet;
+
+import server.ServerThread;
 import util.ClassHandling;
 
 import action.GameAction;
+import action.GameActionLeave;
 import action.UserActionClickedButton;
 import action.UserActionClickedCard;
 
@@ -24,12 +27,28 @@ abstract public class GameLogic
 	
 	abstract void startGame();
 	
+	public ServerThread thread;
+	public int sessionID;
+	
 	public boolean userAction(int fromUser, GameAction s)
 		{
 		if (s instanceof UserActionClickedCard)
 			return userActionClickedCard(fromUser, (UserActionClickedCard) s);
 		else if (s instanceof UserActionClickedButton)
 			return userActionClickedButton(fromUser, (UserActionClickedButton) s);
+		else if (s instanceof GameActionLeave)
+			{
+			GameActionLeave a=(GameActionLeave)s;
+			boolean b=userLeft(a.fromClientID);
+			players.remove(a.fromClientID);
+			
+			if(players.isEmpty())
+				thread.gameSessions.remove(sessionID);
+			//TODO only update this game session
+			thread.broadcastToClients(thread.createMessageGameSessionsToClients());
+			
+			return b;
+			}
 		return false;
 		}
 
@@ -37,20 +56,32 @@ abstract public class GameLogic
 
 	abstract public boolean userActionClickedButton(int fromUser, UserActionClickedButton s);
 	
+	/**
+	 * User wants to participate in the game
+	 */
 	abstract public boolean userJoined(int userID);
+	
+	/**
+	 * User does not want to participate anymore
+	 */
 	abstract public boolean userLeft(int userID);
-	//abstract public boolean joinAI(); // False if full, or if AI can't join?
 
-	// General metadata displayed to connected users.
-//	abstract public String getName();
-//	abstract public String getDescription();
+	/**
+	 * Get how many players are actually participating (because max does not put a limit on spectators)
+	 */
+	abstract public int getNumParticipatingPlayers();
+	
 	abstract public int getMaxPlayers();
 	abstract public int getMinPlayers();
 	
+	
+	
+	/**
+	 * Detect available game types
+	 */
 	@SuppressWarnings("unchecked")
 	public static Map<Class<? extends GameLogic>, GameType> availableGames()
 		{
-//		List<GameType> games = new ArrayList<GameType>();
 		Map<Class<? extends GameLogic>, GameType> games=new HashMap<Class<? extends GameLogic>, GameType>();
 		
 		try

@@ -112,9 +112,11 @@ public class ServerThread extends Thread
 						try
 							{
 							GameLogic game = ((UserActionStartGame)action).game.newInstance();
+							game.thread=this;
 							game.userJoined(action.fromClientID);
 							game.sessionName = ((UserActionStartGame)action).sessionName;
 							int sessionID=getFreeGameSessionID();
+							game.sessionID=sessionID;
 							gameSessions.put(sessionID, game);
 							
 							broadcastToClients(new Message(new UserActionGameSessionUpdate(sessionID, createGameSessionUpdate(sessionID))));
@@ -149,7 +151,7 @@ public class ServerThread extends Thread
 	/**
 	 * Pass message on to all clients
 	 */
-	private void broadcastToClients(Message msg)
+	public void broadcastToClients(Message msg)
 		{
 		for(ConnectionToClient conn:connections.values())
 			conn.send(msg);

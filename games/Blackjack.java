@@ -80,6 +80,11 @@ public class Blackjack extends DefaultGameLogic
 		return true;
 		}
 	
+	public int getNumParticipatingPlayers()
+		{
+		return players.size();
+		}
+	
 	public boolean userActionClickedButton(int fromUser, UserActionClickedButton action)
 		{
 		PlayerState p = players.get(fromUser);
@@ -333,17 +338,6 @@ public class Blackjack extends DefaultGameLogic
 		return points;
 		}
 
-	/*
-	public String getName()
-		{
-		return "BlackJack";
-		}
-
-	public String getDescription()
-		{
-		return "BlackJack tournament edition. Bet money until only one remain.";
-		}
-	*/
 
 	/////////////////////////////////////////////////
 	// 
@@ -354,15 +348,5 @@ public class Blackjack extends DefaultGameLogic
 		return null;
 
 		}
-	/*
-	{
-	CardStack<PlayingCard> cards=null;
-	CardStack<?> cards2=cards;
-	CardStack<ServerCard> cards3=cards2;
-	
-	
-	ServerCard c;
-	((PlayingCard)c).isAce();
-	}
-	 */
+
 	}

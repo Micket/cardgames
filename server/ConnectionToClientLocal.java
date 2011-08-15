@@ -14,7 +14,7 @@ import server.ConnectionToClient;
 public class ConnectionToClientLocal extends ConnectionToClient
 	{
 	public Client localClient;
-	private ServerThread thread;
+	//private ServerThread thread;
 	
 	/**
 	 * Random unique ID obtained upon connection. It never changes during a session.
@@ -23,7 +23,7 @@ public class ConnectionToClientLocal extends ConnectionToClient
 	
 	public ConnectionToClientLocal(ServerThread thread)
 		{
-		this.thread=thread;
+		//this.thread=thread;
 		}
 	
 	

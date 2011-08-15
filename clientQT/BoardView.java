@@ -40,7 +40,7 @@ public class BoardView extends QGraphicsView
 	private Client client;
 
 	private QPoint oldMousePos=new QPoint();
-	public Object gameID;
+	public int gameID;
 
 	public BoardView(Client client, QWidget parent, int gameID)
 		{

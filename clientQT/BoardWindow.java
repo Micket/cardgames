@@ -1,8 +1,8 @@
 package clientQT;
 
+import action.GameActionLeave;
 import action.Message;
 
-import clientData.Client;
 import clientData.ServerListener;
 
 import com.trolltech.qt.gui.*;
@@ -49,6 +49,10 @@ public class BoardWindow extends QWidget implements ServerListener
 	@Override
 	protected void closeEvent(QCloseEvent arg)
 		{
+		GameActionLeave a=new GameActionLeave();
+		a.gameID=view.gameID;
+		client.send(new Message(a));
+		
 		client.serverListeners.remove(this);
 		client.boardViewsExistFor.remove(view.gameID);
 		}
