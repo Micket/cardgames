@@ -18,7 +18,7 @@ import action.UserActionClickedButton;
  * @author Micket
  */
 @GameTypePlugin(
-		description = "bla bla bla desc",
+		description = "Compete in classical Blackjack against other players to until only one remain.",
 		maxplayers = -1,
 		minplayers = 0,
 		name = "Blackjack",

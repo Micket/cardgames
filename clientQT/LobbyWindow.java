@@ -253,7 +253,7 @@ public class LobbyWindow extends QWidget implements ServerListener
 		for(Map.Entry<Class<? extends GameLogic>, GameType> g:client.gameTypes.entrySet())
 			{
 			final Class<? extends GameLogic> cl=g.getKey();
-			GameType gt=g.getValue();
+			final GameType gt=g.getValue();
 			QAction menuaction = new QAction(gt.name, miNewGame);
 			miNewGame.addAction(menuaction);
 			menuaction.triggered.connect(new Runnable()
@@ -264,7 +264,7 @@ public class LobbyWindow extends QWidget implements ServerListener
 						// TODO Auto-generated method stub
 						
 						UserActionStartGame a=new UserActionStartGame();
-						a.sessionName = QInputDialog.getText(null, "Session name", "Session name", QLineEdit.EchoMode.Normal, "My game");
+						a.sessionName = QInputDialog.getText(null, "Session name", gt.description+"\nSession name:", QLineEdit.EchoMode.Normal, "My game");
 						if (a.sessionName == null)
 							return; // Then no new game!
 						a.game=cl;
