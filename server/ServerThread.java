@@ -113,6 +113,7 @@ public class ServerThread extends Thread
 							{
 							GameLogic game = ((UserActionStartGame)action).game.newInstance();
 							game.userJoined(action.fromClientID);
+							game.sessionName = ((UserActionStartGame)action).sessionName;
 							int sessionID=getFreeGameSessionID();
 							gameSessions.put(sessionID, game);
 							
