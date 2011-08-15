@@ -20,4 +20,5 @@ public class GameSession implements Serializable
 	public int maxusers;
 	public int minusers;
 	public Set<Integer> joinedUsers;
+	public String sessionName;
 	}

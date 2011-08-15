@@ -20,6 +20,7 @@ abstract public class GameLogic
 	{
 	public boolean gameOn = false;
 	public Set<Integer> players = new HashSet<Integer>();
+	public String sessionName;
 	
 	abstract void startGame();
 	

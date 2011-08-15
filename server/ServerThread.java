@@ -112,7 +112,6 @@ public class ServerThread extends Thread
 						try
 							{
 							GameLogic game = ((UserActionStartGame)action).game.newInstance();
-							game.players.add(action.fromClientID); //This really should be here and not in gamelogic
 							game.userJoined(action.fromClientID);
 							int sessionID=getFreeGameSessionID();
 							gameSessions.put(sessionID, game);
@@ -143,12 +142,7 @@ public class ServerThread extends Thread
 						System.out.println("Unrecognized action");
 					}
 				}
-			
-			
 			}
-		
-		
-		
 		}
 	
 	/**
@@ -203,6 +197,7 @@ public class ServerThread extends Thread
 		gmd.minusers=logic.getMinPlayers();
 		gmd.type=logic.getClass();
 		gmd.joinedUsers = logic.players;
+		gmd.sessionName = logic.sessionName;
 		return gmd;
 		}
 	
@@ -255,11 +250,13 @@ public class ServerThread extends Thread
 			{
 			// TODO: Remove client from all games as well.
 			connections.remove(clientID);
-			for(GameLogic g:gameSessions.values())
+			for(Map.Entry<Integer,GameLogic> g:gameSessions.entrySet()) // TODO: This doesn't scale. Store this mapping as well instead of looping.
 				{
-				if (g.players.contains(clientID))
+				if (g.getValue().players.contains(clientID))
 					{
-					g.userLeft(clientID);
+					g.getValue().userLeft(clientID);
+					if (g.getValue().players.isEmpty()) // Remove empty games automatically.
+						gameSessions.remove(g.getKey());
 					}
 				}
 			broadcastUserlistToClients();

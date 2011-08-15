@@ -210,6 +210,8 @@ public class LobbyWindow extends QWidget implements ServerListener
 			nickList.insertTopLevelItem(0, user);
 			nicks.put(u.getKey(), user);
 			}
+		setGameSessions();
+		
 		}
 
 	public void setGameSessions()
@@ -217,6 +219,12 @@ public class LobbyWindow extends QWidget implements ServerListener
 		gameList.clear();
 		gameList.setRowCount(client.gameSessions.size());
 		System.out.println("game sessions: "+client.gameSessions);
+		
+		// Delete all old entries first. (Why is there no clear()?
+		for(QTreeWidgetItem w:nicks.values())
+			for(QTreeWidgetItem s:w.takeChildren())
+				w.removeChild(s);
+		
 		for(GameSession g:client.gameSessions.values())
 			{
 			GameType gt=client.gameTypes.get(g.type);
@@ -231,7 +239,7 @@ public class LobbyWindow extends QWidget implements ServerListener
 
 			// Maybe something like this?
 			List<String> temptext = new ArrayList<String>(1);
-			temptext.add(gt.name);
+			temptext.add(g.sessionName + " ("+gt.name+")"); // temptext.add(gt.name); and possible other data..
 			QTreeWidgetItem temp=new QTreeWidgetItem(temptext);
 			for(Integer u:g.joinedUsers)
 				nicks.get(u).addChild(temp);

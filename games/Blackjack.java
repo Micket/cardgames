@@ -21,11 +21,11 @@ import action.UserActionClickedButton;
 		description = "bla bla bla desc",
 		maxplayers = -1,
 		minplayers = 0,
-		name = "Black Jack",
-		category = "uuuh",
+		name = "Blackjack",
+		category = "Banking",
 		instructions = "Play to win etc." // Good idea to have some rich text player instructions here?
 		)
-public class BlackJack extends DefaultGameLogic
+public class Blackjack extends DefaultGameLogic
 	{
 
 	enum GameState { Betting, Playing, Over }
