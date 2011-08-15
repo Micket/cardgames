@@ -17,6 +17,9 @@ import com.trolltech.qt.core.QTimer;
 import com.trolltech.qt.core.Qt;
 import com.trolltech.qt.core.Qt.MouseButton;
 import com.trolltech.qt.gui.*;
+import com.trolltech.qt.gui.QPainter.RenderHint;
+import com.trolltech.qt.opengl.QGL;
+import com.trolltech.qt.opengl.QGLFormat;
 import com.trolltech.qt.opengl.QGLWidget;
 import com.trolltech.qt.svg.QGraphicsSvgItem;
 import com.trolltech.qt.svg.QSvgRenderer;
@@ -33,7 +36,7 @@ public class BoardView extends QGraphicsView
 	public List<AnimatedCard> cards=new LinkedList<AnimatedCard>();
 	public List<QPoint> emptyPosList=new LinkedList<QPoint>();
 	
-	public double zoom=0.3;
+	public double zoom=1;
 
 	public ClientGameData gameData=new ClientGameData(); 
 	private BoardLayout layout=new BoardLayout();
@@ -49,8 +52,8 @@ public class BoardView extends QGraphicsView
 		this.client=client;	
 		this.gameID=gameID;
 		
-		//Use OpenGL for rendering
-		setViewport(new QGLWidget());
+		setViewport(new QGLWidget(new QGLFormat(new QGL.FormatOptions(QGL.FormatOption.SampleBuffers))));
+
 
     setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff);
@@ -158,32 +161,18 @@ public class BoardView extends QGraphicsView
 	/**
 	 * Turn an SVG graphics item into pixmap graphics item
 	 */
-	public QGraphicsItemInterface rasterizeSvg(QGraphicsSvgItem g)
+	public static QGraphicsItemInterface rasterizeSvg(QGraphicsSvgItem g, double zoom)
 		{
+		double scale=zoom;
+
 		QRectF bb=g.boundingRect();
-
-		double scale=zoom*0.5;
-
 		int w=(int)(bb.width()*scale)+1;
 		int h=(int)(bb.height()*scale)+1;
-		System.out.println("wh "+w+"  "+h);
 		QPixmap pm=new QPixmap(new QSize(w,h));
-		pm.fill(QColor.red);
-//		pm.fill(QColor.transparent);
+		pm.fill(QColor.transparent);
 		QPainter painter=new QPainter(pm);
-
-//		painter.setBrush(QColor.black);
-//		pm.fill(QColor.red);
-
-		System.out.println(painter.combinedMatrix());
-		
-//		painter.scale(scale,scale);
-		painter.scale(0.1,0.1);
-//		QRectF b2=g.renderer().viewBoxF();
-		QRectF b2=g.boundingRect();
-		System.out.println(b2);
-//		g.translate(-b2.left(), -b2.top());
-//		g.renderer().render(painter);
+		painter.setRenderHint(RenderHint.HighQualityAntialiasing);
+		painter.scale(scale, scale);
 		g.paint(painter, new QStyleOptionGraphicsItem(), null);  
 		painter.end();
 
@@ -283,7 +272,7 @@ public class BoardView extends QGraphicsView
 				
 			
 			//QGraphicsItemInterface item=
-			//cardImage=rasterizeSvg(new QGraphicsSvgItem("cards/spades9.svg"));
+			//cardImage=rasterizeSvg(new QGraphicsSvgItem("cards/pokerbackside.svg"));
 			
 			cardImage.setZValue(curz);
 			cardImage.resetTransform();

@@ -7,8 +7,6 @@
 * android port
 * debian package
 * fedora package
-* svg rasterizer, faster rendering. any way to speed up more? the problem is likely slow clipping.
-  also, can try and not recreate entire scene all the time
 * card placement: as a hand
 * move card from one heap to another, send signal
 * layout of cards on board.

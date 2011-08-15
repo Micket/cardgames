@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 
+import clientQT.BoardView;
+
 import com.trolltech.qt.gui.QGraphicsItemInterface;
 import com.trolltech.qt.gui.QGraphicsPixmapItem;
 import com.trolltech.qt.gui.QPixmap;
@@ -62,7 +64,10 @@ public class ClientGameData
 		if(new File("cards",cardFile).exists())
 			{
 			if(file.endsWith(".svg"))
-				return new QGraphicsSvgItem(file);
+				{
+				QGraphicsSvgItem item=new QGraphicsSvgItem(file);
+				return BoardView.rasterizeSvg(item,0.3);
+				}
 			else
 				return new QGraphicsPixmapItem(new QPixmap(file));
 			}
