@@ -279,6 +279,8 @@ public class BoardView extends QGraphicsView
 			//card.image.setPos(card.posX*zoom, card.posY*zoom);
 			cardImage.setTransform(QTransform.fromScale(zoom, zoom), true);
 			cardImage.setTransform(QTransform.fromTranslate(card.posX, card.posY), true);
+			cardImage.rotate(card.rotation*180/Math.PI);
+			
 			
 			s.addItem(cardImage);
 

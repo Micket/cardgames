@@ -3,9 +3,18 @@ package clientQT;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.vecmath.Matrix3d;
+import javax.vecmath.Matrix3f;
+import javax.vecmath.Matrix4d;
+import javax.vecmath.Matrix4f;
+import javax.vecmath.Point3d;
+import javax.vecmath.Vector2d;
+
 import com.trolltech.qt.core.QPoint;
+import com.trolltech.qt.gui.QMatrix;
 
 import serverData.CardStack;
+import util.Matrix2d;
 
 import clientData.Client;
 import clientData.ClientCard;
@@ -35,19 +44,26 @@ public class BoardLayout
 	
 		if(first)
 			{
-			ClientPlayerData pdata=new ClientPlayerData();
-			gamedata.playerMap.put(client.getClientID(),pdata);
-
-			CardStack<ClientCard> onestack=new CardStack<ClientCard>();
-			pdata.stackMap.put("os", onestack);
-
-			for(int i=1;i<=10;i++)
+			for(int ap=0;ap<2;ap++)
 				{
-				ClientCard cdata=new ClientCard();
-				cdata.front="poker Spades "+i;
-				cdata.back="poker back";
-				pdata.stackMap.get("os").addCard(cdata);
+				ClientPlayerData pdata=new ClientPlayerData();
+				if(ap==0)
+					gamedata.playerMap.put(client.getClientID(),pdata);
+				else
+					gamedata.playerMap.put(-ap,pdata); //until we have more players
+
+				CardStack<ClientCard> onestack=new CardStack<ClientCard>();
+				pdata.stackMap.put("os", onestack);
+
+				for(int i=1;i<=10;i++)
+					{
+					ClientCard cdata=new ClientCard();
+					cdata.front="poker Spades "+i;
+					cdata.back="poker back";
+					pdata.stackMap.get("os").addCard(cdata);
+					}
 				}
+			
 			first=false;
 			
 			System.out.println("---------layout1!");
@@ -56,45 +72,53 @@ public class BoardLayout
 		
 		//TODO also for common area!
 		
-		//Check if this player has data. Otherwise it is a spectator
-		ClientPlayerData pdata=gamedata.playerMap.get(client.getClientID());
-		if(pdata!=null)
+		for(int playerID:gamedata.playerMap.keySet())
 			{
+			//Here, create a transform for this players coordinate system
+			Matrix2d transformRot=new Matrix2d();
+			double baseRotAngle=Math.PI/4*playerID;
+			transformRot.setRot(baseRotAngle);
+			Vector2d transformMove=new Vector2d(100,100);
+			
+			//Check if this player has data. Otherwise it is a spectator
+			ClientPlayerData pdata=gamedata.playerMap.get(playerID);
+
 			//Create a reversible map of the cards
 			Map<ClientCard,AnimatedCard> mapCC_AC=new HashMap<ClientCard, AnimatedCard>();
 			for(AnimatedCard ac:view.cards)
 				mapCC_AC.put(ac.cardData, ac);
-			
+
 			view.emptyPosList.clear();
-			
+
 			//For each stack
 			for(String stackName:pdata.stackMap.keySet())
 				{
 				CardStack<ClientCard> onestack=pdata.stackMap.get(stackName);
-				
+
 				//Place position beneath
 				view.emptyPosList.add(new QPoint(0,0));
-				
+
 				//Place cards
 				for(int i=0;i<onestack.size();i++)
 					{
 					ClientCard cc=onestack.getCard(i);
 					AnimatedCard ac=mapCC_AC.get(cc);
 
-					double shouldBeX=i*20;
-					double shouldBeY=i*20;
-//					double shouldBeX=40+i*20;
-	//				double shouldBeY=40+i*20;
-
+					Vector2d shouldBe=new Vector2d(i*10, i*10);
+					shouldBe.add(transformMove);
+					transformRot.transform(shouldBe);
+					shouldBe.add(new Vector2d(100,100)); //To center rotation around midpos
+					
 					//If a card does not have an animated card, then just create it in the right location
 					if(ac==null)
 						{
 						System.out.println("creating card "+i);
-						
+
 						ac=new AnimatedCard(cc);
-						ac.posX=shouldBeX;
-						ac.posY=shouldBeY;
+						ac.posX=shouldBe.x;
+						ac.posY=shouldBe.y;
 						ac.posZ=10-i;
+						ac.rotation=baseRotAngle;
 						
 						view.cards.add(ac);
 						mapCC_AC.put(cc, ac);
@@ -104,39 +128,43 @@ public class BoardLayout
 						{
 						//If a card is not in the right location, then animate it moving there
 
-						if(!ac.isBeingDragged && (ac.posX!=shouldBeX || ac.posY!=shouldBeY))
+						if(!ac.isBeingDragged && (ac.posX!=shouldBe.x || ac.posY!=shouldBe.y))
 							{
 							//System.out.println("out of pos");
-							
-							double mvx=ac.posX-shouldBeX;
-							double mvy=ac.posY-shouldBeY;
-							
+
+							double mvx=ac.posX-shouldBe.x;
+							double mvy=ac.posY-shouldBe.y;
+
 							//System.out.println(mvx+"  "+mvy);
-//							if(mvx>5)
-//								mvx=5;
-							
+							//								if(mvx>5)
+							//									mvx=5;
+
 							ac.posX-=mvx*0.2;
 							ac.posY-=mvy*0.2;
 
 							//When card is close enough, make sure it is exactly in the right position so updates can stop
 							double stopRadius=3;
-							if(Math.abs(ac.posX-shouldBeX)<stopRadius && Math.abs(ac.posY-shouldBeY)<stopRadius)
+							if(Math.abs(ac.posX-shouldBe.x)<stopRadius && Math.abs(ac.posY-shouldBe.y)<stopRadius)
 								{
-								ac.posX=shouldBeX;
-								ac.posY=shouldBeY;
+								ac.posX=shouldBe.x;
+								ac.posY=shouldBe.y;
 								}
 
 							needRedraw=true;
 							}
-						
+
 						}
 					}
-				
-				
+
+
 				}
+
+				
+				
 			
 			
 			}
+
 	
 		/*
 		view.cards.clear();
