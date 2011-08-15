@@ -1,5 +1,6 @@
 * about menu
 * disconnect from server, menu item
+* server connection status
 * handle lost connections. IOExceptions. common function to tear down client connection
 * mac port - can get java starter from endrov
 * windows port
@@ -14,7 +15,9 @@
   in particular, how to display other players cards? and common cards?
 * chat within game session
 * GUI for user to flag that it wishes to participate in game
+* spectators
 * optional system to allow users to register, and only allow registered connections
+* Store results/highscores.
 * AI connections
 * make AIs. I suggest using GAs
 * plugin loader - support classes being inside a jar-file
@@ -33,4 +36,12 @@
 * translation
 * documentation
 
+* graphics
+  * poker chips for betting games
+  * simpler playingcard backside designs.
+  * rendering of decks (placing many cards is a great idea in general).
+  * recenter graphics (?) (or fix QT..)
+
 * more games
+  * poker
+  * 
