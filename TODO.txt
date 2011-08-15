@@ -3,6 +3,7 @@
 * handle lost connections. IOExceptions. common function to tear down client connection
 * mac port - can get java starter from endrov
 * windows port
+* android port
 * svg rasterizer, faster rendering. any way to speed up more? the problem is likely slow clipping.
   also, can try and not recreate entire scene all the time
 * card placement: as a hand
@@ -20,5 +21,13 @@
 * way for server to provide missing graphics
 * how to present buttons for user, and user to click them
 * sound events (and visual)
+* game logs
+* store/resume games
+* soft server restarts?
+* config file for server
+* config file for client
+* dice support
+* random number generation
 
 * more games
+
