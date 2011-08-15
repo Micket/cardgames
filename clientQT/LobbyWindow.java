@@ -140,13 +140,13 @@ public class LobbyWindow extends QWidget implements ServerListener
 	public void actionExit()
 		{
 		System.out.println("Exiting...");
+		client.disconnectFromServer();
 		System.exit(0);
-		//TODO handle connections
 		}
 
 	public void actionAbout()
 		{
-		//TODO
+		//TODO show about dialog.
 		}
 	
 	public void actionSendMessage()

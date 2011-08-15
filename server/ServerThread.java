@@ -251,7 +251,6 @@ public class ServerThread extends Thread
 		{
 		if (connections.containsKey(clientID))
 			{
-			// TODO: Remove client from all games as well.
 			connections.remove(clientID);
 			for(Map.Entry<Integer,GameLogic> g:gameSessions.entrySet()) // TODO: This doesn't scale. Store this mapping as well instead of looping.
 				{
@@ -262,6 +261,7 @@ public class ServerThread extends Thread
 						gameSessions.remove(g.getKey());
 					}
 				}
+			// TODO: Broadcast game session list as well.
 			broadcastUserlistToClients();
 			}
 		else

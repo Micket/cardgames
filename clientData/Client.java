@@ -157,16 +157,23 @@ public class Client
 	 */
 	public void connectToServer(InetAddress address, int port) throws IOException
 		{
-		if (serverConn != null)
-			{
-			serverConn.send(new Message(new UserActionDisconnect()));
-			}
+		disconnectFromServer();
 		ConnectionToServerRemote sc=new ConnectionToServerRemote(this, address, port);
 		serverConn=sc;
 		sc.start();
 		}
 	
-
+	/**
+	 * Connect to a remote server
+	 */
+	public void disconnectFromServer()
+		{
+		if (serverConn != null)
+			{
+			serverConn.send(new Message(new UserActionDisconnect()));
+			}
+		serverConn = null;
+		}
 
 	public int getClientID()
 		{
