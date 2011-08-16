@@ -114,14 +114,20 @@ public class LobbyWindow extends QWidget implements ServerListener
 		miConnect.setStatusTip(tr("Connect to server"));
 		miConnect.triggered.connect(this, "actionConnect()");
 
+		QAction miDisconnect = new QAction(tr("Disconnect"), this);
+		miDisconnect.setStatusTip(tr("Disconnect to server"));
+		miDisconnect.triggered.connect(this, "actionDisconnect()");
+
 		QAction miAbout = new QAction(tr("About"), this);
 		miAbout.setStatusTip(tr("About this program"));
 		miAbout.triggered.connect(this, "actionAbout()");
 
-		miNewGame = menuBar.addMenu("&New");
 		QMenu mClient = menuBar.addMenu("&Client");
 		mClient.addAction(miConnect);
+		mClient.addAction(miDisconnect);
 		mClient.addAction(miExit);
+		miNewGame = menuBar.addMenu("&New");
+
 
 		QMenu helpMenu = menuBar.addMenu(tr("&Help"));
 		helpMenu.addAction(miAbout);
@@ -172,6 +178,10 @@ public class LobbyWindow extends QWidget implements ServerListener
 		new ConnectToServerDialog(client).show();
 		}
 	
+	public void actionDisconnect()
+		{
+		client.disconnectFromServer();
+		}
 	
 	public void closeEvent(QCloseEvent e)
 		{
@@ -187,7 +197,6 @@ public class LobbyWindow extends QWidget implements ServerListener
 			}
 			});
 		}
-	
 	
 	public void showLobbyMessage(final UserActionLobbyMessage lm)
 		{
