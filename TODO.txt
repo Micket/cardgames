@@ -12,8 +12,9 @@
 * layout of cards on board.
   in particular, how to display other players cards? and common cards?
 * chat within game session
-* GUI for user to flag that it wishes to participate in game
+* GUI for user to flag that it wishes to participate in game (I'm not sure about this...)
 * spectators
+* teams
 * optional system to allow users to register, and only allow registered connections
 * Store results/highscores.
 * AI connections
@@ -41,5 +42,5 @@
   * recenter graphics (?) (or fix QT..)
 
 * more games
-  * poker
-  * 
+  * poker (texas hold'em?)
+  * solitaire
