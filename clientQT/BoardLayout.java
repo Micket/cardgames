@@ -3,15 +3,9 @@ package clientQT;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.vecmath.Matrix3d;
-import javax.vecmath.Matrix3f;
-import javax.vecmath.Matrix4d;
-import javax.vecmath.Matrix4f;
-import javax.vecmath.Point3d;
 import javax.vecmath.Vector2d;
 
 import com.trolltech.qt.core.QPoint;
-import com.trolltech.qt.gui.QMatrix;
 
 import serverData.CardStack;
 import util.Matrix2d;
@@ -28,11 +22,8 @@ import clientData.ClientPlayerData;
  */
 public class BoardLayout
 	{
-	boolean first=true;
-	
-	
+	private boolean first=true;
 	private Map<ClientCard,AnimatedCard> mapCC_AC=new HashMap<ClientCard, AnimatedCard>();
-	
 	private boolean needRedraw;
 	
 	/**
@@ -107,7 +98,8 @@ public class BoardLayout
 		}
 	
 	
-	private void layoutForOnePlayer(BoardView view, Client client, int playerID, double baseRotAngle, Matrix2d transformRot, Vector2d transformMove,
+	private void layoutForOnePlayer(BoardView view, Client client, int playerID, 
+			double baseRotAngle, Matrix2d transformRot, Vector2d transformMove,
 			ClientPlayerData pdata)
 		{
 		
