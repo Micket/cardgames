@@ -1,5 +1,5 @@
 * about menu
-* disconnect from server, menu item
+* clear menu items/nicklists and such when disconnected (but not the chat window)
 * server connection status
 * handle lost connections. IOExceptions. common function to tear down client connection
 * mac port - can get java starter from endrov
