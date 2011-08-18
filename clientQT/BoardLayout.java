@@ -14,6 +14,7 @@ import clientData.ClientCard;
 import clientData.ClientGameData;
 import clientData.ClientPlayerData;
 import clientData.GameDesign;
+import clientData.GameDesign.StackDef;
 
 
 /**
@@ -114,7 +115,7 @@ public class BoardLayout
 	
 	
 	private void layoutForOnePlayer(BoardView view, Client client, int playerID, 
-			double baseRotAngle, Matrix2d transformRot, Vector2d transformMove, Vector2d midPos, 
+			double baseRotAngle, Matrix2d transformRot, Vector2d transformMoveOrig, Vector2d midPos, 
 			ClientPlayerData pdata)
 		{
 
@@ -127,6 +128,20 @@ public class BoardLayout
 			{
 			CardStack<ClientCard> onestack=pdata.stackMap.get(stackName);
 
+			Vector2d transformMove=new Vector2d(transformMoveOrig);
+			StackDef stackDef;
+			
+			if(playerID>=0)
+				stackDef=design.playerField.stacks.get(stackName);
+			else
+				stackDef=design.commonField.stacks.get(stackName);
+			if(stackDef!=null)
+				{
+				transformMove.x+=stackDef.x;
+				transformMove.y+=stackDef.y;
+				}
+			else
+				System.out.println("Fail "+stackName);
 
 			//Layout a normal stack
 
@@ -284,13 +299,12 @@ public class BoardLayout
 
 		for(String stackName:design.playerField.stacks.keySet())
 			{
-
-			System.out.println("---- "+stackName);
-			
-			
 			CardStack<ClientCard> onestack=new CardStack<ClientCard>();
 			pdata.stackMap.put(stackName, onestack);
-
+			
+			GameDesign.StackDef stackDef=design.playerField.stacks.get(stackName);
+			onestack.stackStyle=stackDef.stack.stackStyle;
+			
 			for(int i=1;i<=10;i++)
 				{
 				ClientCard cdata=new ClientCard();

@@ -1,5 +1,6 @@
 package serverData;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Collections;
@@ -13,7 +14,7 @@ import java.util.Collections;
 public class CardStack<E>
 	{
 
-	public static enum StackStyle
+	public static enum StackStyle implements Serializable
 		{
 		Hand, Solitaire, Deck
 		}
