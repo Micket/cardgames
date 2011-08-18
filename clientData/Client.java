@@ -15,6 +15,7 @@ import util.CardGameInfo;
 
 import action.Message;
 import action.UserAction;
+import action.UserActionGameDesign;
 import action.UserActionGameSessionUpdate;
 import action.UserActionListOfGameSessions;
 import action.UserActionListOfGameTypes;
@@ -56,6 +57,8 @@ public class Client
 				gotListOfGameTypes((UserActionListOfGameTypes)action);
 			else if(action instanceof UserActionListOfGameSessions)
 				gotListOfGameSessions((UserActionListOfGameSessions)action);
+			else if(action instanceof UserActionGameDesign)
+				gotGameDesign((UserActionGameDesign)action);
 			else if(action instanceof UserActionGameSessionUpdate)
 				gotGameSessionUpdate((UserActionGameSessionUpdate)action);
 			
@@ -67,6 +70,13 @@ public class Client
 		for(ServerListener listener:serverListeners)
 			listener.eventServerMessage(msg);
 		
+		}
+
+
+	private void gotGameDesign(UserActionGameDesign action)
+		{
+		for(ServerListener listener:serverListeners)
+			listener.eventGameDesign(action);
 		}
 
 

@@ -10,6 +10,7 @@ import java.util.Set;
 import util.CardGameInfo;
 
 import action.Message;
+import action.UserActionGameDesign;
 
 import com.trolltech.qt.gui.QApplication;
 
@@ -67,6 +68,12 @@ public class ClientQT extends Client implements ServerListener
 		// TODO Auto-generated method stub
 		
 		}
+	
+	@Override
+	public void eventGameDesign(UserActionGameDesign msg)
+		{
+		}
+
 
 	
 

@@ -2,6 +2,7 @@ package clientQT;
 
 import action.GameActionLeave;
 import action.Message;
+import action.UserActionGameDesign;
 
 import clientData.ServerListener;
 
@@ -55,6 +56,13 @@ public class BoardWindow extends QWidget implements ServerListener
 		
 		client.serverListeners.remove(this);
 		client.boardViewsExistFor.remove(view.gameID);
+		}
+
+	@Override
+	public void eventGameDesign(UserActionGameDesign msg)
+		{
+		if(msg.gameID==view.gameID)
+			view.setGameDesign(msg);
 		}
 	
 	}

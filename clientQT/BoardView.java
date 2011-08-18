@@ -7,9 +7,9 @@ import java.util.List;
 
 import action.Message;
 import action.UserActionClickedCard;
+import action.UserActionGameDesign;
 import clientData.Client;
 import clientData.ClientGameData;
-
 import com.trolltech.qt.core.QPoint;
 import com.trolltech.qt.core.QTimer;
 import com.trolltech.qt.core.Qt;
@@ -31,8 +31,6 @@ public class BoardView extends QGraphicsView
 	//TODO unload these!
 	private QPixmap bg;
 	private QtGraphicsData emptyPic;
-
-	
 	
 	public List<AnimatedCard> cards=new LinkedList<AnimatedCard>();
 	public List<EmptyPos> emptyPosList=new LinkedList<EmptyPos>();
@@ -40,7 +38,7 @@ public class BoardView extends QGraphicsView
 	public double zoom=0.3;
 
 	public ClientGameData gameData=new ClientGameData(); 
-	private BoardLayout layout=new BoardLayout();
+	private BoardLayout layout;
 	
 	private Client client;
 
@@ -52,6 +50,8 @@ public class BoardView extends QGraphicsView
 		super(parent);
 		this.client=client;	
 		this.gameID=gameID;
+		
+		layout=new BoardLayout(this, client);
 		
 		setViewport(new QGLWidget(new QGLFormat(new QGL.FormatOptions(QGL.FormatOption.SampleBuffers))));
 
@@ -66,7 +66,7 @@ public class BoardView extends QGraphicsView
     timer.start(1000/50);
 
 		//Place cards on board
-		layout.doLayout(this, client);
+		layout.doLayout();
 		redoLayout();
 
 		setSizePolicy(QSizePolicy.Policy.Ignored,QSizePolicy.Policy.Ignored);
@@ -75,7 +75,7 @@ public class BoardView extends QGraphicsView
 	
 	public void eventTimer()
 		{
-		if(layout.doLayout(this, client))
+		if(layout.doLayout())
 			{
 			redoLayout();
 			//System.out.println("timer req update");
@@ -175,7 +175,6 @@ public class BoardView extends QGraphicsView
 	 */
 	public QtGraphicsData getScaledImage(String front)
 		{
-//		return gameData.getImageForCard(front).getScaledImage(1);
 		return gameData.getImageForCard(front).getScaledImage(zoom);
 		}
 	
@@ -188,8 +187,8 @@ public class BoardView extends QGraphicsView
 		//Place background
 		if(bg==null)
 		bg=new QPixmap("cards/tiledtable.png");
-		for(int ax=0;ax<4;ax++)
-			for(int ay=0;ay<4;ay++)
+		for(int ax=0;ax<10;ax++)
+			for(int ay=0;ay<10;ay++)
 				{
 				QGraphicsPixmapItem item=new QGraphicsPixmapItem(bg);
 				item.setZValue(-1000);
@@ -257,10 +256,7 @@ public class BoardView extends QGraphicsView
 					card.imageBack=getScaledImage(card.cardData.back).createGraphicsItem();
 				item=card.imageBack;
 				}
-				
 			
-			//card.posX=0;
-			//card.posY=0;
 			
 			item.setZValue(curz);
 			item.resetTransform();
@@ -272,6 +268,21 @@ public class BoardView extends QGraphicsView
 
 			curz++;
 			}
+		
+		}
+
+
+	
+	
+	public void setGameDesign(UserActionGameDesign msg)
+		{
+		layout.newDesign(msg.design);
+		layout.doLayout();
+		QApplication.invokeLater(new Runnable() {
+			public void run() {
+				redoLayout();
+			}
+		});
 		
 		}
 	

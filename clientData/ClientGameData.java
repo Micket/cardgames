@@ -6,12 +6,6 @@ import java.util.Map;
 
 import clientQT.QtGraphicsData;
 
-import com.trolltech.qt.gui.QGraphicsItemInterface;
-import com.trolltech.qt.gui.QGraphicsPixmapItem;
-import com.trolltech.qt.gui.QPixmap;
-import com.trolltech.qt.svg.QGraphicsSvgItem;
-import com.trolltech.qt.svg.QSvgRenderer;
-
 public class ClientGameData
 	{
 

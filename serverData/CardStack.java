@@ -13,6 +13,13 @@ import java.util.Collections;
 public class CardStack<E>
 	{
 
+	public static enum StackStyle
+		{
+		Hand, Solitaire, Deck
+		}
+	
+	public StackStyle stackStyle=StackStyle.Hand;
+	
 	/**
 	 * We have to think of representing games like MTG - a recursive definition might be better
 	 *
