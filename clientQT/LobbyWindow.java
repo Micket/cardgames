@@ -39,6 +39,7 @@ import com.trolltech.qt.gui.QTreeWidget;
 import com.trolltech.qt.gui.QTreeWidgetItem;
 import com.trolltech.qt.gui.QWidget;
 import com.trolltech.qt.gui.*; // Fuck it..
+import java.util.Arrays;
 
 public class LobbyWindow extends QWidget implements ServerListener
 	{
@@ -64,9 +65,12 @@ public class LobbyWindow extends QWidget implements ServerListener
 		//lobbyLayout.setOrientation(Qt.Orientation.Horizontal);
 		QVBoxLayout chatWindowLayout=new QVBoxLayout();
 		QHBoxLayout chatInputLayout=new QHBoxLayout();
-		QSplitter nickAndGameLayout = new QSplitter();
-		nickAndGameLayout.setOrientation(Qt.Orientation.Vertical);
-
+		
+		QSplitter chatAndSidebar = new QSplitter();
+		QSplitter nickAndGame = new QSplitter();
+		
+		nickAndGame.setOrientation(Qt.Orientation.Vertical);
+		chatAndSidebar.setOrientation(Qt.Orientation.Horizontal);
 
 		bNick=new QPushButton(client.getNick()+":", this);
 		bNick.clicked.connect(this, "actionChangeNick()");
@@ -81,20 +85,36 @@ public class LobbyWindow extends QWidget implements ServerListener
 		nickList.header().close();
 		
 		gameList=new QTableWidget();
-		gameList.setColumnCount(2);
+		gameList.setColumnCount(3);
 		gameList.setColumnWidth(0,30);
 		gameList.setShowGrid(false);
+		// TODO: Why the fuck wont this change the header...
+		//gameList.setHorizontalHeaderLabels(Arrays.asList("#","Type","Session"));
+		gameList.setHorizontalHeaderItem(0,new QTableWidgetItem("#"));
+		gameList.setHorizontalHeaderItem(1,new QTableWidgetItem("Type"));
+		gameList.setHorizontalHeaderItem(2,new QTableWidgetItem("Session"));
 		
 		// Lobby layout
 		setLayout(lobbyLayout);
-		lobbyLayout.addLayout(chatWindowLayout);
-		lobbyLayout.addWidget(nickAndGameLayout);
+		//lobbyLayout.addLayout(chatWindowLayout);
+		//lobbyLayout.addWidget(nickAndGameLayout);
+		lobbyLayout.addWidget(chatAndSidebar);
+		QWidget temp = new QWidget();
+		temp.setLayout(chatWindowLayout); // This gives extra padding.
+		temp.setContentsMargins(0, 0, 0, 0);
+		
+		chatWindowLayout.setContentsMargins(0,0,0,0);
+		//lobbyLayout.setContentsMargins(0, 0,0,0);
+		//chatAndSidebar.setContentsMargins(0, 0, 0, 0);
+		
+		chatAndSidebar.addWidget(temp);
+		chatAndSidebar.addWidget(nickAndGame);
 		chatWindowLayout.addWidget(chatHistory);
 		chatWindowLayout.addLayout(chatInputLayout);
 		chatInputLayout.addWidget(bNick);
 		chatInputLayout.addWidget(tfEditLine);
-		nickAndGameLayout.addWidget(nickList);
-		nickAndGameLayout.addWidget(gameList);
+		nickAndGame.addWidget(nickList);
+		nickAndGame.addWidget(gameList);
 		
 		setWindowTitle("Lobby");
 		
@@ -234,6 +254,7 @@ public class LobbyWindow extends QWidget implements ServerListener
 			for(QTreeWidgetItem s:w.takeChildren())
 				w.removeChild(s);
 		
+		int i = 0;
 		for(GameSession g:client.gameSessions.values())
 			{
 			GameType gt=client.gameTypes.get(g.type);
@@ -241,10 +262,13 @@ public class LobbyWindow extends QWidget implements ServerListener
 				System.out.println("Error: gametype does not exist "+gt); //This is a problem with the local connection
 			
 			// TODO: Store metadata in some way to allow sorting and such.. (perhaps use a tree view)
-			QTableWidgetItem newGameItem=new QTableWidgetItem(gt.name);
+			QTableWidgetItem newGameType=new QTableWidgetItem(gt.name);
 			QTableWidgetItem newGameUsersItem=new QTableWidgetItem( g.maxusers < 0 ? ""+g.joinedUsers.size() : ""+g.joinedUsers.size()+"/"+g.maxusers);
-			gameList.setItem(0,0,newGameUsersItem);
-			gameList.setItem(0,1,newGameItem);
+			QTableWidgetItem newGameName=new QTableWidgetItem( g.sessionName );
+			gameList.setItem(i,0,newGameUsersItem);
+			gameList.setItem(i,1,newGameType);
+			gameList.setItem(i,2,newGameName);
+			i++;
 
 			// Maybe something like this?
 			List<String> temptext = new ArrayList<String>(1);
@@ -315,7 +339,7 @@ public class LobbyWindow extends QWidget implements ServerListener
 		System.out.println("New game list...");
 		QApplication.invokeLater(new Runnable() {
 			public void run() {
-				setGameTypes();
+				setGameTypes(); // TODO: This shouldn't be here.
 				setGameSessions();
 			}
 		});
