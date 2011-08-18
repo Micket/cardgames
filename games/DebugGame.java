@@ -1,6 +1,7 @@
 package games;
 
 import serverData.CardStack;
+import serverData.CardStack.StackStyle;
 import serverData.PlayingCard;
 import serverData.PlayingCardUtil; // Common things for playing cards here?
 
@@ -70,8 +71,15 @@ public class DebugGame extends DefaultGameLogic
 	public GameDesign createGameDesign()
 		{
 		GameDesign d=new GameDesign();
-		GameDesign.StackDef def=d.playerField.createStack("hand");
-		def.stack=new CardStack<Object>();
+		GameDesign.StackDef defHand=d.playerField.createStack("hand");
+		defHand.stack=new CardStack<Object>();
+		
+		GameDesign.StackDef defDeck=d.playerField.createStack("deck");
+		defDeck.stack=new CardStack<Object>();
+		defDeck.stack.stackStyle=StackStyle.Deck;
+		defDeck.y=-300;
+
+		
 		return d;
 		}
 
