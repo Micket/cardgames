@@ -20,7 +20,7 @@ import action.UserActionClickedButton;
  */
 @GameTypePlugin(
 		description = "Compete in classical Blackjack against other players to until only one remain.",
-		maxplayers = -1,
+		maxplayers = 8,
 		minplayers = 0,
 		name = "Blackjack",
 		category = "Banking",

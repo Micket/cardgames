@@ -205,9 +205,10 @@ public class ServerThread extends Thread
 	private GameSession createGameSessionUpdate(int sessionID)
 		{
 		GameLogic logic=gameSessions.get(sessionID);
+		GameType gt=this.availableGames.get(logic);
 		GameSession gmd = new GameSession();
-		gmd.maxusers=logic.getMaxPlayers();
-		gmd.minusers=logic.getMinPlayers();
+		gmd.maxusers=gt.maxplayers;
+		gmd.minusers=gt.minplayers;
 		gmd.type=logic.getClass();
 		gmd.joinedUsers = logic.players;
 		gmd.sessionName = logic.sessionName;

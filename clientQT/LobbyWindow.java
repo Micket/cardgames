@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Arrays;
 
 import action.Message;
 import action.UserAction;
@@ -69,11 +70,7 @@ public class LobbyWindow extends QWidget implements ServerListener
 		gameList.setColumnCount(3);
 		gameList.setColumnWidth(0,30);
 		gameList.setShowGrid(false);
-		// TODO: Why the fuck wont this change the header...
 		gameList.setHorizontalHeaderLabels(Arrays.asList("#","Type","Session"));
-		//gameList.setHorizontalHeaderItem(0,new QTableWidgetItem("#"));
-		//gameList.setHorizontalHeaderItem(1,new QTableWidgetItem("Type"));
-		//gameList.setHorizontalHeaderItem(2,new QTableWidgetItem("Session"));
 		
 		// Lobby layout
 		setLayout(lobbyLayout);
@@ -245,7 +242,9 @@ public class LobbyWindow extends QWidget implements ServerListener
 			
 			// TODO: Store metadata in some way to allow sorting and such.. (perhaps use a tree view)
 			QTableWidgetItem newGameType=new QTableWidgetItem(gt.name);
-			QTableWidgetItem newGameUsersItem=new QTableWidgetItem( g.maxusers < 0 ? ""+g.joinedUsers.size() : ""+g.joinedUsers.size()+"/"+g.maxusers);
+			System.out.println("minusers = "+g.minusers+", maxusers = "+g.maxusers);
+			QTableWidgetItem newGameUsersItem=new PlayersTableWidgetItem(g.minusers, g.maxusers, g.joinedUsers.size());
+			//QTableWidgetItem newGameUsersItem=new QTableWidgetItem( g.maxusers < 0 ? ""+g.joinedUsers.size() : ""+g.joinedUsers.size()+"/"+g.maxusers);
 			QTableWidgetItem newGameName=new QTableWidgetItem( g.sessionName );
 			gameList.setItem(i,0,newGameUsersItem);
 			gameList.setItem(i,1,newGameType);
