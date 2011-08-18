@@ -5,8 +5,6 @@ import java.util.Map;
 
 import javax.vecmath.Vector2d;
 
-import com.trolltech.qt.core.QPoint;
-
 import serverData.CardStack;
 import util.Matrix2d;
 
@@ -78,14 +76,17 @@ public class BoardLayout
 			{
 			//Here, create a transform for this players coordinate system
 			Matrix2d transformRot=new Matrix2d();
-			double baseRotAngle=Math.PI/4*playerID;
+			double baseRotAngle=Math.PI/2*playerID;
 			transformRot.setRot(baseRotAngle);
-			Vector2d transformMove=new Vector2d(100,100);
+			Vector2d transformMove=new Vector2d(0,100/view.zoom);
 			
 			ClientPlayerData pdata=gamedata.playerMap.get(playerID);
 
+			
+			Vector2d midPos=new Vector2d(400.0/2/view.zoom,400.0/2/view.zoom);
+
 				
-			layoutForOnePlayer(view, client, playerID, baseRotAngle, transformRot, transformMove, pdata);
+			layoutForOnePlayer(view, client, playerID, baseRotAngle, transformRot, transformMove, midPos, pdata);
 			
 			
 			}
@@ -99,11 +100,9 @@ public class BoardLayout
 	
 	
 	private void layoutForOnePlayer(BoardView view, Client client, int playerID, 
-			double baseRotAngle, Matrix2d transformRot, Vector2d transformMove,
+			double baseRotAngle, Matrix2d transformRot, Vector2d transformMove, Vector2d midPos, 
 			ClientPlayerData pdata)
 		{
-		
-
 
 		//Create a reversible map of the cards
 		for(AnimatedCard ac:view.cards)
@@ -114,8 +113,15 @@ public class BoardLayout
 			{
 			CardStack<ClientCard> onestack=pdata.stackMap.get(stackName);
 
+
+			//Layout a normal stack
+			
 			//Place position beneath
-			view.emptyPosList.add(new QPoint(0,0));
+			
+			Vector2d ePos=new Vector2d(transformMove);
+			transformRot.transform(ePos);
+			ePos.add(midPos); //To center rotation around midpos
+			view.emptyPosList.add(new EmptyPos(ePos.x, ePos.y, baseRotAngle));
 
 			//Place cards
 			for(int i=0;i<onestack.size();i++)
@@ -123,10 +129,15 @@ public class BoardLayout
 				ClientCard cc=onestack.getCard(i);
 				AnimatedCard ac=mapCC_AC.get(cc);
 
-				Vector2d shouldBe=new Vector2d(i*10, i*10);
-				shouldBe.add(transformMove);
-				transformRot.transform(shouldBe);
-				shouldBe.add(new Vector2d(100,100)); //To center rotation around midpos
+				//Vector2d cardPos=new Vector2d(-i*10, -i*10);
+				//cardPos.add(transformMove);
+				Vector2d cardPos=new Vector2d(transformMove);
+				transformRot.transform(cardPos);
+				cardPos.add(new Vector2d(-i*10, -i*10));
+				cardPos.add(midPos); //To center rotation around midpos
+				
+				
+				
 				
 				//If a card does not have an animated card, then just create it in the right location
 				if(ac==null)
@@ -134,9 +145,9 @@ public class BoardLayout
 					System.out.println("creating card "+i);
 
 					ac=new AnimatedCard(cc);
-					ac.posX=shouldBe.x;
-					ac.posY=shouldBe.y;
-					ac.posZ=10-i;
+					ac.posX=cardPos.x;
+					ac.posY=cardPos.y;
+					ac.posZ=i;
 					ac.rotation=baseRotAngle;
 					
 					view.cards.add(ac);
@@ -147,12 +158,12 @@ public class BoardLayout
 					{
 					//If a card is not in the right location, then animate it moving there
 
-					if(!ac.isBeingDragged && (ac.posX!=shouldBe.x || ac.posY!=shouldBe.y))
+					if(!ac.isBeingDragged && (ac.posX!=cardPos.x || ac.posY!=cardPos.y))
 						{
 						//System.out.println("out of pos");
 
-						double mvx=ac.posX-shouldBe.x;
-						double mvy=ac.posY-shouldBe.y;
+						double mvx=ac.posX-cardPos.x;
+						double mvy=ac.posY-cardPos.y;
 
 						//System.out.println(mvx+"  "+mvy);
 						//								if(mvx>5)
@@ -163,10 +174,10 @@ public class BoardLayout
 
 						//When card is close enough, make sure it is exactly in the right position so updates can stop
 						double stopRadius=3;
-						if(Math.abs(ac.posX-shouldBe.x)<stopRadius && Math.abs(ac.posY-shouldBe.y)<stopRadius)
+						if(Math.abs(ac.posX-cardPos.x)<stopRadius && Math.abs(ac.posY-cardPos.y)<stopRadius)
 							{
-							ac.posX=shouldBe.x;
-							ac.posY=shouldBe.y;
+							ac.posX=cardPos.x;
+							ac.posY=cardPos.y;
 							}
 
 						needRedraw=true;

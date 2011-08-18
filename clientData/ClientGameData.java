@@ -4,13 +4,13 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-
-import clientQT.BoardView;
+import clientQT.QtGraphicsData;
 
 import com.trolltech.qt.gui.QGraphicsItemInterface;
 import com.trolltech.qt.gui.QGraphicsPixmapItem;
 import com.trolltech.qt.gui.QPixmap;
 import com.trolltech.qt.svg.QGraphicsSvgItem;
+import com.trolltech.qt.svg.QSvgRenderer;
 
 public class ClientGameData
 	{
@@ -41,6 +41,7 @@ public class ClientGameData
 			}
 
 		imageMap.put("poker back","pokerbackside.svg");
+		imageMap.put("emptypos","empty.svg");
 
 		//System.out.println(imageMap);
 		}
@@ -52,7 +53,7 @@ public class ClientGameData
 	 * 
 	 * Interface problem: Now this depends on QT
 	 */
-	public QGraphicsItemInterface getImageForCard(String card)
+	public QtGraphicsData getImageForCard(String card)
 		{
 		String cardFile=imageMap.get(card);
 		if(cardFile==null)
@@ -62,15 +63,7 @@ public class ClientGameData
 			
 		String file="cards/"+cardFile;
 		if(new File("cards",cardFile).exists())
-			{
-			if(file.endsWith(".svg"))
-				{
-				QGraphicsSvgItem item=new QGraphicsSvgItem(file);
-				return BoardView.rasterizeSvg(item,0.3);
-				}
-			else
-				return new QGraphicsPixmapItem(new QPixmap(file));
-			}
+			return new QtGraphicsData(new File("cards",cardFile));
 		else
 			throw new RuntimeException("No such file, "+file); //Later: Request image from server
 		}

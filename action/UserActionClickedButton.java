@@ -6,4 +6,6 @@ public class UserActionClickedButton extends GameAction
 	
 	public int buttonID;
 	public int buttonValue;
+	
+	
 	}
