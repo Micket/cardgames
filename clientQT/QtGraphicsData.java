@@ -67,7 +67,6 @@ public class QtGraphicsData
 			{
 			System.out.println("png - baaad. need to implement rescaling here");
 			return this;
-//			return createGraphicsItem();
 			}
 		}
 	

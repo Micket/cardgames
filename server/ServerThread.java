@@ -10,6 +10,7 @@ import java.util.Set;
 import action.GameAction;
 import action.Message;
 import action.UserAction;
+import action.UserActionGameDesign;
 import action.UserActionGameSessionUpdate;
 import action.UserActionListOfGameTypes;
 import action.UserActionListOfUsers;
@@ -121,11 +122,14 @@ public class ServerThread extends Thread
 							
 							broadcastToClients(new Message(new UserActionGameSessionUpdate(sessionID, createGameSessionUpdate(sessionID))));
 							
+							send(action.fromClientID,new Message(new UserActionGameDesign(sessionID, game.createGameDesign())));
+							
 							System.out.println("Starting game.");
 							}
 						catch (Exception e)
 							{
 							System.out.println("Can't instanciate game!");
+							e.printStackTrace();
 							}
 						}
 					else if (action instanceof UserActionSetNick)
@@ -148,6 +152,8 @@ public class ServerThread extends Thread
 			}
 		}
 	
+	
+	
 	/**
 	 * Pass message on to all clients
 	 */
@@ -169,6 +175,10 @@ public class ServerThread extends Thread
 		broadcastToClients(new Message(action));
 		}
 
+	public void send(int clientID, Message msg)
+		{
+		connections.get(clientID).send(msg);
+		}
 	
 	/**
 	 * Get the type of a game, given ID

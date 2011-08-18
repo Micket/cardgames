@@ -1,6 +1,7 @@
 package clientData;
 
 import action.Message;
+import action.UserActionGameDesign;
 
 public interface ServerListener
 	{
@@ -10,4 +11,6 @@ public interface ServerListener
 	public void eventNewUserList();
 	
 	public void eventNewGameSessions();
+
+	public void eventGameDesign(UserActionGameDesign msg);
 	}

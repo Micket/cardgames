@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.HashSet;
 
+import clientData.GameDesign;
+
 import server.ServerThread;
 import util.ClassHandling;
 
@@ -74,7 +76,7 @@ abstract public class GameLogic
 	abstract public int getMaxPlayers();
 	abstract public int getMinPlayers();
 	
-	
+	abstract public GameDesign createGameDesign();
 	
 	/**
 	 * Detect available game types

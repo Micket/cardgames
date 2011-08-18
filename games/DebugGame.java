@@ -2,13 +2,11 @@ package games;
 
 import serverData.CardStack;
 import serverData.PlayingCard;
-import serverData.ServerCard;
 import serverData.PlayingCardUtil; // Common things for playing cards here?
 
-import clientData.ClientCard;
+import clientData.GameDesign;
 
 import action.UserActionClickedCard;
-import action.UserActionDragCard;
 
 /**
  * Empty game for testing. One player, and some decks of cards.
@@ -69,5 +67,12 @@ public class DebugGame extends DefaultGameLogic
 		return players.size();
 		}
 	
+	public GameDesign createGameDesign()
+		{
+		GameDesign d=new GameDesign();
+		GameDesign.StackDef def=d.playerField.createStack("hand");
+		def.stack=new CardStack<Object>();
+		return d;
+		}
 
 	}

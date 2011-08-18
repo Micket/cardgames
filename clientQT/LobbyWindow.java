@@ -10,6 +10,7 @@ import java.util.List;
 
 import action.Message;
 import action.UserAction;
+import action.UserActionGameDesign;
 import action.UserActionLobbyMessage;
 import action.UserActionSetNick;
 import action.UserActionStartGame;
@@ -19,27 +20,7 @@ import clientData.ServerListener;
 import clientData.GameSession;
 
 import com.trolltech.qt.core.Qt;
-import com.trolltech.qt.gui.QAction;
-import com.trolltech.qt.gui.QApplication;
-import com.trolltech.qt.gui.QCloseEvent;
-import com.trolltech.qt.gui.QLineEdit;
-import com.trolltech.qt.gui.QMenu;
-import com.trolltech.qt.gui.QMenuBar;
-import com.trolltech.qt.gui.QPushButton;
-import com.trolltech.qt.gui.QTextEdit;
-import com.trolltech.qt.gui.QSplitter;
-import com.trolltech.qt.gui.QVBoxLayout;
-import com.trolltech.qt.gui.QHBoxLayout;
-import com.trolltech.qt.gui.QInputDialog;
-import com.trolltech.qt.gui.QPixmap;
-import com.trolltech.qt.gui.QSizePolicy;
-import com.trolltech.qt.gui.QTableWidget;
-import com.trolltech.qt.gui.QTableWidgetItem;
-import com.trolltech.qt.gui.QTreeWidget;
-import com.trolltech.qt.gui.QTreeWidgetItem;
-import com.trolltech.qt.gui.QWidget;
 import com.trolltech.qt.gui.*; // Fuck it..
-import java.util.Arrays;
 
 public class LobbyWindow extends QWidget implements ServerListener
 	{
@@ -345,6 +326,11 @@ public class LobbyWindow extends QWidget implements ServerListener
 				setGameSessions();
 			}
 		});
+		}
+
+	@Override
+	public void eventGameDesign(UserActionGameDesign msg)
+		{
 		}
 
 	

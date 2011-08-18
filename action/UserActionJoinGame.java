@@ -1,7 +1,5 @@
 package action;
 
-import games.GameLogic;
-
 /**
  *
  * @author micket

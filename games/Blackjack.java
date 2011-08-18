@@ -9,6 +9,7 @@ import serverData.ServerCard;
 //import serverData.PlayingCardUtil; // Common things for playing cards here?
 
 import clientData.ClientCard;
+import clientData.GameDesign;
 
 import action.UserActionClickedButton;
 
@@ -338,6 +339,12 @@ public class Blackjack extends DefaultGameLogic
 		return points;
 		}
 
+
+	public GameDesign createGameDesign()
+		{
+		GameDesign d=new GameDesign();
+		return d;
+		}
 
 	/////////////////////////////////////////////////
 	// 
