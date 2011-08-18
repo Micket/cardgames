@@ -89,10 +89,10 @@ public class LobbyWindow extends QWidget implements ServerListener
 		gameList.setColumnWidth(0,30);
 		gameList.setShowGrid(false);
 		// TODO: Why the fuck wont this change the header...
-		//gameList.setHorizontalHeaderLabels(Arrays.asList("#","Type","Session"));
-		gameList.setHorizontalHeaderItem(0,new QTableWidgetItem("#"));
-		gameList.setHorizontalHeaderItem(1,new QTableWidgetItem("Type"));
-		gameList.setHorizontalHeaderItem(2,new QTableWidgetItem("Session"));
+		gameList.setHorizontalHeaderLabels(Arrays.asList("#","Type","Session"));
+		//gameList.setHorizontalHeaderItem(0,new QTableWidgetItem("#"));
+		//gameList.setHorizontalHeaderItem(1,new QTableWidgetItem("Type"));
+		//gameList.setHorizontalHeaderItem(2,new QTableWidgetItem("Session"));
 		
 		// Lobby layout
 		setLayout(lobbyLayout);
@@ -247,6 +247,7 @@ public class LobbyWindow extends QWidget implements ServerListener
 		{
 		gameList.clear();
 		gameList.setRowCount(client.gameSessions.size());
+		gameList.setHorizontalHeaderLabels(Arrays.asList("#","Type","Session"));
 		System.out.println("game sessions: "+client.gameSessions);
 		
 		// Delete all old entries first. (Why is there no clear()?
@@ -277,6 +278,7 @@ public class LobbyWindow extends QWidget implements ServerListener
 			for(Integer u:g.joinedUsers)
 				nicks.get(u).addChild(temp);
 			}
+
 		}
 	
 	public void setGameTypes()
