@@ -17,7 +17,7 @@ import action.UserActionStartGame;
 
 import clientData.Client;
 import clientData.ServerListener;
-import clientData.GameSession;
+import clientData.GameInfo;
 
 import com.trolltech.qt.core.Qt;
 import com.trolltech.qt.gui.*; // Fuck it..
@@ -236,7 +236,7 @@ public class LobbyWindow extends QWidget implements ServerListener
 				w.removeChild(s);
 		
 		int i = 0;
-		for(GameSession g:client.gameSessions.values())
+		for(GameInfo g:client.gameSessions.values())
 			{
 			GameType gt=client.gameTypes.get(g.type);
 			if(gt==null)

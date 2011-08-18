@@ -16,7 +16,7 @@ import util.CardGameInfo;
 import action.Message;
 import action.UserAction;
 import action.UserActionGameDesign;
-import action.UserActionGameSessionUpdate;
+import action.UserActionGameInfoUpdate;
 import action.UserActionListOfGameSessions;
 import action.UserActionListOfGameTypes;
 import action.UserActionListOfUsers;
@@ -35,7 +35,7 @@ public class Client
 	public Map<Integer,GameLogic> sessions=new HashMap<Integer, GameLogic>();
 	public List<ServerListener> serverListeners=new LinkedList<ServerListener>();
 	public Map<Integer, String> mapClientIDtoNick=new HashMap<Integer, String>();
-	public Map<Integer, GameSession> gameSessions=new HashMap<Integer, GameSession>();
+	public Map<Integer, GameInfo> gameSessions=new HashMap<Integer, GameInfo>();
 	public Map<Class<? extends GameLogic>, GameType> gameTypes=new HashMap<Class<? extends GameLogic>, GameType>();
 
 	public String tryToGetNick=System.getProperty("user.name");
@@ -59,8 +59,8 @@ public class Client
 				gotListOfGameSessions((UserActionListOfGameSessions)action);
 			else if(action instanceof UserActionGameDesign)
 				gotGameDesign((UserActionGameDesign)action);
-			else if(action instanceof UserActionGameSessionUpdate)
-				gotGameSessionUpdate((UserActionGameSessionUpdate)action);
+			else if(action instanceof UserActionGameInfoUpdate)
+				gotGameSessionUpdate((UserActionGameInfoUpdate)action);
 			
 			//TODO in so many ways it would be nice with a general "else"
 			
@@ -114,7 +114,7 @@ public class Client
 	/**
 	 * One updated game session
 	 */
-	private void gotGameSessionUpdate(UserActionGameSessionUpdate action)
+	private void gotGameSessionUpdate(UserActionGameInfoUpdate action)
 		{
 		if(action.session==null)
 			gameSessions.remove(action.gameID);

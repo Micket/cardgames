@@ -9,7 +9,7 @@ import java.util.Set;
  * Information presented to lobby users.
  * @author micket
  */
-public class GameSession implements Serializable
+public class GameInfo implements Serializable
 	{
 	private static final long serialVersionUID = 1L;
 

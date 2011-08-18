@@ -9,7 +9,7 @@ public class PlayingCard extends ServerCard
 	{
 
 	public boolean showsFront=false;
-	public int rotation=0; //Can be 0,1,2,3, going clockwise
+	public double rotation=0; //Can be 0,1,2,3, going clockwise
 
 
     public enum Suit { Clubs, Diamonds, Hearts, Spades, RedJoker, BlackJoker } // Jokers can often be only red or black

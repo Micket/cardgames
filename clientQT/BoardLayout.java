@@ -277,6 +277,7 @@ public class BoardLayout
 				ac.posZ=newAc.posZ;
 
 				//TODO rotation
+				ac.rotation=newAc.rotation;
 
 				needRedraw=true;
 				}

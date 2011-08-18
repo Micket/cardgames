@@ -12,6 +12,7 @@ import clientData.ClientCard;
 import clientData.GameDesign;
 
 import action.UserActionClickedButton;
+import action.UserActionGameStateUpdate;
 
 /**
  * Logic for the simple card game BlackJack with betting.
@@ -344,6 +345,11 @@ public class Blackjack extends DefaultGameLogic
 		{
 		GameDesign d=new GameDesign();
 		return d;
+		}
+	
+	public void getGameState(UserActionGameStateUpdate state)
+		{
+		
 		}
 
 	/////////////////////////////////////////////////
