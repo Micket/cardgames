@@ -15,6 +15,7 @@ import action.GameAction;
 import action.GameActionLeave;
 import action.UserActionClickedButton;
 import action.UserActionClickedCard;
+import action.UserActionGameStateUpdate;
 
 /**
  * www.pagat.com for many many games.
@@ -77,6 +78,8 @@ abstract public class GameLogic
 	abstract public int getMinPlayers();
 	
 	abstract public GameDesign createGameDesign();
+	
+	abstract public void getGameState(UserActionGameStateUpdate state);
 	
 	/**
 	 * Detect available game types

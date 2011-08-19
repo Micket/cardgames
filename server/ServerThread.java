@@ -11,7 +11,7 @@ import action.GameAction;
 import action.Message;
 import action.UserAction;
 import action.UserActionGameDesign;
-import action.UserActionGameSessionUpdate;
+import action.UserActionGameInfoUpdate;
 import action.UserActionListOfGameTypes;
 import action.UserActionListOfUsers;
 import action.UserActionListOfGameSessions;
@@ -23,7 +23,7 @@ import action.UserActionDisconnect;
 import games.GameLogic;
 import games.GameType;
 
-import clientData.GameSession;
+import clientData.GameInfo;
 
 /**
  * Main server thread - handles all existing connections
@@ -120,7 +120,7 @@ public class ServerThread extends Thread
 							game.sessionID=sessionID;
 							gameSessions.put(sessionID, game);
 							
-							broadcastToClients(new Message(new UserActionGameSessionUpdate(sessionID, createGameSessionUpdate(sessionID))));
+							broadcastToClients(new Message(new UserActionGameInfoUpdate(sessionID, createGameSessionUpdate(sessionID))));
 							
 							send(action.fromClientID,new Message(new UserActionGameDesign(sessionID, game.createGameDesign())));
 							
@@ -202,13 +202,12 @@ public class ServerThread extends Thread
 	
 	
 	
-	private GameSession createGameSessionUpdate(int sessionID)
+	private GameInfo createGameSessionUpdate(int sessionID)
 		{
 		GameLogic logic=gameSessions.get(sessionID);
-		GameType gt=this.availableGames.get(logic);
-		GameSession gmd = new GameSession();
-		gmd.maxusers=gt.maxplayers;
-		gmd.minusers=gt.minplayers;
+		GameInfo gmd = new GameInfo();
+		gmd.maxusers=logic.getMaxPlayers();
+		gmd.minusers=logic.getMinPlayers();
 		gmd.type=logic.getClass();
 		gmd.joinedUsers = logic.players;
 		gmd.sessionName = logic.sessionName;
@@ -224,7 +223,7 @@ public class ServerThread extends Thread
 		UserActionListOfGameSessions action=new UserActionListOfGameSessions();
 		for(Map.Entry<Integer,GameLogic> s:gameSessions.entrySet())
 			{
-			GameSession gmd = createGameSessionUpdate(s.getKey());
+			GameInfo gmd = createGameSessionUpdate(s.getKey());
 			action.gameList.put(s.getKey(), gmd);
 			}
 		return new Message(action);

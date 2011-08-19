@@ -15,7 +15,7 @@ import action.UserActionGameDesign;
 import com.trolltech.qt.gui.QApplication;
 
 import clientData.Client;
-import clientData.GameSession;
+import clientData.GameInfo;
 import clientData.ServerListener;
 
 /**
@@ -31,7 +31,7 @@ public class ClientQT extends Client implements ServerListener
 	@Override
 	public void eventNewGameSessions()
 		{
-		for(final Map.Entry<Integer, GameSession> e:gameSessions.entrySet())
+		for(final Map.Entry<Integer, GameInfo> e:gameSessions.entrySet())
 			{
 			if(e.getValue().joinedUsers.contains(getClientID()))
 				{

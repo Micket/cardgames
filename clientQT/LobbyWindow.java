@@ -18,7 +18,7 @@ import action.UserActionStartGame;
 
 import clientData.Client;
 import clientData.ServerListener;
-import clientData.GameSession;
+import clientData.GameInfo;
 
 import com.trolltech.qt.core.Qt;
 import com.trolltech.qt.gui.*; // Fuck it..
@@ -43,8 +43,6 @@ public class LobbyWindow extends QWidget implements ServerListener
 		this.client=client;
 
 		QHBoxLayout lobbyLayout=new QHBoxLayout();
-		//QSplitter lobbyLayout=new QSplitter();
-		//lobbyLayout.setOrientation(Qt.Orientation.Horizontal);
 		QVBoxLayout chatWindowLayout=new QVBoxLayout();
 		QHBoxLayout chatInputLayout=new QHBoxLayout();
 		
@@ -71,26 +69,29 @@ public class LobbyWindow extends QWidget implements ServerListener
 		gameList.setColumnWidth(0,30);
 		gameList.setShowGrid(false);
 		gameList.setHorizontalHeaderLabels(Arrays.asList("#","Type","Session"));
+		gameList.verticalHeader().hide();
+		gameList.horizontalHeader().setStretchLastSection(true);
+		gameList.setAlternatingRowColors(true);
+		gameList.setSortingEnabled(true);
 		
 		// Lobby layout
 		setLayout(lobbyLayout);
-		//lobbyLayout.addLayout(chatWindowLayout);
-		//lobbyLayout.addWidget(nickAndGameLayout);
+		lobbyLayout.setContentsMargins(5,5,5,5);
 		lobbyLayout.addWidget(chatAndSidebar);
 		QWidget temp = new QWidget();
 		temp.setLayout(chatWindowLayout); // This gives extra padding.
 		temp.setContentsMargins(0, 0, 0, 0);
 		
 		chatWindowLayout.setContentsMargins(0,0,0,0);
-		//lobbyLayout.setContentsMargins(0, 0,0,0);
-		//chatAndSidebar.setContentsMargins(0, 0, 0, 0);
 		
 		chatAndSidebar.addWidget(temp);
 		chatAndSidebar.addWidget(nickAndGame);
 		chatWindowLayout.addWidget(chatHistory);
 		chatWindowLayout.addLayout(chatInputLayout);
+		chatWindowLayout.setSpacing(0);
 		chatInputLayout.addWidget(bNick);
 		chatInputLayout.addWidget(tfEditLine);
+		chatInputLayout.setSpacing(0);
 		nickAndGame.addWidget(nickList);
 		nickAndGame.addWidget(gameList);
 		
@@ -234,7 +235,7 @@ public class LobbyWindow extends QWidget implements ServerListener
 				w.removeChild(s);
 		
 		int i = 0;
-		for(GameSession g:client.gameSessions.values())
+		for(GameInfo g:client.gameSessions.values())
 			{
 			GameType gt=client.gameTypes.get(g.type);
 			if(gt==null)

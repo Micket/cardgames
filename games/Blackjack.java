@@ -12,6 +12,7 @@ import clientData.ClientCard;
 import clientData.GameDesign;
 
 import action.UserActionClickedButton;
+import action.UserActionGameStateUpdate;
 
 /**
  * Logic for the simple card game BlackJack with betting.
@@ -28,7 +29,6 @@ import action.UserActionClickedButton;
 		)
 public class Blackjack extends DefaultGameLogic
 	{
-
 	enum GameState { Betting, Playing, Over }
 
 	class PlayerState
@@ -54,6 +54,10 @@ public class Blackjack extends DefaultGameLogic
 	private GameState gs;
 	private Map<Integer,PlayerState> players = new HashMap<Integer,PlayerState>();
 
+	// TODO: Is it possible to access max and min-players from the gametype? But then, these could be changed (at least when creating the game).
+	public int getMaxPlayers() { return 8; }
+	public int getMinPlayers() { return 0; }
+	
 	public void startGame()
 		{
 		gameOn = true;
@@ -344,6 +348,11 @@ public class Blackjack extends DefaultGameLogic
 		{
 		GameDesign d=new GameDesign();
 		return d;
+		}
+	
+	public void getGameState(UserActionGameStateUpdate state)
+		{
+		
 		}
 
 	/////////////////////////////////////////////////

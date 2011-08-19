@@ -5,9 +5,12 @@ import serverData.CardStack.StackStyle;
 import serverData.PlayingCard;
 import serverData.PlayingCardUtil; // Common things for playing cards here?
 
+import clientData.ClientCard;
 import clientData.GameDesign;
 
 import action.UserActionClickedCard;
+import action.UserActionGameStateUpdate;
+import action.UserActionGameStateUpdate.PlayerState;
 
 /**
  * Empty game for testing. One player, and some decks of cards.
@@ -82,5 +85,22 @@ public class DebugGame extends DefaultGameLogic
 		
 		return d;
 		}
+	
+	public void getGameState(UserActionGameStateUpdate state)
+		{
+		for(int p:players)
+			{
+			PlayerState ps=state.createPlayer(p);
+			
+			CardStack<ClientCard> stack=new CardStack<ClientCard>();
+			ps.stacks.put("hand", stack);
+			ClientCard cc=new ClientCard();
+			stack.addCard(cc);
+			
+			//TODO information about this card
+			
+			}
+		}
+
 
 	}

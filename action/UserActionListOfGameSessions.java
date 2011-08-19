@@ -1,12 +1,12 @@
 package action;
 
 import java.util.HashMap;
-import clientData.GameSession;
+import clientData.GameInfo;
 
 public class UserActionListOfGameSessions extends UserAction
 	{
 	private static final long serialVersionUID = 1L;
 
 	// Map between gameID and metadata.
-	public HashMap<Integer, GameSession> gameList=new HashMap<Integer, GameSession>();
+	public HashMap<Integer, GameInfo> gameList=new HashMap<Integer, GameInfo>();
 	}
