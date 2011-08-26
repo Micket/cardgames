@@ -36,9 +36,9 @@ public class DebugGame extends DefaultGameLogic
 	/// Complete deck of cards (for convenience)
 //	private CardStack<PlayingCard> deckA = PlayingCardUtil.getDeck52();
 
-	private Map<Integer, DebugPlayerState> pstate=new HashMap<Integer, DebugPlayerState>();
+	private Map<Integer, LogicPlayerState> pstate=new HashMap<Integer, LogicPlayerState>();
 	
-	private class DebugPlayerState
+	private class LogicPlayerState
 		{
 		public CardStack<PlayingCard> hand = new CardStack<PlayingCard>();
 		public CardStack<PlayingCard> deck= new CardStack<PlayingCard>();
@@ -56,7 +56,7 @@ public class DebugGame extends DefaultGameLogic
 	
 	public boolean userJoined(int userID)
 		{
-		DebugPlayerState s=new DebugPlayerState();
+		LogicPlayerState s=new LogicPlayerState();
 		pstate.put(userID, s);
 		
 		s.hand.cards.add(new PlayingCard(PlayingCard.Suit.Spades, PlayingCard.Rank.Deuce));
@@ -87,9 +87,7 @@ public class DebugGame extends DefaultGameLogic
 		
 		if (s.stack.equals("hand") && s.player==fromUser)
 			{
-			DebugPlayerState ps=pstate.get(fromUser);
-			
-
+			LogicPlayerState ps=pstate.get(fromUser);
 			
 			UserActionDragCard action=new UserActionDragCard();
 			action.gameID=sessionID;
@@ -101,16 +99,9 @@ public class DebugGame extends DefaultGameLogic
 			action.toPlayer=s.player;
 			action.toPos=ps.deck.size();
 			action.toStackName="deck";
-
-			//TODO or should one having something more of a status update?
-			
-			System.out.println("sending the move");
-			
-			//TODO execute locally. One could write different convenience functions to do this
 	
 			executeMove(action);
 			thread.send(fromUser, new Message(action));
-			
 			}
 		else
 			return false;
@@ -123,7 +114,7 @@ public class DebugGame extends DefaultGameLogic
 		if(stackName.equals("hand"))
 			return pstate.get(player).hand;
 		else if(stackName.equals("deck"))
-			return pstate.get(player).hand;
+			return pstate.get(player).deck;
 		else
 			throw new RuntimeException("no such stack: "+stackName);
 		}
@@ -135,10 +126,6 @@ public class DebugGame extends DefaultGameLogic
 		
 		PlayingCard theCard=stackFrom.cards.remove(action.fromPos);
 		stackTo.cards.add(action.toPos, theCard);
-		
-		System.out.println(action);
-		System.out.println("from: "+stackFrom);
-		System.out.println("to: "+stackTo);
 		}
 	
 	
@@ -174,7 +161,7 @@ public class DebugGame extends DefaultGameLogic
 		{
 		for(int p:players)
 			{
-			DebugPlayerState ds=pstate.get(p);
+			LogicPlayerState ds=pstate.get(p);
 			PlayerState ps=action.createPlayer(p);
 			
 			CardStack<ClientCard> stackHand=CardStack.toClientCardStack(ds.hand);

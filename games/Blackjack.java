@@ -1,18 +1,21 @@
 package games;
 
+
 import java.util.Map;
 import java.util.HashMap;
 
 import serverData.CardStack;
 import serverData.PlayingCard;
+import serverData.PlayingCardUtil;
 import serverData.ServerCard;
-//import serverData.PlayingCardUtil; // Common things for playing cards here?
+import serverData.CardStack.StackStyle;
 
 import clientData.ClientCard;
 import clientData.GameDesign;
 
 import action.UserActionClickedButton;
 import action.UserActionGameStateUpdate;
+import action.UserActionGameStateUpdate.PlayerState;
 
 /**
  * Logic for the simple card game BlackJack with betting.
@@ -29,9 +32,9 @@ import action.UserActionGameStateUpdate;
 		)
 public class Blackjack extends DefaultGameLogic
 	{
-	enum GameState { Betting, Playing, Over }
+	private enum GameState { Betting, Playing, Over }
 
-	class PlayerState
+	private class LogicPlayerState
 		{
 		public CardStack<PlayingCard> hand = new CardStack<PlayingCard>();
 		public boolean done = false;
@@ -47,12 +50,10 @@ public class Blackjack extends DefaultGameLogic
 	/// Number of decks used.
 	private int decks = 1;
 	
-	/// Complete deck of cards (for convenience)
-	private CardStack<PlayingCard> newDeck;
-	private CardStack<PlayingCard> deck;
-	private CardStack<PlayingCard> dealerHand;
+	private CardStack<PlayingCard> deckWithNewCards=new CardStack<PlayingCard>();
+	private CardStack<PlayingCard> dealerHand=new CardStack<PlayingCard>();
 	private GameState gs;
-	private Map<Integer,PlayerState> players = new HashMap<Integer,PlayerState>();
+	private Map<Integer,LogicPlayerState> players = new HashMap<Integer,LogicPlayerState>();
 
 	// TODO: Is it possible to access max and min-players from the gametype? But then, these could be changed (at least when creating the game).
 	public int getMaxPlayers() { return 8; }
@@ -69,7 +70,7 @@ public class Blackjack extends DefaultGameLogic
 		{
 		if (!super.userJoined(userID))
 			return false;
-		players.put(userID, new PlayerState());
+		players.put(userID, new LogicPlayerState());
 		return true;
 		}
 	
@@ -92,7 +93,7 @@ public class Blackjack extends DefaultGameLogic
 	
 	public boolean userActionClickedButton(int fromUser, UserActionClickedButton action)
 		{
-		PlayerState p = players.get(fromUser);
+		LogicPlayerState p = players.get(fromUser);
 		if (action.buttonID == 0) // Bet
 			{
 			return playerBetting(p, action.buttonValue);
@@ -142,15 +143,11 @@ public class Blackjack extends DefaultGameLogic
 	public boolean allDone()
 		{
 		if (gs != GameState.Playing)
-			{
 			return false;
-			}
-		boolean done = true;
-		for (PlayerState p : players.values())
-			{
-			done &= p.done;
-			}
-		return done;
+		for (LogicPlayerState p : players.values())
+			if(!p.done)
+				return false;
+		return true;
 		}
 	
 	/**
@@ -159,24 +156,22 @@ public class Blackjack extends DefaultGameLogic
 	public boolean allBets()
 		{
 		if (gs != GameState.Betting)
-			{
 			return false;
-			}
 		boolean done = true;
-		for (PlayerState p : players.values())
-			{
+		for (LogicPlayerState p : players.values())
 			done &= p.cash == 0 || p.bet > 0;
-			}
 		return done;
 		}
 	
     /**
 	 * Checks if a player or the bank has won.
+	 * 
+	 * TODO this function is obviously coded wrong
 	 */
 	public boolean isGameOver()
 		{
 		boolean moneyLeft = false;
-		for (PlayerState p : players.values())
+		for (LogicPlayerState p : players.values())
 			{
 			if (p.cash > 0)
 				{
@@ -203,7 +198,7 @@ public class Blackjack extends DefaultGameLogic
 	/**
 	 * Request to draw new card for specified player.
 	 */
-	private boolean playerBetting(PlayerState p, int bet)
+	private boolean playerBetting(LogicPlayerState p, int bet)
 		{
 		if (gs != GameState.Betting || bet > p.cash || bet <= 0)
 			{
@@ -221,7 +216,7 @@ public class Blackjack extends DefaultGameLogic
 	/**
 	 * Request to draw new card for specified player.
 	 */
-	private boolean playerDraw(PlayerState p)
+	private boolean playerDraw(LogicPlayerState p)
 		{
 		if (gs != GameState.Playing || p.done)
 			{
@@ -230,7 +225,7 @@ public class Blackjack extends DefaultGameLogic
 			}
 		else
 			{
-			PlayingCard c = deck.drawCard();
+			PlayingCard c = deckWithNewCards.drawCard();
 			p.hand.addCard(c);
 			// Tell user what he drew card c.
 			if (sumCards(p.hand) > playerStop)
@@ -254,7 +249,7 @@ public class Blackjack extends DefaultGameLogic
 		// Tell all user what cards the dealer has
 		while (points < dealerStop)
 			{
-			c = deck.drawCard();
+			c = deckWithNewCards.drawCard();
 			dealerHand.addCard(c);
 			points = sumCards(dealerHand);
 			// Tell all user what he drew card c.
@@ -262,7 +257,7 @@ public class Blackjack extends DefaultGameLogic
 
 		for (int i = 0; i < players.size(); i++)
 			{
-			PlayerState ps = players.get(i);
+			LogicPlayerState ps = players.get(i);
 			playerPoints = sumCards(ps.hand);
 			if (playerPoints <= playerStop && (points > playerStop || points < playerPoints))
 				{
@@ -286,28 +281,21 @@ public class Blackjack extends DefaultGameLogic
 	 */
 	private void startTurn()
 		{
-		CardStack<PlayingCard> cs;
-
 		dealerHand.clear();
 		for (int i = 0; i < players.size(); i++)
-			{
 			players.get(i).hand.clear();
-			}
-
-		deck.clear();
+		
+		deckWithNewCards.clear();
 		for (int i = 0; i < decks; i++)
-			{
-			deck.addCards(newDeck);
-			}
-		deck.shuffle();
-		cs = deck.drawCards(2);
-		dealerHand.addCards(cs);
+			deckWithNewCards.addCards(PlayingCardUtil.getDeck52());
+		deckWithNewCards.shuffle();
+		
+		dealerHand.addCards(deckWithNewCards.drawCards(2)); //TODO If it is laid out already like this, there will be no animation
 		for (int i = 0; i < players.size(); i++)
 			{
 			if (players.get(i).cash > 0)
 				{
-				cs = deck.drawCards(2);
-				players.get(i).hand.addCards(cs);
+				players.get(i).hand.addCards(deckWithNewCards.drawCards(2)); //TODO If it is laid out already like this, there will be no animation
 				players.get(i).done = false;
 				}
 			}
@@ -347,11 +335,37 @@ public class Blackjack extends DefaultGameLogic
 	public GameDesign createGameDesign()
 		{
 		GameDesign d=new GameDesign();
+		GameDesign.StackDef defPlayerHand=d.playerField.createStack("hand");
+		defPlayerHand.stack=new CardStack<Object>();
+		
+		GameDesign.StackDef defDealerHand=d.commonField.createStack("hand");
+		defDealerHand.stack=new CardStack<Object>();
+
+		GameDesign.StackDef defNewCards=d.commonField.createStack("newcards");
+		defNewCards.stack=new CardStack<Object>();
+		defNewCards.stack.stackStyle=StackStyle.Deck;
+		defNewCards.x=200;
+
 		return d;
 		}
 	
-	public void getGameState(UserActionGameStateUpdate state)
+	public void getGameState(UserActionGameStateUpdate action)
 		{
+		
+		for(int p:players.keySet())
+			{
+			LogicPlayerState ds=players.get(p);
+			PlayerState ps=action.createPlayer(p);
+			
+			CardStack<ClientCard> stackHand=CardStack.toClientCardStack(ds.hand);
+			ps.stacks.put("hand", stackHand);
+			}
+
+		PlayerState ps=action.createPlayer(-1); //TODO create a const
+		CardStack<ClientCard> stackNewCards=CardStack.toClientCardStack(deckWithNewCards);
+		ps.stacks.put("newcards", stackNewCards);
+		CardStack<ClientCard> stackDealer=CardStack.toClientCardStack(dealerHand);
+		ps.stacks.put("hand", stackDealer);
 		
 		}
 
