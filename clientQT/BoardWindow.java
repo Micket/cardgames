@@ -3,6 +3,7 @@ package clientQT;
 import action.GameActionLeave;
 import action.Message;
 import action.GameActionSendMessage;
+import action.UserActionDragCard;
 import action.UserActionGameDesign;
 import action.UserActionGameStateUpdate;
 import clientData.ServerListener;
@@ -120,6 +121,12 @@ public class BoardWindow extends QWidget implements ServerListener
 				chatHistory.append(client.getNickFor(action.fromClientID)+": "+action.message);
 			}
 			});
+		}
+
+	@Override
+	public void eventDragCard(UserActionDragCard action)
+		{
+		view.dragCard(action);
 		}
 	
 	

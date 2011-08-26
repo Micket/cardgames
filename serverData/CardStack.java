@@ -56,6 +56,7 @@ public class CardStack<E>
 		return cs;
 		}
 
+
 	public E getCard(int i) { return cards.get(i); }
 	public int size() { return cards.size(); }
 	public void shuffle() { Collections.shuffle(cards); }
@@ -96,5 +97,10 @@ public class CardStack<E>
 		return news;
 		}
 
-	
+
+	@Override
+	public String toString()
+		{
+		return cards.toString();
+		}
 	}

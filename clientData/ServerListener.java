@@ -2,6 +2,7 @@ package clientData;
 
 import action.GameActionSendMessage;
 import action.Message;
+import action.UserActionDragCard;
 import action.UserActionGameDesign;
 import action.UserActionGameStateUpdate;
 
@@ -19,4 +20,6 @@ public interface ServerListener
 	public void eventGameMessage(GameActionSendMessage action);
 
 	public void eventGameStateUpdate(UserActionGameStateUpdate action);
+
+	public void eventDragCard(UserActionDragCard action);
 	}

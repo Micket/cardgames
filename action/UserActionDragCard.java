@@ -12,4 +12,12 @@ public class UserActionDragCard extends GameAction
 	public String toStackName; //which stack
 	public int toPos; //which card in stack
 	
+	
+	@Override
+	public String toString()
+		{
+		return "DragCard: "+fromPlayer+"/"+fromStackName+"/"+fromPos
+		+" to "+
+		toPlayer+"/"+toStackName+"/"+toPos;
+		}
 	}

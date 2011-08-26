@@ -7,6 +7,7 @@ import java.util.List;
 
 import action.Message;
 import action.UserActionClickedCard;
+import action.UserActionDragCard;
 import action.UserActionGameDesign;
 import action.UserActionGameStateUpdate;
 import clientData.Client;
@@ -292,6 +293,18 @@ public class BoardView extends QGraphicsView
 	public void setGameState(UserActionGameStateUpdate msg)
 		{
 		layout.newState(msg);
+		layout.doLayout();
+		QApplication.invokeLater(new Runnable() {
+			public void run() {
+				redoLayout();
+			}
+		});
+		}
+
+
+	public void dragCard(UserActionDragCard action)
+		{
+		layout.dragCard(action);
 		layout.doLayout();
 		QApplication.invokeLater(new Runnable() {
 			public void run() {

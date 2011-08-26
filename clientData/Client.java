@@ -16,6 +16,7 @@ import util.CardGameInfo;
 import action.GameActionSendMessage;
 import action.Message;
 import action.UserAction;
+import action.UserActionDragCard;
 import action.UserActionGameDesign;
 import action.UserActionGameInfoUpdate;
 import action.UserActionGameStateUpdate;
@@ -67,6 +68,8 @@ public class Client
 				gotGameMessage((GameActionSendMessage)action);
 			else if(action instanceof UserActionGameStateUpdate)
 				gotGameStateUpdate((UserActionGameStateUpdate)action);
+			else if(action instanceof UserActionDragCard)
+				gotDragCard((UserActionDragCard)action);
 			
 			//TODO in so many ways it would be nice with a general "else"
 			
@@ -76,6 +79,13 @@ public class Client
 		for(ServerListener listener:serverListeners)
 			listener.eventServerMessage(msg);
 		
+		}
+
+
+	private void gotDragCard(UserActionDragCard action)
+		{
+		for(ServerListener listener:serverListeners)
+			listener.eventDragCard(action);
 		}
 
 

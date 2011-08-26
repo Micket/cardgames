@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.vecmath.Vector2d;
 
+import action.UserActionDragCard;
 import action.UserActionGameStateUpdate;
 
 import serverData.CardStack;
@@ -309,8 +310,8 @@ public class BoardLayout
 			
 			for(String stackName:pstate.stacks.keySet())
 				{
-				//Get the design of the board area
 				/*
+				//Get the design of the board area
 				GameDesign.StackDef stackDef;
 				if(playerID==-1)
 					stackDef=design.commonField.stacks.get(stackName);
@@ -321,42 +322,30 @@ public class BoardLayout
 				//Add all the cards
 
 				pdata.stackMap.put(stackName,pstate.stacks.get(stackName));
-
-//				onestack.stackStyle=stackDef.stack.stackStyle;
-
-				/*
-				
-				CardStack<ClientCard> onestack=new CardStack<ClientCard>();
-				pdata.stackMap.put(stackName, onestack);
-				
-				
-				for(int i=1;i<=10;i++)
-					{
-					ClientCard cdata=new ClientCard();
-					cdata.front="poker Spades "+i;
-					cdata.back="poker back";
-					pdata.stackMap.get(stackName).addCard(cdata);
-					}
-				*/
-				
-				
 				}
-			
-			/*
-			for(String stackName:design.playerField.stacks.keySet())
-				{
-				
-				
-				
-				
-				}*/
 			
 			}
 		
+		gamedata.updateCardLinksToStacks();
+		}
+
+	
+	
+	
+	public void dragCard(UserActionDragCard action)
+		{
+		ClientGameData gamedata=view.gameData;
 		
+		ClientPlayerData pdataFrom=gamedata.playerMap.get(action.fromPlayer);
+		ClientPlayerData pdataTo=gamedata.playerMap.get(action.toPlayer);
+		
+		CardStack<ClientCard> stackFrom=pdataFrom.stackMap.get(action.fromStackName);
+		CardStack<ClientCard> stackTo=pdataTo.stackMap.get(action.toStackName);
+		
+		ClientCard theCard=stackFrom.cards.remove(action.fromPos);
+		stackTo.cards.add(action.toPos, theCard);
 		
 		gamedata.updateCardLinksToStacks();
-		
 		}
 	
 	

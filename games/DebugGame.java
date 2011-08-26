@@ -9,9 +9,12 @@ import serverData.PlayingCard;
 import serverData.PlayingCardUtil; // Common things for playing cards here?
 
 import clientData.ClientCard;
+import clientData.ClientPlayerData;
 import clientData.GameDesign;
 
+import action.Message;
 import action.UserActionClickedCard;
+import action.UserActionDragCard;
 import action.UserActionGameStateUpdate;
 import action.UserActionGameStateUpdate.PlayerState;
 
@@ -32,12 +35,10 @@ public class DebugGame extends DefaultGameLogic
 
 	/// Complete deck of cards (for convenience)
 //	private CardStack<PlayingCard> deckA = PlayingCardUtil.getDeck52();
-//	private CardStack<PlayingCard> deckB = new CardStack<PlayingCard>();
-//	private CardStack<PlayingCard> player = new CardStack<PlayingCard>();
 
-	Map<Integer, DebugPlayerState> pstate=new HashMap<Integer, DebugPlayerState>();
+	private Map<Integer, DebugPlayerState> pstate=new HashMap<Integer, DebugPlayerState>();
 	
-	class DebugPlayerState
+	private class DebugPlayerState
 		{
 		public CardStack<PlayingCard> hand = new CardStack<PlayingCard>();
 		public CardStack<PlayingCard> deck= new CardStack<PlayingCard>();
@@ -69,7 +70,12 @@ public class DebugGame extends DefaultGameLogic
 		s.deck.cards.add(new PlayingCard(PlayingCard.Suit.Spades, PlayingCard.Rank.Six));
 		s.deck.stackStyle=StackStyle.Deck;
 		
-
+		for(PlayingCard c:s.hand.cards)
+			c.showsFront=true;
+		for(PlayingCard c:s.deck.cards)
+			c.showsFront=true;
+		
+		
 //////////////		
 		if (!super.userJoined(userID))
 			return false;
@@ -78,19 +84,64 @@ public class DebugGame extends DefaultGameLogic
 	
 	public boolean userActionClickedCard(int fromUser, UserActionClickedCard s)
 		{
-		if (s.stack.equals("hand"))
+		
+		if (s.stack.equals("hand") && s.player==fromUser)
 			{
-			/*
-			System.out.println("Taking a card from deck A");
-			PlayingCard c = deckA.drawCard();
-			player.addCard(c);
-			// Send card to user..
-			*/
+			DebugPlayerState ps=pstate.get(fromUser);
+			
+
+			
+			UserActionDragCard action=new UserActionDragCard();
+			action.gameID=sessionID;
+			
+			action.fromPlayer=s.player;
+			action.fromPos=s.stackPos;
+			action.fromStackName="hand";
+
+			action.toPlayer=s.player;
+			action.toPos=ps.deck.size();
+			action.toStackName="deck";
+
+			//TODO or should one having something more of a status update?
+			
+			System.out.println("sending the move");
+			
+			//TODO execute locally. One could write different convenience functions to do this
+	
+			executeMove(action);
+			thread.send(fromUser, new Message(action));
+			
 			}
 		else
 			return false;
 		return true;
 		}
+	
+	
+	public CardStack<PlayingCard> getStack(int player, String stackName)
+		{
+		if(stackName.equals("hand"))
+			return pstate.get(player).hand;
+		else if(stackName.equals("deck"))
+			return pstate.get(player).hand;
+		else
+			throw new RuntimeException("no such stack: "+stackName);
+		}
+	
+	public void executeMove(UserActionDragCard action)
+		{
+		CardStack<PlayingCard> stackFrom=getStack(action.fromPlayer, action.fromStackName);
+		CardStack<PlayingCard> stackTo=getStack(action.toPlayer, action.toStackName);
+		
+		PlayingCard theCard=stackFrom.cards.remove(action.fromPos);
+		stackTo.cards.add(action.toPos, theCard);
+		
+		System.out.println(action);
+		System.out.println("from: "+stackFrom);
+		System.out.println("to: "+stackTo);
+		}
+	
+	
 	
 	public boolean userLeft(int userID)
 		{

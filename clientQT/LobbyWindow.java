@@ -13,6 +13,7 @@ import java.util.TreeMap;
 import action.GameActionSendMessage;
 import action.Message;
 import action.UserAction;
+import action.UserActionDragCard;
 import action.UserActionGameDesign;
 import action.UserActionGameStateUpdate;
 import action.UserActionLobbyMessage;
@@ -229,6 +230,7 @@ public class LobbyWindow extends QWidget implements ServerListener
 
 	public void setGameSessions()
 		{
+		gameList.setSelectionBehavior(SelectionBehavior.SelectRows);
 		gameList.clear();
 		gameList.setRowCount(client.gameSessions.size());
 		gameList.setHorizontalHeaderLabels(Arrays.asList("#","Type","Session"));
@@ -238,9 +240,7 @@ public class LobbyWindow extends QWidget implements ServerListener
 		for(QTreeWidgetItem w:nicks.values())
 			for(QTreeWidgetItem s:w.takeChildren())
 				w.removeChild(s);
-		
-		gameList.setSelectionBehavior(SelectionBehavior.SelectRows);
-		
+
 		int i = 0;
 		for(GameInfo g:client.gameSessions.values())
 			{
@@ -362,6 +362,11 @@ public class LobbyWindow extends QWidget implements ServerListener
 		}
 
 	public void eventGameStateUpdate(UserActionGameStateUpdate action)
+		{
+		}
+
+	@Override
+	public void eventDragCard(UserActionDragCard action)
 		{
 		}
 
