@@ -10,17 +10,17 @@ import com.trolltech.qt.gui.QTableWidgetItem;
 public class PlayersTableWidgetItem extends QTableWidgetItem
 	{
 
-	int minplayers, maxplayers, players;
+	private int minplayers, maxplayers, players;
 
-	PlayersTableWidgetItem(int minplayers, int maxplayers, int players)
+	public PlayersTableWidgetItem(int minplayers, int maxplayers, int players)
 		{
 		this.minplayers = minplayers;
 		this.maxplayers = maxplayers;
 		this.players = players;
-		this.setText(players 
+		setText(players 
 				+ (minplayers > 0 ? "("+minplayers+")" : "")
 				+ (maxplayers > 0 ? "/"+maxplayers : ""));
-		this.setTextAlignment(Qt.AlignmentFlag.AlignCenter.value());
+		setTextAlignment(Qt.AlignmentFlag.AlignCenter.value());
 		}
 
 	public boolean operator_less(QTableWidgetItem x)

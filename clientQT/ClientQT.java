@@ -12,6 +12,7 @@ import util.CardGameInfo;
 import action.GameActionSendMessage;
 import action.Message;
 import action.UserActionGameDesign;
+import action.UserActionGameStateUpdate;
 
 import com.trolltech.qt.gui.QApplication;
 
@@ -146,6 +147,11 @@ public class ClientQT extends Client implements ServerListener
 	@Override
 	public void eventGameMessage(GameActionSendMessage action)
 		{
+		}
+
+	public void eventGameStateUpdate(UserActionGameStateUpdate action)
+		{
+		
 		}
 
 	}

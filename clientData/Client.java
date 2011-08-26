@@ -18,6 +18,7 @@ import action.Message;
 import action.UserAction;
 import action.UserActionGameDesign;
 import action.UserActionGameInfoUpdate;
+import action.UserActionGameStateUpdate;
 import action.UserActionListOfGameSessions;
 import action.UserActionListOfGameTypes;
 import action.UserActionListOfUsers;
@@ -64,6 +65,8 @@ public class Client
 				gotGameSessionUpdate((UserActionGameInfoUpdate)action);
 			else if(action instanceof GameActionSendMessage)
 				gotGameMessage((GameActionSendMessage)action);
+			else if(action instanceof UserActionGameStateUpdate)
+				gotGameStateUpdate((UserActionGameStateUpdate)action);
 			
 			//TODO in so many ways it would be nice with a general "else"
 			
@@ -73,6 +76,13 @@ public class Client
 		for(ServerListener listener:serverListeners)
 			listener.eventServerMessage(msg);
 		
+		}
+
+
+	private void gotGameStateUpdate(UserActionGameStateUpdate action)
+		{
+		for(ServerListener listener:serverListeners)
+			listener.eventGameStateUpdate(action);
 		}
 
 

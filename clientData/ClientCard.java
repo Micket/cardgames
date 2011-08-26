@@ -21,7 +21,7 @@ public class ClientCard
 
 	
 	
-	public int clientID;
+	public int cardPlayer;
 	public String stack;
 	public int stackPos;
 	

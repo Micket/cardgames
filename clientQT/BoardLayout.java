@@ -5,6 +5,8 @@ import java.util.Map;
 
 import javax.vecmath.Vector2d;
 
+import action.UserActionGameStateUpdate;
+
 import serverData.CardStack;
 import serverData.CardStack.StackStyle;
 import util.Matrix2d;
@@ -14,6 +16,7 @@ import clientData.ClientCard;
 import clientData.ClientGameData;
 import clientData.ClientPlayerData;
 import clientData.GameDesign;
+import clientData.GameDesign.FieldDef;
 import clientData.GameDesign.StackDef;
 
 
@@ -291,33 +294,74 @@ public class BoardLayout
 	public void newDesign(GameDesign design)
 		{
 		this.design=design;
-		
-		
+		}
+
+	public void newState(UserActionGameStateUpdate msg)
+		{
 		ClientGameData gamedata=view.gameData;
 
-		ClientPlayerData pdata=new ClientPlayerData();
-		gamedata.playerMap.put(client.getClientID(),pdata);
-
-		for(String stackName:design.playerField.stacks.keySet())
+		for(int playerID:msg.player.keySet())
 			{
-			CardStack<ClientCard> onestack=new CardStack<ClientCard>();
-			pdata.stackMap.put(stackName, onestack);
+			ClientPlayerData pdata=new ClientPlayerData();
+			gamedata.playerMap.put(playerID,pdata);
+
+			UserActionGameStateUpdate.PlayerState pstate=msg.player.get(playerID);
 			
-			GameDesign.StackDef stackDef=design.playerField.stacks.get(stackName);
-			onestack.stackStyle=stackDef.stack.stackStyle;
-			
-			for(int i=1;i<=10;i++)
+			for(String stackName:pstate.stacks.keySet())
 				{
-				ClientCard cdata=new ClientCard();
-				cdata.front="poker Spades "+i;
-				cdata.back="poker back";
-				pdata.stackMap.get(stackName).addCard(cdata);
+				//Get the design of the board area
+				/*
+				GameDesign.StackDef stackDef;
+				if(playerID==-1)
+					stackDef=design.commonField.stacks.get(stackName);
+				else
+					stackDef=design.playerField.stacks.get(stackName);
+				*/
+				
+				//Add all the cards
+
+				pdata.stackMap.put(stackName,pstate.stacks.get(stackName));
+
+//				onestack.stackStyle=stackDef.stack.stackStyle;
+
+				/*
+				
+				CardStack<ClientCard> onestack=new CardStack<ClientCard>();
+				pdata.stackMap.put(stackName, onestack);
+				
+				
+				for(int i=1;i<=10;i++)
+					{
+					ClientCard cdata=new ClientCard();
+					cdata.front="poker Spades "+i;
+					cdata.back="poker back";
+					pdata.stackMap.get(stackName).addCard(cdata);
+					}
+				*/
+				
+				
 				}
+			
+			/*
+			for(String stackName:design.playerField.stacks.keySet())
+				{
+				
+				
+				
+				
+				}*/
 			
 			}
 		
+		
+		
+		gamedata.updateCardLinksToStacks();
+		
 		}
 	
+	
+	
+
 	
 	
 	}

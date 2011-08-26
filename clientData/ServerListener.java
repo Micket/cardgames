@@ -3,6 +3,7 @@ package clientData;
 import action.GameActionSendMessage;
 import action.Message;
 import action.UserActionGameDesign;
+import action.UserActionGameStateUpdate;
 
 public interface ServerListener
 	{
@@ -16,4 +17,6 @@ public interface ServerListener
 	public void eventGameDesign(UserActionGameDesign msg);
 
 	public void eventGameMessage(GameActionSendMessage action);
+
+	public void eventGameStateUpdate(UserActionGameStateUpdate action);
 	}

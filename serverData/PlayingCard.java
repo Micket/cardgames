@@ -24,7 +24,7 @@ public class PlayingCard extends ServerCard
     private Suit suit;
     private Rank rank;
 
-    PlayingCard(Suit s, Rank r)
+    public PlayingCard(Suit s, Rank r)
         {
         suit = s;
         rank = r;

@@ -37,6 +37,7 @@ public class GameDesign implements Serializable
 
 	public FieldDef playerField=new FieldDef();
 	public FieldDef commonField=new FieldDef();
-	
+
+
 
 	}

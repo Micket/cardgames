@@ -4,6 +4,9 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import serverData.CardStack;
+
+import clientData.GameDesign.FieldDef;
 import clientQT.QtGraphicsData;
 
 public class ClientGameData
@@ -13,7 +16,6 @@ public class ClientGameData
 	 * For the name of a card, what image does it map to?
 	 */
 	public Map<String,String> imageMap=new HashMap<String, String>();
-	
 	
 	
 	/**
@@ -61,5 +63,31 @@ public class ClientGameData
 		else
 			throw new RuntimeException("No such file, "+file); //Later: Request image from server
 		}
+	
+	
+
+	/**
+	 * Update the position of cards within stacks
+	 */
+	public void updateCardLinksToStacks()
+		{
+		for(int playerID:playerMap.keySet())
+			{
+			ClientPlayerData pdata=playerMap.get(playerID);
+			
+			for(String stackName:pdata.stackMap.keySet())
+				{
+				CardStack<ClientCard> s=pdata.stackMap.get(stackName);
+				for(int i=0;i<s.cards.size();i++)
+					{
+					ClientCard cc=s.cards.get(i);
+					cc.stack=stackName;
+					cc.stackPos=i;
+					cc.cardPlayer=playerID;
+					}
+				}
+			}
+		}
+	
 	
 	}

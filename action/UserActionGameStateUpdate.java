@@ -33,4 +33,9 @@ public class UserActionGameStateUpdate extends GameAction
 		player.put(id,s);
 		return s;
 		}
+	
+	public UserActionGameStateUpdate(int gameID)
+		{
+		this.gameID=gameID;
+		}
 	}

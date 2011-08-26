@@ -4,6 +4,7 @@ import action.GameActionLeave;
 import action.Message;
 import action.GameActionSendMessage;
 import action.UserActionGameDesign;
+import action.UserActionGameStateUpdate;
 import clientData.ServerListener;
 
 import com.trolltech.qt.gui.*;
@@ -102,6 +103,12 @@ public class BoardWindow extends QWidget implements ServerListener
 		{
 		if(msg.gameID==view.gameID)
 			view.setGameDesign(msg);
+		}
+
+	public void eventGameStateUpdate(UserActionGameStateUpdate msg)
+		{
+		if(msg.gameID==view.gameID)
+			view.setGameState(msg);
 		}
 
 	@Override

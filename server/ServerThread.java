@@ -13,6 +13,7 @@ import action.Message;
 import action.UserAction;
 import action.UserActionGameDesign;
 import action.UserActionGameInfoUpdate;
+import action.UserActionGameStateUpdate;
 import action.UserActionListOfGameTypes;
 import action.UserActionListOfUsers;
 import action.UserActionListOfGameSessions;
@@ -129,7 +130,12 @@ public class ServerThread extends Thread
 							
 							broadcastToClients(new Message(new UserActionGameInfoUpdate(sessionID, createGameSessionUpdate(sessionID))));
 							
-							send(action.fromClientID,new Message(new UserActionGameDesign(sessionID, game.createGameDesign())));
+							Message back=new Message();
+							back.add(new UserActionGameDesign(sessionID, game.createGameDesign()));
+							UserActionGameStateUpdate upd=new UserActionGameStateUpdate(game.sessionID);
+							game.getGameState(upd);
+							back.add(upd);
+							send(action.fromClientID,back);
 							
 							System.out.println("Starting game.");
 							}

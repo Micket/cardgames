@@ -8,7 +8,9 @@ import java.util.List;
 import action.Message;
 import action.UserActionClickedCard;
 import action.UserActionGameDesign;
+import action.UserActionGameStateUpdate;
 import clientData.Client;
+import clientData.ClientCard;
 import clientData.ClientGameData;
 import com.trolltech.qt.core.QPoint;
 import com.trolltech.qt.core.QTimer;
@@ -96,19 +98,19 @@ public class BoardView extends QGraphicsView
 		{
 		if(event.button()==MouseButton.LeftButton)
 			{
+			//Handle user clicking on a card
 			AnimatedCard card=getCardUnderPress(event);
 			if(card!=null)
 				{
+				ClientCard cc=card.cardData;
+				
 				UserActionClickedCard a=new UserActionClickedCard();
 				a.gameID=gameID;
+				a.stack=cc.stack;
+				a.stackPos=cc.stackPos;
+				a.player=cc.cardPlayer;
 				
-				
-				//////////TODO which card???
-				// stack
-				// id
-				
-				Message msg=new Message();
-				client.send(msg);
+				client.send(new Message(a));
 				}
 			}
 		}
@@ -284,6 +286,18 @@ public class BoardView extends QGraphicsView
 			}
 		});
 		
+		}
+
+
+	public void setGameState(UserActionGameStateUpdate msg)
+		{
+		layout.newState(msg);
+		layout.doLayout();
+		QApplication.invokeLater(new Runnable() {
+			public void run() {
+				redoLayout();
+			}
+		});
 		}
 	
 	

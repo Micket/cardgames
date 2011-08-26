@@ -1,5 +1,8 @@
 package games;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import serverData.CardStack;
 import serverData.CardStack.StackStyle;
 import serverData.PlayingCard;
@@ -28,18 +31,46 @@ public class DebugGame extends DefaultGameLogic
 	{
 
 	/// Complete deck of cards (for convenience)
-	private CardStack<PlayingCard> deckA = PlayingCardUtil.getDeck52();
-	private CardStack<PlayingCard> deckB = new CardStack<PlayingCard>();
-	private CardStack<PlayingCard> player = new CardStack<PlayingCard>();
+//	private CardStack<PlayingCard> deckA = PlayingCardUtil.getDeck52();
+//	private CardStack<PlayingCard> deckB = new CardStack<PlayingCard>();
+//	private CardStack<PlayingCard> player = new CardStack<PlayingCard>();
 
+	Map<Integer, DebugPlayerState> pstate=new HashMap<Integer, DebugPlayerState>();
+	
+	class DebugPlayerState
+		{
+		public CardStack<PlayingCard> hand = new CardStack<PlayingCard>();
+		public CardStack<PlayingCard> deck= new CardStack<PlayingCard>();
+		}
+	
+	
 	public void startGame()
 		{
+		
+		
+		
 		gameOn = true;
 		// Send information on layout and cardstacks.
 		}
 	
 	public boolean userJoined(int userID)
 		{
+		DebugPlayerState s=new DebugPlayerState();
+		pstate.put(userID, s);
+		
+		s.hand.cards.add(new PlayingCard(PlayingCard.Suit.Spades, PlayingCard.Rank.Deuce));
+		s.hand.cards.add(new PlayingCard(PlayingCard.Suit.Spades, PlayingCard.Rank.Three));
+		s.hand.cards.add(new PlayingCard(PlayingCard.Suit.Spades, PlayingCard.Rank.Five));
+		s.hand.cards.add(new PlayingCard(PlayingCard.Suit.Spades, PlayingCard.Rank.Four));
+		s.hand.stackStyle=StackStyle.Hand;
+
+		
+		s.deck.cards.add(new PlayingCard(PlayingCard.Suit.Spades, PlayingCard.Rank.Five));
+		s.deck.cards.add(new PlayingCard(PlayingCard.Suit.Spades, PlayingCard.Rank.Six));
+		s.deck.stackStyle=StackStyle.Deck;
+		
+
+//////////////		
 		if (!super.userJoined(userID))
 			return false;
 		return true;
@@ -47,12 +78,14 @@ public class DebugGame extends DefaultGameLogic
 	
 	public boolean userActionClickedCard(int fromUser, UserActionClickedCard s)
 		{
-		if (s.stackName.compareTo("deck_A") == 0)
+		if (s.stack.equals("hand"))
 			{
+			/*
 			System.out.println("Taking a card from deck A");
 			PlayingCard c = deckA.drawCard();
 			player.addCard(c);
 			// Send card to user..
+			*/
 			}
 		else
 			return false;
@@ -86,19 +119,18 @@ public class DebugGame extends DefaultGameLogic
 		return d;
 		}
 	
-	public void getGameState(UserActionGameStateUpdate state)
+	public void getGameState(UserActionGameStateUpdate action)
 		{
 		for(int p:players)
 			{
-			PlayerState ps=state.createPlayer(p);
+			DebugPlayerState ds=pstate.get(p);
+			PlayerState ps=action.createPlayer(p);
 			
-			CardStack<ClientCard> stack=new CardStack<ClientCard>();
-			ps.stacks.put("hand", stack);
-			ClientCard cc=new ClientCard();
-			stack.addCard(cc);
-			
-			//TODO information about this card
-			
+			CardStack<ClientCard> stackHand=CardStack.toClientCardStack(ds.hand);
+			ps.stacks.put("hand", stackHand);
+
+			CardStack<ClientCard> stackDeck=CardStack.toClientCardStack(ds.deck);
+			ps.stacks.put("deck", stackDeck);
 			}
 		}
 

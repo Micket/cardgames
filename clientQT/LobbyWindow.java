@@ -14,6 +14,7 @@ import action.GameActionSendMessage;
 import action.Message;
 import action.UserAction;
 import action.UserActionGameDesign;
+import action.UserActionGameStateUpdate;
 import action.UserActionLobbyMessage;
 import action.UserActionSetNick;
 import action.UserActionStartGame;
@@ -23,7 +24,9 @@ import clientData.ServerListener;
 import clientData.GameInfo;
 
 import com.trolltech.qt.core.Qt;
+import com.trolltech.qt.core.Qt.ItemFlag;
 import com.trolltech.qt.gui.*; // Fuck it..
+import com.trolltech.qt.gui.QAbstractItemView.SelectionBehavior;
 
 public class LobbyWindow extends QWidget implements ServerListener
 	{
@@ -236,6 +239,8 @@ public class LobbyWindow extends QWidget implements ServerListener
 			for(QTreeWidgetItem s:w.takeChildren())
 				w.removeChild(s);
 		
+		gameList.setSelectionBehavior(SelectionBehavior.SelectRows);
+		
 		int i = 0;
 		for(GameInfo g:client.gameSessions.values())
 			{
@@ -249,11 +254,19 @@ public class LobbyWindow extends QWidget implements ServerListener
 			QTableWidgetItem newGameUsersItem=new PlayersTableWidgetItem(g.minusers, g.maxusers, g.joinedUsers.size());
 			//QTableWidgetItem newGameUsersItem=new QTableWidgetItem( g.maxusers < 0 ? ""+g.joinedUsers.size() : ""+g.joinedUsers.size()+"/"+g.maxusers);
 			QTableWidgetItem newGameName=new QTableWidgetItem( g.sessionName );
+			
+			newGameUsersItem.setFlags(ItemFlag.ItemIsSelectable, ItemFlag.ItemIsEnabled);
+			newGameType.setFlags(ItemFlag.ItemIsSelectable, ItemFlag.ItemIsEnabled);
+			newGameName.setFlags(ItemFlag.ItemIsSelectable, ItemFlag.ItemIsEnabled);
+
 			gameList.setItem(i,0,newGameUsersItem);
 			gameList.setItem(i,1,newGameType);
 			gameList.setItem(i,2,newGameName);
 			i++;
+			
 
+
+			
 			// Maybe something like this?
 			List<String> temptext = new ArrayList<String>(1);
 			temptext.add(g.sessionName + " ("+gt.name+")"); // temptext.add(gt.name); and possible other data..
@@ -345,6 +358,10 @@ public class LobbyWindow extends QWidget implements ServerListener
 
 	@Override
 	public void eventGameMessage(GameActionSendMessage action)
+		{
+		}
+
+	public void eventGameStateUpdate(UserActionGameStateUpdate action)
 		{
 		}
 
