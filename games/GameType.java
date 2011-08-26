@@ -10,7 +10,7 @@ import java.io.Serializable;
  *
  * @author micket
  */
-public class GameType implements Serializable
+public class GameType implements Serializable, Comparable<GameType>
 	{
 	private static final long serialVersionUID = 1L;
 	
@@ -41,5 +41,11 @@ public class GameType implements Serializable
 	public String toString()
 		{
 		return category+"."+name;
+		}
+
+	@Override
+	public int compareTo(GameType o)
+		{
+		return name.compareTo(o.name);
 		}
 	}

@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;
+import java.util.TreeMap;
 
 import action.Message;
 import action.UserAction;
@@ -266,10 +267,18 @@ public class LobbyWindow extends QWidget implements ServerListener
 		{
 		System.out.println("Filling in the list of available games. ("+client.gameTypes.size()+" in total).");
 		miNewGame.clear();
+		
+		//Sort games by name
+		Map<GameType, Class<? extends GameLogic>> gameTypes=new TreeMap<GameType, Class<? extends GameLogic>>();
 		for(Map.Entry<Class<? extends GameLogic>, GameType> g:client.gameTypes.entrySet())
+			gameTypes.put(g.getValue(),g.getKey());
+		
+		//Create menu entries
+		//TODO submenu for each category
+		for(Map.Entry<GameType, Class<? extends GameLogic>> g:gameTypes.entrySet())
 			{
-			final Class<? extends GameLogic> cl=g.getKey();
-			final GameType gt=g.getValue();
+			final Class<? extends GameLogic> cl=g.getValue();
+			final GameType gt=g.getKey();
 			QAction menuaction = new QAction(gt.name, miNewGame);
 			miNewGame.addAction(menuaction);
 			menuaction.triggered.connect(new Runnable()
