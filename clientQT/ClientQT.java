@@ -9,6 +9,7 @@ import java.util.Set;
 
 import util.CardGameInfo;
 
+import action.GameActionSendMessage;
 import action.Message;
 import action.UserActionGameDesign;
 
@@ -140,6 +141,11 @@ public class ClientQT extends Client implements ServerListener
 
 
 		QApplication.exec();
+		}
+
+	@Override
+	public void eventGameMessage(GameActionSendMessage action)
+		{
 		}
 
 	}

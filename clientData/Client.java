@@ -13,6 +13,7 @@ import java.util.Map;
 import server.ConnectionToClientLocal;
 import util.CardGameInfo;
 
+import action.GameActionSendMessage;
 import action.Message;
 import action.UserAction;
 import action.UserActionGameDesign;
@@ -61,6 +62,8 @@ public class Client
 				gotGameDesign((UserActionGameDesign)action);
 			else if(action instanceof UserActionGameInfoUpdate)
 				gotGameSessionUpdate((UserActionGameInfoUpdate)action);
+			else if(action instanceof GameActionSendMessage)
+				gotGameMessage((GameActionSendMessage)action);
 			
 			//TODO in so many ways it would be nice with a general "else"
 			
@@ -70,6 +73,13 @@ public class Client
 		for(ServerListener listener:serverListeners)
 			listener.eventServerMessage(msg);
 		
+		}
+
+
+	private void gotGameMessage(GameActionSendMessage action)
+		{
+		for(ServerListener listener:serverListeners)
+			listener.eventGameMessage(action);
 		}
 
 

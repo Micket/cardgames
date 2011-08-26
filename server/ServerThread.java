@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 import action.GameAction;
+import action.GameActionSendMessage;
 import action.Message;
 import action.UserAction;
 import action.UserActionGameDesign;
@@ -85,8 +86,6 @@ public class ServerThread extends Thread
 				}
 			if(msg!=null)
 				{
-				Message outMsg=new Message();
-				
 				for(UserAction action:msg.actions)
 					{
 					if(action instanceof GameAction)// Pass on message to game session
@@ -95,7 +94,16 @@ public class ServerThread extends Thread
 						
 						GameLogic game = gameSessions.get(ga.gameID);
 						if(game!=null)
-							game.userAction(action.fromClientID, ga);
+							{
+							if(ga instanceof GameActionSendMessage)
+								{
+								GameActionSendMessage lm=(GameActionSendMessage)action;
+								lm.fromClientID=action.fromClientID;
+								broadcastToGameClients(new Message(lm), lm.gameID);
+								}
+							else
+								game.userAction(action.fromClientID, ga);
+							}
 						else
 							System.out.println("Error: Trying to pass message to non-existing game session "+ga.gameID);
 						}
@@ -103,8 +111,7 @@ public class ServerThread extends Thread
 						{
 						UserActionLobbyMessage lm=(UserActionLobbyMessage)action;
 						lm.fromClientID=action.fromClientID;
-						outMsg.add(lm);
-						broadcastToClients(outMsg);
+						broadcastToClients(new Message(lm));
 						
 						System.out.println("got message "+lm.message);
 						}
@@ -163,6 +170,18 @@ public class ServerThread extends Thread
 			conn.send(msg);
 		}
 
+	/**
+	 * Pass message on to all clients in a game
+	 */
+	public void broadcastToGameClients(Message msg, int gameID)
+		{
+		GameLogic logic=gameSessions.get(gameID);
+		if(logic!=null)
+			for(int clientID:logic.players)
+				connections.get(clientID).send(msg);
+		}
+	
+	
 	/**
 	 * Send a new user list of all users
 	 */

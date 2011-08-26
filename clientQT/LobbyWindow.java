@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Arrays;
 import java.util.TreeMap;
 
+import action.GameActionSendMessage;
 import action.Message;
 import action.UserAction;
 import action.UserActionGameDesign;
@@ -339,6 +340,11 @@ public class LobbyWindow extends QWidget implements ServerListener
 
 	@Override
 	public void eventGameDesign(UserActionGameDesign msg)
+		{
+		}
+
+	@Override
+	public void eventGameMessage(GameActionSendMessage action)
 		{
 		}
 
