@@ -6,10 +6,7 @@ import java.util.Map;
 import serverData.CardStack;
 import serverData.CardStack.StackStyle;
 import serverData.PlayingCard;
-import serverData.PlayingCardUtil; // Common things for playing cards here?
-
 import clientData.ClientCard;
-import clientData.ClientPlayerData;
 import clientData.GameDesign;
 
 import action.Message;

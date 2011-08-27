@@ -17,6 +17,7 @@ import action.GameActionSendMessage;
 import action.Message;
 import action.UserAction;
 import action.UserActionDragCard;
+import action.UserActionGameCardUpdate;
 import action.UserActionGameDesign;
 import action.UserActionGameInfoUpdate;
 import action.UserActionGameStateUpdate;
@@ -68,6 +69,8 @@ public class Client
 				gotGameMessage((GameActionSendMessage)action);
 			else if(action instanceof UserActionGameStateUpdate)
 				gotGameStateUpdate((UserActionGameStateUpdate)action);
+			else if(action instanceof UserActionGameCardUpdate)
+				gotGameCardUpdate((UserActionGameCardUpdate)action);
 			else if(action instanceof UserActionDragCard)
 				gotDragCard((UserActionDragCard)action);
 			
@@ -79,6 +82,13 @@ public class Client
 		for(ServerListener listener:serverListeners)
 			listener.eventServerMessage(msg);
 		
+		}
+
+
+	private void gotGameCardUpdate(UserActionGameCardUpdate action)
+		{
+		for(ServerListener listener:serverListeners)
+			listener.eventGameCardUpdate(action);
 		}
 
 

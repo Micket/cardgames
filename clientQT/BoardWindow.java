@@ -4,6 +4,7 @@ import action.GameActionLeave;
 import action.Message;
 import action.GameActionSendMessage;
 import action.UserActionDragCard;
+import action.UserActionGameCardUpdate;
 import action.UserActionGameDesign;
 import action.UserActionGameStateUpdate;
 import clientData.ServerListener;
@@ -16,7 +17,6 @@ import com.trolltech.qt.gui.*;
  */
 public class BoardWindow extends QWidget implements ServerListener
 	{
-	
 	private ClientQT client;
 	private BoardView view;
 	
@@ -127,6 +127,12 @@ public class BoardWindow extends QWidget implements ServerListener
 	public void eventDragCard(UserActionDragCard action)
 		{
 		view.dragCard(action);
+		}
+
+	@Override
+	public void eventGameCardUpdate(UserActionGameCardUpdate action)
+		{
+		view.gameCardUpdate(action);
 		}
 	
 	

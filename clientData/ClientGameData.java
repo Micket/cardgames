@@ -6,18 +6,10 @@ import java.util.Map;
 
 import serverData.CardStack;
 
-import clientData.GameDesign.FieldDef;
 import clientQT.QtGraphicsData;
 
 public class ClientGameData
 	{
-
-	/**
-	 * For the name of a card, what image does it map to?
-	 */
-	public Map<String,String> imageMap=new HashMap<String, String>();
-	
-	
 	/**
 	 * Heaps for each player. Common heap is -1. This ID is reserved, all user IDs are positive
 	 */
@@ -25,22 +17,6 @@ public class ClientGameData
 
 	
 	
-	public ClientGameData()
-		{
-		//This is the default deck of cards. It can be extended with custom cards
-		for(int i=1;i<=12;i++)
-			{
-			imageMap.put("poker Spades "+i, "spades"+i+".svg");
-			imageMap.put("poker Diamonds "+i, "diamonds"+i+".svg");
-			imageMap.put("poker Hearts "+i, "hearts"+i+".svg");
-			imageMap.put("poker Clubs "+i, "clubs"+i+".svg");
-			}
-
-		imageMap.put("poker back","pokerbackside.svg");
-		imageMap.put("emptypos","empty.svg");
-
-		//System.out.println(imageMap);
-		}
 	
 
 	/**
@@ -49,19 +25,18 @@ public class ClientGameData
 	 * 
 	 * Interface problem: Now this depends on QT
 	 */
-	public QtGraphicsData getImageForCard(String card)
+	public QtGraphicsData getImage(String image)
 		{
-		String cardFile=imageMap.get(card);
-		if(cardFile==null)
-			{
-			throw new RuntimeException("No card image map for "+card); //Later: Request image from server
-			}
-			
-		String file="cards/"+cardFile;
-		if(new File("cards",cardFile).exists())
-			return new QtGraphicsData(new File("cards",cardFile));
+		File fileSVG=new File("images",image+".svg");
+		if(fileSVG.exists())
+			return new QtGraphicsData(fileSVG);
 		else
-			throw new RuntimeException("No such file, "+file); //Later: Request image from server
+			{
+			File filePNG=new File("images",image+".png");
+			if(filePNG.exists())
+				return new QtGraphicsData(filePNG);
+			}
+		throw new RuntimeException("No such image, "+image); //Later: Request image from server
 		}
 	
 	

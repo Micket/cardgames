@@ -1,13 +1,20 @@
 package clientQT;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+
+import javax.vecmath.Vector2d;
+
+import util.Tuple;
 
 
 import action.Message;
 import action.UserActionClickedCard;
 import action.UserActionDragCard;
+import action.UserActionGameCardUpdate;
 import action.UserActionGameDesign;
 import action.UserActionGameStateUpdate;
 import clientData.Client;
@@ -32,11 +39,11 @@ import com.trolltech.qt.opengl.QGLWidget;
 public class BoardView extends QGraphicsView
 	{
 	//TODO unload these!
-	private QPixmap bg;
+	private QtGraphicsData bg;
 	private QtGraphicsData emptyPic;
 	
 	public List<AnimatedCard> cards=new LinkedList<AnimatedCard>();
-	public List<EmptyPos> emptyPosList=new LinkedList<EmptyPos>();
+	public Map<Tuple<Integer,String>, EmptyPos> emptyPosList=new HashMap<Tuple<Integer,String>, EmptyPos>();
 	
 	public double zoom=0.3;
 
@@ -166,20 +173,30 @@ public class BoardView extends QGraphicsView
 					{
 					//Find the highest (z) card beneath cursor
 					AnimatedCard cardBeneath=null;
+					Tuple<Integer,String> emptyPos=null;
+					
 					for(QGraphicsItemInterface item:scene().items(event.posF()))
+						{
 						for(AnimatedCard ocard:cards)
 							if(ocard.imageFront==item || ocard.imageBack==item) //TODO. bug. what if a card exists multiple times?
 								if(!ocard.isBeingDragged)
 									if(cardBeneath==null || ocard.posZ>cardBeneath.posZ)
 										cardBeneath=ocard;
+
+						for(Tuple<Integer,String> emptyPosKey:emptyPosList.keySet())
+							{
+							EmptyPos p=emptyPosList.get(emptyPosKey);
+							if(p.qtitem==item)
+								{
+								emptyPos=emptyPosKey;
+								//System.out.println("Found empty pos!!! "+emptyPosKey);
+								}
+							}
+						}
 					draggedCard.isBeingDragged=false;
-					
-					//TODO ability to drag onto empty heap
 					
 					if(cardBeneath!=null)
 						{
-						System.out.println("onto card "+cardBeneath);
-						
 						ClientCard fromCard=draggedCard.cardData;
 						ClientCard toCard=cardBeneath.cardData;
 						
@@ -194,6 +211,23 @@ public class BoardView extends QGraphicsView
 						a.toStackName=toCard.stack;
 						a.toPos=toCard.stackPos+1;
 
+						client.send(new Message(a));
+						}
+					else if(emptyPos!=null)
+						{
+						ClientCard fromCard=draggedCard.cardData;
+						
+						UserActionDragCard a=new UserActionDragCard();
+						a.gameID=gameID;
+						
+						a.fromPlayer=fromCard.cardPlayer;
+						a.fromStackName=fromCard.stack;
+						a.fromPos=fromCard.stackPos;
+						
+						a.toPlayer=emptyPos.fst();
+						a.toStackName=emptyPos.snd();
+						a.toPos=0;
+						
 						client.send(new Message(a));
 						}
 					
@@ -216,7 +250,7 @@ public class BoardView extends QGraphicsView
 	 */
 	public QtGraphicsData getScaledImage(String front)
 		{
-		return gameData.getImageForCard(front).getScaledImage(zoom);
+		return gameData.getImage(front).getScaledImage(zoom);
 		}
 	
 	public void redoLayout()
@@ -227,11 +261,15 @@ public class BoardView extends QGraphicsView
 		
 		//Place background
 		if(bg==null)
-		bg=new QPixmap("cards/tiledtable.png");
+			bg=gameData.getImage("tiledtable");
+//			bg=new QPixmap("cards/tiledtable.png");
 		for(int ax=0;ax<10;ax++)
 			for(int ay=0;ay<10;ay++)
 				{
-				QGraphicsPixmapItem item=new QGraphicsPixmapItem(bg);
+				
+				QGraphicsItemInterface item=bg.createGraphicsItem();
+				//QRectF bb=item.boundingRect();
+				//new QGraphicsPixmapItem(bg);
 				item.setZValue(-1000);
 				item.resetTransform();
 				item.setTransform(QTransform.fromScale(zoom, zoom), true);
@@ -239,21 +277,26 @@ public class BoardView extends QGraphicsView
 				s.addItem(item);
 				}
 
+		//Ensure empty pic loaded
+		if(emptyPic==null)
+			emptyPic=getScaledImage("empty pos");  //TODO Will not find empty pos because it is transparent. 
 		
 		//Draw all empty positions
-		if(emptyPic==null)
-			emptyPic=getScaledImage("emptypos"); //TODO should only create one scaled image and use instances
-		for(EmptyPos p:emptyPosList)
+		for(EmptyPos p:emptyPosList.values())
 			{
-			QGraphicsItemInterface item=emptyPic.createGraphicsItem();
-			item.setZValue(-900);
-			item.setTransform(QTransform.fromTranslate(p.x*zoom, p.y*zoom), true);
-			item.rotate(p.rotation*180/Math.PI);
-			item.setTransform(QTransform.fromTranslate(-item.boundingRect().width()*zoom/2, -item.boundingRect().height()*zoom/2), true);
+			if(p.qtitem==null)
+				{
+				p.qtitem=emptyPic.createGraphicsItem();
+				p.qtitem.setZValue(-900);
+				p.qtitem.resetTransform();
+				p.qtitem.setTransform(QTransform.fromTranslate(p.x*zoom, p.y*zoom), true);
+				p.qtitem.rotate(p.rotation*180/Math.PI);
+				p.qtitem.setTransform(QTransform.fromTranslate(-p.qtitem.boundingRect().width()*zoom/2, -p.qtitem.boundingRect().height()*zoom/2), true);
+				}
 			
-			s.addItem(item);
+			s.addItem(p.qtitem);
 			}
-		
+
 		//Sort the cards in Z to ensure the right drawing order
 		Collections.sort(cards, new Comparator<AnimatedCard>()
 			{
@@ -282,8 +325,7 @@ public class BoardView extends QGraphicsView
 		for(AnimatedCard card:cards)
 			{
 			QGraphicsItemInterface item;
-			
-			
+						
 			//Get the image for the card if it is not loaded
 			if(card.cardData.showsFront)
 				{
@@ -318,31 +360,35 @@ public class BoardView extends QGraphicsView
 	public void setGameDesign(UserActionGameDesign msg)
 		{
 		layout.newDesign(msg.design);
-		layout.doLayout();
-		QApplication.invokeLater(new Runnable() {
-			public void run() {
-				redoLayout();
-			}
-		});
-		
+		threadSafeDoLayout();
 		}
 
 
 	public void setGameState(UserActionGameStateUpdate msg)
 		{
 		layout.newState(msg);
-		layout.doLayout();
-		QApplication.invokeLater(new Runnable() {
-			public void run() {
-				redoLayout();
-			}
-		});
+		threadSafeDoLayout();
 		}
 
 
 	public void dragCard(UserActionDragCard action)
 		{
 		layout.dragCard(action);
+		threadSafeDoLayout();
+		}
+	
+	public void gameCardUpdate(UserActionGameCardUpdate action)
+		{
+		layout.cardUpdate(action);
+		threadSafeDoLayout();
+		}
+
+
+	/**
+	 * This function should be called after layout has been changed by a non-QT-thread
+	 */
+	private void threadSafeDoLayout()
+		{
 		layout.doLayout();
 		QApplication.invokeLater(new Runnable() {
 			public void run() {
@@ -350,6 +396,25 @@ public class BoardView extends QGraphicsView
 			}
 		});
 		}
-	
+
+
+	private EmptyPos getCreateEmptyPos(int playerID, String stackName)
+		{
+		Tuple<Integer,String> key=Tuple.make(playerID, stackName);
+		EmptyPos p=emptyPosList.get(key);
+		if(p==null)
+			emptyPosList.put(key, p=new EmptyPos());
+		return p;
+		}
+
+
+	public void setEmptyPos(int playerID, String stackName, Vector2d ePos, double baseRotAngle)
+		{
+		EmptyPos p=getCreateEmptyPos(playerID, stackName);
+		p.x=ePos.x;
+		p.y=ePos.y;
+		p.rotation=baseRotAngle;
+		}
+
 	
 	}

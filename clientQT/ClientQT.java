@@ -12,6 +12,7 @@ import util.CardGameInfo;
 import action.GameActionSendMessage;
 import action.Message;
 import action.UserActionDragCard;
+import action.UserActionGameCardUpdate;
 import action.UserActionGameDesign;
 import action.UserActionGameStateUpdate;
 
@@ -157,6 +158,11 @@ public class ClientQT extends Client implements ServerListener
 
 	@Override
 	public void eventDragCard(UserActionDragCard action)
+		{
+		}
+
+	@Override
+	public void eventGameCardUpdate(UserActionGameCardUpdate action)
 		{
 		}
 

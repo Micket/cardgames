@@ -97,4 +97,21 @@ public class QtGraphicsData
 		}
 
 
+	public int width()
+		{
+		if(bmp!=null)
+			return bmp.width();
+		else
+			throw new RuntimeException("eek");
+		}
+
+	public int height()
+		{
+		if(bmp!=null)
+			return bmp.height();
+		else
+			throw new RuntimeException("eek");
+		}
+
+
 	}

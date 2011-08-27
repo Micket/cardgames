@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.vecmath.Vector2d;
 
 import action.UserActionDragCard;
+import action.UserActionGameCardUpdate;
 import action.UserActionGameStateUpdate;
 
 import serverData.CardStack;
@@ -17,7 +18,6 @@ import clientData.ClientCard;
 import clientData.ClientGameData;
 import clientData.ClientPlayerData;
 import clientData.GameDesign;
-import clientData.GameDesign.FieldDef;
 import clientData.GameDesign.StackDef;
 
 
@@ -27,7 +27,6 @@ import clientData.GameDesign.StackDef;
  */
 public class BoardLayout
 	{
-	private boolean first=true;
 	private Map<ClientCard,AnimatedCard> mapCC_AC=new HashMap<ClientCard, AnimatedCard>();
 	private boolean needRedraw;
 	
@@ -51,44 +50,8 @@ public class BoardLayout
 		{
 		needRedraw=false;
 		mapCC_AC.clear();
-		view.emptyPosList.clear();
-
 		
 		ClientGameData gamedata=view.gameData;
-
-		/*
-		////////// temp////////////
-		if(first)
-			{
-			for(int ap=0;ap<2;ap++)
-				{
-				ClientPlayerData pdata=new ClientPlayerData();
-				if(ap==0)
-					gamedata.playerMap.put(client.getClientID(),pdata);
-				else
-					gamedata.playerMap.put(-ap,pdata); //until we have more players
-				
-				
-				
-				
-				CardStack<ClientCard> onestack=new CardStack<ClientCard>();
-				pdata.stackMap.put("os", onestack);
-
-				for(int i=1;i<=10;i++)
-					{
-					ClientCard cdata=new ClientCard();
-					cdata.front="poker Spades "+i;
-					cdata.back="poker back";
-					pdata.stackMap.get("os").addCard(cdata);
-					}
-				}
-			
-			first=false;
-			
-			System.out.println("---------layout1!");
-			}
-		///////////////////////
-		*/
 
 		//Each player
 		for(int playerID:gamedata.playerMap.keySet())
@@ -101,18 +64,22 @@ public class BoardLayout
 			
 			ClientPlayerData pdata=gamedata.playerMap.get(playerID);
 
-			
 			Vector2d midPos=new Vector2d(400.0/2/view.zoom,400.0/2/view.zoom);
 
-				
 			layoutForOnePlayer(view, client, playerID, baseRotAngle, transformRot, transformMove, midPos, pdata);
-			
-			
 			}
 
-		//TODO common area
-		//call layoutforoneplayer
-		
+		//Common area
+		ClientPlayerData pdata=gamedata.playerMap.get(-1);
+		if(pdata!=null)
+			{
+			Matrix2d transformRot=new Matrix2d();
+			double baseRotAngle=0;
+			transformRot.setRot(baseRotAngle);
+			Vector2d transformMove=new Vector2d(0,100/view.zoom);
+			Vector2d midPos=new Vector2d(400.0/2/view.zoom,400.0/2/view.zoom);
+			layoutForOnePlayer(view, client, -1, baseRotAngle, transformRot, transformMove, midPos, pdata);
+			}
 		
 		return needRedraw;
 		}
@@ -145,19 +112,28 @@ public class BoardLayout
 				transformMove.y+=stackDef.y;
 				}
 			else
-				System.out.println("There is no stackdef for "+stackName+
+				throw new RuntimeException("Error: There is no stackdef for "+stackName+
 						", there is "+design.playerField.stacks.keySet()+" and "+design.commonField.stacks.keySet());
 
 			//Layout a normal stack
-
 			if(onestack.stackStyle==StackStyle.Deck)
 				{
 				//Place position beneath
 				Vector2d ePos=new Vector2d(transformMove);
 				transformRot.transform(ePos);
 				ePos.add(midPos); //To center rotation around midpos
-				view.emptyPosList.add(new EmptyPos(ePos.x, ePos.y, baseRotAngle));
+//				view.emptyPosList.add(new EmptyPos(ePos.x, ePos.y, baseRotAngle));
 
+
+				view.setEmptyPos(playerID, stackName, ePos, baseRotAngle);
+
+				
+				
+				/*double cardDistance=10.0/Math.log(onestack.size()+2);
+				if(cardDistance>10)
+					cardDistance=10;*/
+				double cardDistance=2;
+				
 				//Place cards
 				for(int i=0;i<onestack.size();i++)
 					{
@@ -167,7 +143,7 @@ public class BoardLayout
 					//cardPos.add(transformMove);
 					Vector2d cardPos=new Vector2d(transformMove);
 					transformRot.transform(cardPos);
-					cardPos.add(new Vector2d(-i*10, -i*10));
+					cardPos.add(new Vector2d(-i*cardDistance, -i*cardDistance));
 					cardPos.add(midPos); //To center rotation around midpos
 					
 					AnimatedCard ac=new AnimatedCard(cc);
@@ -215,11 +191,10 @@ public class BoardLayout
 				{
 				
 				//Place position beneath
-				
 				Vector2d ePos=new Vector2d(transformMove);
 				transformRot.transform(ePos);
 				ePos.add(midPos); //To center rotation around midpos
-				view.emptyPosList.add(new EmptyPos(ePos.x, ePos.y, baseRotAngle));
+				view.setEmptyPos(playerID, stackName, ePos, baseRotAngle);
 				 
 				//Place cards
 				for(int i=0;i<onestack.size();i++)
@@ -357,6 +332,12 @@ public class BoardLayout
 		stackTo.cards.add(toPos, theCard);
 		
 		gamedata.updateCardLinksToStacks();
+		}
+
+	public void cardUpdate(UserActionGameCardUpdate action)
+		{
+		ClientGameData gamedata=view.gameData;
+		action.updateStack(gamedata.playerMap.get(action.playerID).stackMap.get(action.stackName));
 		}
 	
 	

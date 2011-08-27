@@ -1,10 +1,16 @@
 package clientQT;
 
+import com.trolltech.qt.gui.QGraphicsItemInterface;
+
 public class EmptyPos
 	{
 	public double x, y;
 	public double rotation;
 
+	public QGraphicsItemInterface qtitem;
+	
+	
+	
 	public EmptyPos()
 		{
 		

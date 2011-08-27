@@ -40,6 +40,9 @@ public class CardStack<E>
 		cards.addAll(cs.cards);
 		}
 
+	/**
+	 * Remove and return the card on the bottom
+	 */
 	public E drawCard()
 		{
 		E card = cards.get(0);
@@ -57,7 +60,19 @@ public class CardStack<E>
 		}
 
 
-	public E getCard(int i) { return cards.get(i); }
+	public E getCard(int i)
+		{
+		return cards.get(i);
+		}
+	
+	public E getTopCard()
+		{
+		if(!cards.isEmpty())
+			return cards.get(cards.size()-1);
+		else
+			return null;
+		}
+	
 	public int size() { return cards.size(); }
 	public void shuffle() { Collections.shuffle(cards); }
 	public void clear() { cards.clear(); }

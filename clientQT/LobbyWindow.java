@@ -14,6 +14,7 @@ import action.GameActionSendMessage;
 import action.Message;
 import action.UserAction;
 import action.UserActionDragCard;
+import action.UserActionGameCardUpdate;
 import action.UserActionGameDesign;
 import action.UserActionGameStateUpdate;
 import action.UserActionLobbyMessage;
@@ -367,6 +368,11 @@ public class LobbyWindow extends QWidget implements ServerListener
 
 	@Override
 	public void eventDragCard(UserActionDragCard action)
+		{
+		}
+
+	@Override
+	public void eventGameCardUpdate(UserActionGameCardUpdate action)
 		{
 		}
 
