@@ -156,9 +156,9 @@ public class BoardView extends QGraphicsView
 		if(event.button()==MouseButton.LeftButton)
 			{
 			AnimatedCard card=getCardUnderPress(event);
-			ClientCard cc=card.cardData;
 			if(card!=null)
 				{
+				ClientCard cc=card.cardData;
 				card.isBeingDragged=true;
 				draggedCard=card;
 

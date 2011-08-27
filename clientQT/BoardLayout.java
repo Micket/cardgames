@@ -318,18 +318,30 @@ public class BoardLayout
 		CardStack<ClientCard> stackFrom=pdataFrom.stackMap.get(action.fromStackName);
 		CardStack<ClientCard> stackTo=pdataTo.stackMap.get(action.toStackName);
 		
-		//If it is the same stack then one has to be careful with indexing
-		int fromPos=action.fromPos;
-		int toPos=action.toPos;
-		if(stackFrom==stackTo)
+		if(stackFrom.stackStyle==StackStyle.Solitaire && stackTo.stackStyle==StackStyle.Solitaire)
 			{
-			if(toPos>fromPos)
-				toPos--;
+			//This code is simplified
+			int numCardToMove=stackFrom.cards.size()-action.fromPos;
+			for(int i=0;i<numCardToMove;i++)
+				{
+				ClientCard theCard=stackFrom.cards.remove(action.fromPos);
+				stackTo.cards.add(theCard);
+				}
 			}
-
+		else
+			{
+			//If it is the same stack then one has to be careful with indexing
+			int fromPos=action.fromPos;
+			int toPos=action.toPos;
+			if(stackFrom==stackTo)
+				{
+				if(toPos>fromPos)
+					toPos--;
+				}
+			ClientCard theCard=stackFrom.cards.remove(fromPos);
+			stackTo.cards.add(toPos, theCard);
+			}
 		
-		ClientCard theCard=stackFrom.cards.remove(fromPos);
-		stackTo.cards.add(toPos, theCard);
 		
 		gamedata.updateCardLinksToStacks();
 		}

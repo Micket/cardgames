@@ -36,6 +36,9 @@ public class Solitaire extends DefaultGameLogic
 	private Map<Integer, LogicPlayerState> pstate=new HashMap<Integer, LogicPlayerState>();
 	private int numSolitaireHeap=7;
 
+	final private String DECKCURRENT="deckcurrent";
+	final private String DECKNEW="decknew";
+
 	private PlayingCard.Rank[] ordering=new PlayingCard.Rank[]{
 			PlayingCard.Rank.Ace, 
 			PlayingCard.Rank.Deuce,
@@ -62,9 +65,9 @@ public class Solitaire extends DefaultGameLogic
 		
 		public CardStack<PlayingCard> getStack(String stackName)
 			{
-			if(stackName.equals("decknew"))
+			if(stackName.equals(DECKNEW))
 				return deckNew;
-			else if(stackName.equals("deckcurrent"))
+			else if(stackName.equals(DECKCURRENT))
 				return deckCurrent;
 			else if(isSolitaireStack(stackName))
 				return stacksForHand.get(Integer.parseInt(stackName.substring("solitaire".length())));
@@ -109,7 +112,7 @@ public class Solitaire extends DefaultGameLogic
 		//Distribute cards
 		s.deckNew.addCards(PlayingCardUtil.getDeck52());
 		for(PlayingCard c:s.deckNew.cards)
-			c.showsFront=false;
+			c.showsFront=true; //TODO
 		s.deckNew.shuffle();
 		for(int i=0;i<7;i++)
 			{
@@ -140,8 +143,8 @@ public class Solitaire extends DefaultGameLogic
 				if(ps.deckCurrent.size()!=0)
 					{
 					//Make old card face downward
-					getStack(fromUser, "deckcurrent").getCard(0).showsFront=false;
-					msg.add(getUpdateCardForClient(fromUser, "deckcurrent", 0));
+					getStack(fromUser, DECKCURRENT).getCard(0).showsFront=false;
+					msg.add(getUpdateCardForClient(fromUser, DECKCURRENT, 0));
 					
 					//Move away the old current card
 					UserActionDragCard actionMoveOld=new UserActionDragCard();
@@ -149,11 +152,11 @@ public class Solitaire extends DefaultGameLogic
 					
 					actionMoveOld.fromPlayer=s.player;
 					actionMoveOld.fromPos=0;
-					actionMoveOld.fromStackName="deckcurrent";
-
+					actionMoveOld.fromStackName=DECKCURRENT;
+					
 					actionMoveOld.toPlayer=s.player;
 					actionMoveOld.toPos=0;
-					actionMoveOld.toStackName="decknew";
+					actionMoveOld.toStackName=DECKNEW;
 			
 					executeMove(actionMoveOld);
 					msg.add(actionMoveOld);
@@ -169,11 +172,11 @@ public class Solitaire extends DefaultGameLogic
 				
 				actionMoveNew.fromPlayer=s.player;
 				actionMoveNew.fromPos=ps.deckNew.size()-1;
-				actionMoveNew.fromStackName="decknew";
+				actionMoveNew.fromStackName=DECKNEW;
 
 				actionMoveNew.toPlayer=s.player;
 				actionMoveNew.toPos=ps.deckCurrent.size();
-				actionMoveNew.toStackName="deckcurrent";
+				actionMoveNew.toStackName=DECKCURRENT;
 		
 				executeMove(actionMoveNew);
 				msg.add(actionMoveNew);
@@ -223,11 +226,14 @@ public class Solitaire extends DefaultGameLogic
 	 */
 	private UserActionGameCardUpdate getUpdateCardForClient(int playerID, String stackName, int stackPos)
 		{
+		return null;
+		/*
 		LogicPlayerState ps=pstate.get(playerID);
 		return new UserActionGameCardUpdate(
 				sessionID, 
 				playerID, stackName, stackPos,
 				ps.getStack(stackName).getCard(stackPos).toClientCard());
+				*/
 		}
 
 	/**
@@ -275,54 +281,61 @@ public class Solitaire extends DefaultGameLogic
 		{
 		return name.startsWith("sorted");
 		}
+	private boolean isNewDeck(String name)
+		{
+		return name.equals(DECKNEW);
+		}
+	private boolean isCurrentDeck(String name)
+		{
+		return name.equals(DECKCURRENT);
+		}
 	
+
+	/**
+	 * Handle user dragging a card
+	 */
 	public boolean userActionDragCard(int fromUser, UserActionDragCard s)
 		{
 		LogicPlayerState ps=pstate.get(fromUser);
+		boolean isOk=false;
 		
 		if(isSolitaireStack(s.toStackName))
 			{
 			if(isSolitaireStack(s.fromStackName))
 				{
-				//Between solitaire stacks one can move a card and all cards beneath
+				//Between solitaire stacks one can move a card and all cards below
 				CardStack<PlayingCard> fromStack=ps.getStack(s.fromStackName);
 				if(fromStack.getCard(s.fromPos).showsFront && canPutOnHand(ps.getStack(s.toStackName), fromStack.getCard(s.fromPos)))
-					{
-					//TODO 
-					
-					executeMove(s);
-					thread.send(fromUser, new Message(s));
-					return true;
-					}
-				
+					isOk=true;
 				}
-			else if(isSortedStack(s.fromStackName) || s.fromStackName.equals("deckcurrent"))
+			else if(isSortedStack(s.fromStackName) || isCurrentDeck(s.fromStackName))
 				{
 				//From these stacks one can move the top-most card
 				CardStack<PlayingCard> fromStack=ps.getStack(s.fromStackName);
 				if(s.fromPos==fromStack.size()-1 && canPutOnHand(ps.getStack(s.toStackName), fromStack.getCard(s.fromPos)))
-					{
-					executeMove(s);
-					thread.send(fromUser, new Message(s));
-					return true;
-					}
+					isOk=true;
 				}
 			}
-		else if(isSortedStack(s.toStackName))
+		else if(isSortedStack(s.toStackName) && !isNewDeck(s.fromStackName))
 			{
+			//To the sorted stack any top
 			CardStack<PlayingCard> fromStack=ps.getStack(s.fromStackName);
-			
 			if(s.fromPos==fromStack.size()-1 && canPutOnSorted(ps.getStack(s.toStackName), fromStack.getCard(s.fromPos)))
-				{
-				executeMove(s);
-				thread.send(fromUser, new Message(s));
-				return true;
-				}
-			
+				isOk=true;
 			}
-		return false;
+		
+		
+		if(isOk)
+			{
+			executeMove(s);
+			thread.send(fromUser, new Message(s));
+			return true;
+			}
+		else
+			return false;
 		}
 	
+
 	public CardStack<PlayingCard> getStack(int player, String stackName)
 		{
 		return pstate.get(player).getStack(stackName);
@@ -332,18 +345,30 @@ public class Solitaire extends DefaultGameLogic
 		{
 		CardStack<PlayingCard> stackFrom=getStack(action.fromPlayer, action.fromStackName);
 		CardStack<PlayingCard> stackTo=getStack(action.toPlayer, action.toStackName);
-		
-		//If it is the same stack then one has to be careful with indexing
-		int fromPos=action.fromPos;
-		int toPos=action.toPos;
-		if(stackFrom==stackTo)
+
+		if(stackFrom.stackStyle==StackStyle.Solitaire && stackTo.stackStyle==StackStyle.Solitaire)
 			{
-			if(toPos>fromPos)
-				toPos--;
+			//This code is simplified
+			int numCardToMove=stackFrom.cards.size()-action.fromPos;
+			for(int i=0;i<numCardToMove;i++)
+				{
+				PlayingCard theCard=stackFrom.cards.remove(action.fromPos);
+				stackTo.cards.add(theCard);
+				}
 			}
-		
-		PlayingCard theCard=stackFrom.cards.remove(fromPos);
-		stackTo.cards.add(toPos, theCard);
+		else
+			{
+			//If it is the same stack then one has to be careful with indexing
+			int fromPos=action.fromPos;
+			int toPos=action.toPos;
+			if(stackFrom==stackTo)
+				{
+				if(toPos>fromPos)
+					toPos--;
+				}
+			PlayingCard theCard=stackFrom.cards.remove(fromPos);
+			stackTo.cards.add(toPos, theCard);
+			}
 		}
 	
 	

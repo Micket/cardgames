@@ -53,30 +53,31 @@ public class Client
 		
 		//Handle special messages
 		for(UserAction action:msg.actions)
-			{
-			System.out.println("Getting action ---- "+action.getClass());
-			if(action instanceof UserActionListOfUsers)
-				gotListOfUsers((UserActionListOfUsers)action);
-			else if(action instanceof UserActionListOfGameTypes)
-				gotListOfGameTypes((UserActionListOfGameTypes)action);
-			else if(action instanceof UserActionListOfGameSessions)
-				gotListOfGameSessions((UserActionListOfGameSessions)action);
-			else if(action instanceof UserActionGameDesign)
-				gotGameDesign((UserActionGameDesign)action);
-			else if(action instanceof UserActionGameInfoUpdate)
-				gotGameSessionUpdate((UserActionGameInfoUpdate)action);
-			else if(action instanceof GameActionSendMessage)
-				gotGameMessage((GameActionSendMessage)action);
-			else if(action instanceof UserActionGameStateUpdate)
-				gotGameStateUpdate((UserActionGameStateUpdate)action);
-			else if(action instanceof UserActionGameCardUpdate)
-				gotGameCardUpdate((UserActionGameCardUpdate)action);
-			else if(action instanceof UserActionDragCard)
-				gotDragCard((UserActionDragCard)action);
-			
-			//TODO in so many ways it would be nice with a general "else"
-			
-			}
+			if(action!=null)
+				{
+				System.out.println("Getting action ---- "+action.getClass());
+				if(action instanceof UserActionListOfUsers)
+					gotListOfUsers((UserActionListOfUsers)action);
+				else if(action instanceof UserActionListOfGameTypes)
+					gotListOfGameTypes((UserActionListOfGameTypes)action);
+				else if(action instanceof UserActionListOfGameSessions)
+					gotListOfGameSessions((UserActionListOfGameSessions)action);
+				else if(action instanceof UserActionGameDesign)
+					gotGameDesign((UserActionGameDesign)action);
+				else if(action instanceof UserActionGameInfoUpdate)
+					gotGameSessionUpdate((UserActionGameInfoUpdate)action);
+				else if(action instanceof GameActionSendMessage)
+					gotGameMessage((GameActionSendMessage)action);
+				else if(action instanceof UserActionGameStateUpdate)
+					gotGameStateUpdate((UserActionGameStateUpdate)action);
+				else if(action instanceof UserActionGameCardUpdate)
+					gotGameCardUpdate((UserActionGameCardUpdate)action);
+				else if(action instanceof UserActionDragCard)
+					gotDragCard((UserActionDragCard)action);
+				
+				//TODO in so many ways it would be nice with a general "else"
+				
+				}
 		
 		//Send raw copies of messages
 		for(ServerListener listener:serverListeners)
