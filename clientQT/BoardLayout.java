@@ -342,8 +342,18 @@ public class BoardLayout
 		CardStack<ClientCard> stackFrom=pdataFrom.stackMap.get(action.fromStackName);
 		CardStack<ClientCard> stackTo=pdataTo.stackMap.get(action.toStackName);
 		
-		ClientCard theCard=stackFrom.cards.remove(action.fromPos);
-		stackTo.cards.add(action.toPos, theCard);
+		//If it is the same stack then one has to be careful with indexing
+		int fromPos=action.fromPos;
+		int toPos=action.toPos;
+		if(stackFrom==stackTo)
+			{
+			if(toPos>fromPos)
+				toPos--;
+			}
+
+		
+		ClientCard theCard=stackFrom.cards.remove(fromPos);
+		stackTo.cards.add(toPos, theCard);
 		
 		gamedata.updateCardLinksToStacks();
 		}

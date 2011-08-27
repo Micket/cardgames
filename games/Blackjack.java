@@ -14,6 +14,7 @@ import clientData.ClientCard;
 import clientData.GameDesign;
 
 import action.UserActionClickedButton;
+import action.UserActionDragCard;
 import action.UserActionGameStateUpdate;
 import action.UserActionGameStateUpdate.PlayerState;
 
@@ -369,14 +370,9 @@ public class Blackjack extends DefaultGameLogic
 		
 		}
 
-	/////////////////////////////////////////////////
-	// 
-	public ClientCard convertCard(ServerCard sc)
+	public boolean userActionDragCard(int fromUser, UserActionDragCard s)
 		{
-
-
-		return null;
-
+		return false;
 		}
 
 	}

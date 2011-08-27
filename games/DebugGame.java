@@ -102,12 +102,22 @@ public class DebugGame extends DefaultGameLogic
 	
 			executeMove(action);
 			thread.send(fromUser, new Message(action));
+			return true;
 			}
 		else
 			return false;
-		return true;
 		}
 	
+	
+	public boolean userActionDragCard(int fromUser, UserActionDragCard s)
+		{
+		LogicPlayerState ps=pstate.get(fromUser);
+
+		executeMove(s);
+		thread.send(fromUser, new Message(s));
+		
+		return true;
+		}
 	
 	public CardStack<PlayingCard> getStack(int player, String stackName)
 		{
@@ -124,8 +134,17 @@ public class DebugGame extends DefaultGameLogic
 		CardStack<PlayingCard> stackFrom=getStack(action.fromPlayer, action.fromStackName);
 		CardStack<PlayingCard> stackTo=getStack(action.toPlayer, action.toStackName);
 		
-		PlayingCard theCard=stackFrom.cards.remove(action.fromPos);
-		stackTo.cards.add(action.toPos, theCard);
+		//If it is the same stack then one has to be careful with indexing
+		int fromPos=action.fromPos;
+		int toPos=action.toPos;
+		if(stackFrom==stackTo)
+			{
+			if(toPos>fromPos)
+				toPos--;
+			}
+		
+		PlayingCard theCard=stackFrom.cards.remove(fromPos);
+		stackTo.cards.add(toPos, theCard);
 		}
 	
 	

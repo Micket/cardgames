@@ -147,19 +147,57 @@ public class BoardView extends QGraphicsView
 			AnimatedCard card=getCardUnderPress(event);
 			if(card!=null)
 				{
-				card.isBeingDragged=true;
 				//TODO sometimes there are cards on top to move as well
+
+				card.isBeingDragged=true;
+
+				
 				}
 			}
-		System.out.println("here!");
+		redoLayout();
 		}
 	
 	@Override
 	protected void mouseReleaseEvent(QMouseEvent event)
 		{
 		if(event.button()==MouseButton.LeftButton)
-			for(AnimatedCard card:cards)
-				card.isBeingDragged=false;
+			for(AnimatedCard draggedCard:cards)
+				if(draggedCard.isBeingDragged)
+					{
+					//Find the highest (z) card beneath cursor
+					AnimatedCard cardBeneath=null;
+					for(QGraphicsItemInterface item:scene().items(event.posF()))
+						for(AnimatedCard ocard:cards)
+							if(ocard.imageFront==item || ocard.imageBack==item) //TODO. bug. what if a card exists multiple times?
+								if(!ocard.isBeingDragged)
+									if(cardBeneath==null || ocard.posZ>cardBeneath.posZ)
+										cardBeneath=ocard;
+					draggedCard.isBeingDragged=false;
+					
+					//TODO ability to drag onto empty heap
+					
+					if(cardBeneath!=null)
+						{
+						System.out.println("onto card "+cardBeneath);
+						
+						ClientCard fromCard=draggedCard.cardData;
+						ClientCard toCard=cardBeneath.cardData;
+						
+						UserActionDragCard a=new UserActionDragCard();
+						a.gameID=gameID;
+						
+						a.fromPlayer=fromCard.cardPlayer;
+						a.fromStackName=fromCard.stack;
+						a.fromPos=fromCard.stackPos;
+						
+						a.toPlayer=toCard.cardPlayer;
+						a.toStackName=toCard.stack;
+						a.toPos=toCard.stackPos+1;
+
+						client.send(new Message(a));
+						}
+					
+					}
 		redoLayout();
 		}
 	

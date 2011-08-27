@@ -15,6 +15,7 @@ import action.GameAction;
 import action.GameActionLeave;
 import action.UserActionClickedButton;
 import action.UserActionClickedCard;
+import action.UserActionDragCard;
 import action.UserActionGameStateUpdate;
 
 /**
@@ -39,6 +40,8 @@ abstract public class GameLogic
 			return userActionClickedCard(fromUser, (UserActionClickedCard) s);
 		else if (s instanceof UserActionClickedButton)
 			return userActionClickedButton(fromUser, (UserActionClickedButton) s);
+		else if (s instanceof UserActionDragCard)
+			return userActionDragCard(fromUser, (UserActionDragCard) s);
 		else if (s instanceof GameActionLeave)
 			{
 			GameActionLeave a=(GameActionLeave)s;
@@ -54,6 +57,8 @@ abstract public class GameLogic
 			}
 		return false;
 		}
+
+	abstract public boolean userActionDragCard(int fromUser, UserActionDragCard s);
 
 	abstract public boolean userActionClickedCard(int fromUser, UserActionClickedCard s);
 
