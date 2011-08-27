@@ -22,7 +22,7 @@ public class ClientCard
 	
 	
 	public int cardPlayer;
-	public String stack;
+	public String stackName;
 	public int stackPos;
 	
 	

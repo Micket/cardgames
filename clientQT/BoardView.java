@@ -8,6 +8,8 @@ import java.util.Map;
 
 import javax.vecmath.Vector2d;
 
+import serverData.CardStack;
+import serverData.CardStack.StackStyle;
 import util.Tuple;
 
 
@@ -55,6 +57,8 @@ public class BoardView extends QGraphicsView
 	private QPoint oldMousePos=new QPoint();
 	public int gameID;
 
+	private AnimatedCard draggedCard=null;
+	
 	public BoardView(Client client, QWidget parent, int gameID)
 		{
 		super(parent);
@@ -114,7 +118,7 @@ public class BoardView extends QGraphicsView
 				
 				UserActionClickedCard a=new UserActionClickedCard();
 				a.gameID=gameID;
-				a.stack=cc.stack;
+				a.stack=cc.stackName;
 				a.stackPos=cc.stackPos;
 				a.player=cc.cardPlayer;
 				
@@ -152,12 +156,21 @@ public class BoardView extends QGraphicsView
 		if(event.button()==MouseButton.LeftButton)
 			{
 			AnimatedCard card=getCardUnderPress(event);
+			ClientCard cc=card.cardData;
 			if(card!=null)
 				{
-				//TODO sometimes there are cards on top to move as well
-
 				card.isBeingDragged=true;
+				draggedCard=card;
 
+				//For solitaire, drag also all cards beneath
+				CardStack<ClientCard> stack=gameData.playerMap.get(cc.cardPlayer).stackMap.get(cc.stackName);
+				if(stack.stackStyle==StackStyle.Solitaire)
+					for(AnimatedCard oac:cards)
+						{
+						ClientCard occ=oac.cardData;
+						if(occ.cardPlayer==cc.cardPlayer && occ.stackName.equals(cc.stackName) && occ.stackPos>cc.stackPos)
+							oac.isBeingDragged=true;
+						}
 				
 				}
 			}
@@ -167,71 +180,69 @@ public class BoardView extends QGraphicsView
 	@Override
 	protected void mouseReleaseEvent(QMouseEvent event)
 		{
-		if(event.button()==MouseButton.LeftButton)
-			for(AnimatedCard draggedCard:cards)
-				if(draggedCard.isBeingDragged)
+		if(event.button()==MouseButton.LeftButton && draggedCard!=null)
+			{
+			//Find the highest (z) card beneath cursor, or the empty position
+			AnimatedCard cardBeneath=null;
+			Tuple<Integer,String> emptyPos=null;
+			for(QGraphicsItemInterface item:scene().items(event.posF()))
+				{
+				for(AnimatedCard ocard:cards)
+					if(ocard.imageFront==item || ocard.imageBack==item)
+						if(!ocard.isBeingDragged)
+							if(cardBeneath==null || ocard.posZ>cardBeneath.posZ)
+								cardBeneath=ocard;
+
+				for(Tuple<Integer,String> emptyPosKey:emptyPosList.keySet())
 					{
-					//Find the highest (z) card beneath cursor
-					AnimatedCard cardBeneath=null;
-					Tuple<Integer,String> emptyPos=null;
-					
-					for(QGraphicsItemInterface item:scene().items(event.posF()))
-						{
-						for(AnimatedCard ocard:cards)
-							if(ocard.imageFront==item || ocard.imageBack==item) //TODO. bug. what if a card exists multiple times?
-								if(!ocard.isBeingDragged)
-									if(cardBeneath==null || ocard.posZ>cardBeneath.posZ)
-										cardBeneath=ocard;
-
-						for(Tuple<Integer,String> emptyPosKey:emptyPosList.keySet())
-							{
-							EmptyPos p=emptyPosList.get(emptyPosKey);
-							if(p.qtitem==item)
-								{
-								emptyPos=emptyPosKey;
-								//System.out.println("Found empty pos!!! "+emptyPosKey);
-								}
-							}
-						}
-					draggedCard.isBeingDragged=false;
-					
-					if(cardBeneath!=null)
-						{
-						ClientCard fromCard=draggedCard.cardData;
-						ClientCard toCard=cardBeneath.cardData;
-						
-						UserActionDragCard a=new UserActionDragCard();
-						a.gameID=gameID;
-						
-						a.fromPlayer=fromCard.cardPlayer;
-						a.fromStackName=fromCard.stack;
-						a.fromPos=fromCard.stackPos;
-						
-						a.toPlayer=toCard.cardPlayer;
-						a.toStackName=toCard.stack;
-						a.toPos=toCard.stackPos+1;
-
-						client.send(new Message(a));
-						}
-					else if(emptyPos!=null)
-						{
-						ClientCard fromCard=draggedCard.cardData;
-						
-						UserActionDragCard a=new UserActionDragCard();
-						a.gameID=gameID;
-						
-						a.fromPlayer=fromCard.cardPlayer;
-						a.fromStackName=fromCard.stack;
-						a.fromPos=fromCard.stackPos;
-						
-						a.toPlayer=emptyPos.fst();
-						a.toStackName=emptyPos.snd();
-						a.toPos=0;
-						
-						client.send(new Message(a));
-						}
-					
+					EmptyPos p=emptyPosList.get(emptyPosKey);
+					if(p.qtitem==item)
+						emptyPos=emptyPosKey;
 					}
+				}
+
+			if(cardBeneath!=null)
+				{
+				ClientCard fromCard=draggedCard.cardData;
+				ClientCard toCard=cardBeneath.cardData;
+
+				UserActionDragCard a=new UserActionDragCard();
+				a.gameID=gameID;
+
+				a.fromPlayer=fromCard.cardPlayer;
+				a.fromStackName=fromCard.stackName;
+				a.fromPos=fromCard.stackPos;
+
+				a.toPlayer=toCard.cardPlayer;
+				a.toStackName=toCard.stackName;
+				a.toPos=toCard.stackPos+1;
+
+				client.send(new Message(a));
+				}
+			else if(emptyPos!=null)
+				{
+				ClientCard fromCard=draggedCard.cardData;
+
+				UserActionDragCard a=new UserActionDragCard();
+				a.gameID=gameID;
+
+				a.fromPlayer=fromCard.cardPlayer;
+				a.fromStackName=fromCard.stackName;
+				a.fromPos=fromCard.stackPos;
+
+				a.toPlayer=emptyPos.fst();
+				a.toStackName=emptyPos.snd();
+				a.toPos=0;
+
+				client.send(new Message(a));
+				}
+
+
+			//Stop dragging all cards
+			for(AnimatedCard c:cards)
+				c.isBeingDragged=false;
+			draggedCard=null;
+			}
 		redoLayout();
 		}
 	
@@ -262,7 +273,6 @@ public class BoardView extends QGraphicsView
 		//Place background
 		if(bg==null)
 			bg=gameData.getImage("tiledtable");
-//			bg=new QPixmap("cards/tiledtable.png");
 		for(int ax=0;ax<10;ax++)
 			for(int ay=0;ay<10;ay++)
 				{

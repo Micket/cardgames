@@ -56,7 +56,7 @@ public class ClientGameData
 				for(int i=0;i<s.cards.size();i++)
 					{
 					ClientCard cc=s.cards.get(i);
-					cc.stack=stackName;
+					cc.stackName=stackName;
 					cc.stackPos=i;
 					cc.cardPlayer=playerID;
 					}

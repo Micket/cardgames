@@ -66,25 +66,14 @@ public class Solitaire extends DefaultGameLogic
 				return deckNew;
 			else if(stackName.equals("deckcurrent"))
 				return deckCurrent;
-			else if(stackName.startsWith("solitaire"))
+			else if(isSolitaireStack(stackName))
 				return stacksForHand.get(Integer.parseInt(stackName.substring("solitaire".length())));
-			else if(stackName.startsWith("sorted"))
+			else if(isSortedStack(stackName))
 				return stacksForSorted.get(Integer.parseInt(stackName.substring("sorted".length())));
 			else
 				throw new RuntimeException("no such stack: "+stackName);
 			}
 
-		/*
-		public CardStack<PlayingCard> getStackHand(String name)
-			{
-			if(name.startsWith(""))
-			return stacksForHand.get(Integer.parseInt(name.substring("solitaire".length())));
-			}
-		public CardStack<PlayingCard> getStackSorted(String name)
-			{
-			return stacksForSorted.get(Integer.parseInt(name.substring("sorted".length())));
-			}*/
-		
 		public LogicPlayerState()
 			{
 			for(int i=0;i<numSolitaireHeap;i++)
@@ -130,7 +119,6 @@ public class Solitaire extends DefaultGameLogic
 			stack.getCard(stack.size()-1).showsFront=true;
 			}
 
-		s.deckNew.cards.get(s.deckNew.cards.size()-1).showsFront=true;
 		
 //////////////		
 		if (!super.userJoined(userID))
@@ -149,37 +137,46 @@ public class Solitaire extends DefaultGameLogic
 				{
 				Message msg=new Message();
 				
-				//Move away the old current card
 				if(ps.deckCurrent.size()!=0)
 					{
-					UserActionDragCard action=new UserActionDragCard();
-					action.gameID=sessionID;
+					//Make old card face downward
+					getStack(fromUser, "deckcurrent").getCard(0).showsFront=false;
+					msg.add(getUpdateCardForClient(fromUser, "deckcurrent", 0));
 					
-					action.fromPlayer=s.player;
-					action.fromPos=0;
-					action.fromStackName="deckcurrent";
+					//Move away the old current card
+					UserActionDragCard actionMoveOld=new UserActionDragCard();
+					actionMoveOld.gameID=sessionID;
+					
+					actionMoveOld.fromPlayer=s.player;
+					actionMoveOld.fromPos=0;
+					actionMoveOld.fromStackName="deckcurrent";
 
-					action.toPlayer=s.player;
-					action.toPos=0;
-					action.toStackName="decknew";
+					actionMoveOld.toPlayer=s.player;
+					actionMoveOld.toPos=0;
+					actionMoveOld.toStackName="decknew";
 			
-					executeMove(action);
-					msg.add(action);
+					executeMove(actionMoveOld);
+					msg.add(actionMoveOld);
 					}
 				
-				UserActionDragCard action=new UserActionDragCard();
-				action.gameID=sessionID;
-				
-				action.fromPlayer=s.player;
-				action.fromPos=ps.deckNew.size()-1;
-				action.fromStackName="decknew";
+				//Make next card face upward
+				fromStack.getCard(s.stackPos).showsFront=true;
+				msg.add(getUpdateCardForClient(fromUser, s.stack, s.stackPos));
 
-				action.toPlayer=s.player;
-				action.toPos=ps.deckCurrent.size();
-				action.toStackName="deckcurrent";
+				//Move in the next card
+				UserActionDragCard actionMoveNew=new UserActionDragCard();
+				actionMoveNew.gameID=sessionID;
+				
+				actionMoveNew.fromPlayer=s.player;
+				actionMoveNew.fromPos=ps.deckNew.size()-1;
+				actionMoveNew.fromStackName="decknew";
+
+				actionMoveNew.toPlayer=s.player;
+				actionMoveNew.toPos=ps.deckCurrent.size();
+				actionMoveNew.toStackName="deckcurrent";
 		
-				executeMove(action);
-				msg.add(action);
+				executeMove(actionMoveNew);
+				msg.add(actionMoveNew);
 				thread.send(fromUser, msg);
 				return true;
 				}
@@ -187,18 +184,15 @@ public class Solitaire extends DefaultGameLogic
 			}
 		else if(!fromStack.getCard(s.stackPos).showsFront)
 			{
-			//Turn up card if facing down
-			
+			//Make card face upward if facing down and on top
 			if(s.stackPos==fromStack.size()-1)
 				{
 				fromStack.getCard(s.stackPos).showsFront=true;
 				thread.send(fromUser, new Message(getUpdateCardForClient(fromUser, s.stack, s.stackPos)));
-				
-				System.out.println("----here");
+				return true;
 				}
 			}
-		else
-			//if(s.stack.startsWith("solitaire"))
+		else if(!s.stack.startsWith("sorted"))
 			{
 			//Try to automatically put card on any sorted heap
 			if(s.stackPos==fromStack.size()-1)
@@ -223,7 +217,10 @@ public class Solitaire extends DefaultGameLogic
 		return false;
 		}
 	
-	
+
+	/**
+	 * Generate an update of the view of a card
+	 */
 	private UserActionGameCardUpdate getUpdateCardForClient(int playerID, String stackName, int stackPos)
 		{
 		LogicPlayerState ps=pstate.get(playerID);
@@ -233,19 +230,27 @@ public class Solitaire extends DefaultGameLogic
 				ps.getStack(stackName).getCard(stackPos).toClientCard());
 		}
 
+	/**
+	 * Check if card can be put on a solitaire stack
+	 */
 	private boolean canPutOnHand(CardStack<PlayingCard> stack, PlayingCard newc)
 		{
 		PlayingCard topCard=stack.getTopCard();
 		if(topCard==null)
 			return true;
 		else
+			{
 			for(int i=0;i<ordering.length-1;i++)
 				if(newc.getRank()==ordering[i])
 					return topCard.getRank()==ordering[i+1];
-		throw new RuntimeException("Should never reach this line");
+			return false;
+			}
 		}
 
 
+	/**
+	 * Check if card can be put on a sorted stack
+	 */
 	private boolean canPutOnSorted(CardStack<PlayingCard> stack, PlayingCard newc)
 		{
 		PlayingCard topCard=stack.getTopCard();
@@ -256,31 +261,54 @@ public class Solitaire extends DefaultGameLogic
 			for(int i=0;i<ordering.length-1;i++)
 				if(topCard.getRank()==ordering[i])
 					return newc.getRank()==ordering[i+1];
-			throw new RuntimeException("Should never reach this line");
+			return false;
 			}
 		else
 			return false;
 		}
 
-	
+	private boolean isSolitaireStack(String name)
+		{
+		return name.startsWith("solitaire");
+		}
+	private boolean isSortedStack(String name)
+		{
+		return name.startsWith("sorted");
+		}
 	
 	public boolean userActionDragCard(int fromUser, UserActionDragCard s)
 		{
 		LogicPlayerState ps=pstate.get(fromUser);
 		
-		if(s.toStackName.startsWith("solitaire"))
+		if(isSolitaireStack(s.toStackName))
 			{
-			CardStack<PlayingCard> fromStack=ps.getStack(s.fromStackName);
-			
-			if(s.fromPos==fromStack.size()-1 && canPutOnHand(ps.getStack(s.toStackName), fromStack.getCard(s.fromPos)))
+			if(isSolitaireStack(s.fromStackName))
 				{
-				executeMove(s);
-				thread.send(fromUser, new Message(s));
-				return true;
+				//Between solitaire stacks one can move a card and all cards beneath
+				CardStack<PlayingCard> fromStack=ps.getStack(s.fromStackName);
+				if(fromStack.getCard(s.fromPos).showsFront && canPutOnHand(ps.getStack(s.toStackName), fromStack.getCard(s.fromPos)))
+					{
+					//TODO 
+					
+					executeMove(s);
+					thread.send(fromUser, new Message(s));
+					return true;
+					}
+				
 				}
-			
+			else if(isSortedStack(s.fromStackName) || s.fromStackName.equals("deckcurrent"))
+				{
+				//From these stacks one can move the top-most card
+				CardStack<PlayingCard> fromStack=ps.getStack(s.fromStackName);
+				if(s.fromPos==fromStack.size()-1 && canPutOnHand(ps.getStack(s.toStackName), fromStack.getCard(s.fromPos)))
+					{
+					executeMove(s);
+					thread.send(fromUser, new Message(s));
+					return true;
+					}
+				}
 			}
-		else if(s.toStackName.startsWith("sorted"))
+		else if(isSortedStack(s.toStackName))
 			{
 			CardStack<PlayingCard> fromStack=ps.getStack(s.fromStackName);
 			
