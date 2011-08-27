@@ -145,7 +145,8 @@ public class BoardLayout
 				transformMove.y+=stackDef.y;
 				}
 			else
-				System.out.println("Fail "+stackName);
+				System.out.println("There is no stackdef for "+stackName+
+						", there is "+design.playerField.stacks.keySet()+" and "+design.commonField.stacks.keySet());
 
 			//Layout a normal stack
 
