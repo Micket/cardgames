@@ -2,10 +2,18 @@ package clientData;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import serverData.CardStack;
 
+/**
+ * The graphical design of the game
+ * 
+ * @author mahogny
+ *
+ */
 public class GameDesign implements Serializable
 	{
 	private static final long serialVersionUID = 1L;
@@ -39,5 +47,30 @@ public class GameDesign implements Serializable
 	public FieldDef commonField=new FieldDef();
 
 
+	public static class Button
+		{
+		public String title;
+		public String id;
+		
+		public Button(String title, String id)
+			{
+			this.title = title;
+			this.id = id;
+			}
+		}
+	
+	/**
+	 * Buttons. TODO should this maybe be dynamic?
+	 * 
+	 * title -> id
+	 */
+	public List<Button> buttons=new LinkedList<Button>();
+
+	public void addButton(String title, String id)
+		{
+		buttons.add(new Button(title, id));
+		}
+
+	
 
 	}

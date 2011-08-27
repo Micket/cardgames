@@ -91,18 +91,22 @@ public class Blackjack extends DefaultGameLogic
 		return players.size();
 		}
 	
+	private final String BID_BET="bet";
+	private final String BID_HIT="hit";
+	private final String BID_STAND="stand";
+
 	public boolean userActionClickedButton(int fromUser, UserActionClickedButton action)
 		{
 		LogicPlayerState p = players.get(fromUser);
-		if (action.buttonID == 0) // Bet
+		if (action.buttonID.equals(BID_BET)) // Bet
 			{
-			return playerBetting(p, action.buttonValue);
+			return playerBetting(p, 0);
 			}
-		if (action.buttonID == 1) // Hit
+		if (action.buttonID.equals(BID_HIT)) // Hit
 			{
 			return playerDraw(p);
 			}
-		else if (action.buttonID == 2) // Stand
+		else if (action.buttonID.equals(BID_STAND)) // Stand
 			{
 			p.done = true;
 			}
@@ -346,6 +350,10 @@ public class Blackjack extends DefaultGameLogic
 		defNewCards.stack.stackStyle=StackStyle.Deck;
 		defNewCards.x=200;
 
+		d.addButton("Bet",BID_BET);
+		d.addButton("Hit",BID_HIT);
+		d.addButton("Stand",BID_STAND);
+		
 		return d;
 		}
 	

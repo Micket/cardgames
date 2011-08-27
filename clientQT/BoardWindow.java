@@ -3,10 +3,12 @@ package clientQT;
 import action.GameActionLeave;
 import action.Message;
 import action.GameActionSendMessage;
+import action.UserActionClickedButton;
 import action.UserActionDragCard;
 import action.UserActionGameCardUpdate;
 import action.UserActionGameDesign;
 import action.UserActionGameStateUpdate;
+import clientData.GameDesign;
 import clientData.ServerListener;
 
 import com.trolltech.qt.gui.*;
@@ -17,12 +19,13 @@ import com.trolltech.qt.gui.*;
  */
 public class BoardWindow extends QWidget implements ServerListener
 	{
-	private ClientQT client;
-	private BoardView view;
+	private final ClientQT client;
+	private final BoardView view;
 	
 	private QTextEdit chatHistory;
 	private QLineEdit tfEditLine;
-
+	private QHBoxLayout buttonsLayout;
+	
 	private final int gameID;
 	
 	public BoardWindow(ClientQT client, int gameID)
@@ -42,9 +45,13 @@ public class BoardWindow extends QWidget implements ServerListener
 		tfEditLine=new QLineEdit(this);
 		tfEditLine.returnPressed.connect(this,"actionSendMessage()");
 
+		buttonsLayout=new QHBoxLayout();
+		
+		
 		QVBoxLayout lobbyLayout=new QVBoxLayout();
 		setLayout(lobbyLayout);
 		lobbyLayout.addWidget(view);
+		lobbyLayout.addLayout(buttonsLayout);
 		lobbyLayout.addWidget(chatHistory);
 		lobbyLayout.addWidget(tfEditLine);
 		
@@ -52,6 +59,27 @@ public class BoardWindow extends QWidget implements ServerListener
 		setWindowTitle(tr("Card game"));
 		}
 
+	
+		
+	public void setButtons(GameDesign design)
+		{
+		for(final GameDesign.Button b:design.buttons)
+			{
+			QPushButton qtb=new QPushButton(b.title);
+			buttonsLayout.addWidget(qtb);
+			
+			qtb.clicked.connect(new Runnable()
+				{
+				public void run()
+					{
+					client.send(new Message(new UserActionClickedButton(view.gameID, b.id)));
+					}
+				}, "run()");
+			
+			}
+		
+		}
+	
 	public void showStatusMessage(final String str)
 		{
 		QApplication.invokeLater(new Runnable() {
@@ -100,10 +128,19 @@ public class BoardWindow extends QWidget implements ServerListener
 		}
 
 	@Override
-	public void eventGameDesign(UserActionGameDesign msg)
+	public void eventGameDesign(final UserActionGameDesign msg)
 		{
 		if(msg.gameID==view.gameID)
+			{
 			view.setGameDesign(msg);
+			
+			QApplication.invokeLater(new Runnable() {
+			public void run() {
+				setButtons(msg.design); 
+			}
+			});
+			
+			}
 		}
 
 	public void eventGameStateUpdate(UserActionGameStateUpdate msg)

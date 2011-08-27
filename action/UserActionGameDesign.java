@@ -1,6 +1,7 @@
 package action;
 
 
+
 import clientData.GameDesign;
 
 
@@ -15,12 +16,11 @@ public class UserActionGameDesign extends GameAction
 
 	public GameDesign design=new GameDesign();
 
+	
 	public UserActionGameDesign(int gameID, GameDesign design)
 		{
 		this.gameID=gameID;
 		this.design = design;
 		}
-	
-	
 	
 	}

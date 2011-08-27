@@ -15,6 +15,8 @@ public class AnimatedCard
 	public boolean isBeingDragged=false;
 	
 	public double rotation;
+
+	public double rotY;
 	
 	public AnimatedCard(ClientCard cardData)
 		{

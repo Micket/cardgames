@@ -17,7 +17,6 @@ public class ClientGameData
 
 	
 	
-	
 
 	/**
 	 * Images should be stored on the client for bandwidth. But it would make sense to allow the server to provide missing cards,

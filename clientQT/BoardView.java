@@ -335,7 +335,17 @@ public class BoardView extends QGraphicsView
 		for(AnimatedCard card:cards)
 			{
 			QGraphicsItemInterface item;
-						
+
+			boolean showsFront=card.cardData.showsFront;
+			
+			//Handle rotation around y
+			double scaleX=Math.cos(card.rotY);
+			if(scaleX<0)
+				{
+				//TODO this should decide showsFront
+				scaleX=-scaleX;
+				}
+
 			//Get the image for the card if it is not loaded
 			if(card.cardData.showsFront)
 				{
@@ -346,7 +356,10 @@ public class BoardView extends QGraphicsView
 			else
 				{
 				if(card.imageBack==null)
+					{
 					card.imageBack=getScaledImage(card.cardData.back).createGraphicsItem();
+					//TODO maybe delete image here?
+					}
 				item=card.imageBack;
 				}
 			
@@ -355,7 +368,10 @@ public class BoardView extends QGraphicsView
 			item.resetTransform();
 			item.setTransform(QTransform.fromTranslate(card.posX*zoom, card.posY*zoom), true);
 			item.rotate(card.rotation*180/Math.PI);
-			item.setTransform(QTransform.fromTranslate(-item.boundingRect().width()*zoom/2, -item.boundingRect().height()*zoom/2), true);
+			
+			
+			item.setTransform(QTransform.fromTranslate(-item.boundingRect().width()*scaleX*zoom/2, -item.boundingRect().height()*zoom/2), true);
+			item.setTransform(QTransform.fromScale(scaleX, 1), true);
 			
 			s.addItem(item);
 

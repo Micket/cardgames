@@ -112,7 +112,7 @@ public class Solitaire extends DefaultGameLogic
 		//Distribute cards
 		s.deckNew.addCards(PlayingCardUtil.getDeck52());
 		for(PlayingCard c:s.deckNew.cards)
-			c.showsFront=true; //TODO
+			c.showsFront=false;
 		s.deckNew.shuffle();
 		for(int i=0;i<7;i++)
 			{
@@ -129,6 +129,9 @@ public class Solitaire extends DefaultGameLogic
 		return true;
 		}
 	
+	/**
+	 * Handle user clicking on a card
+	 */
 	public boolean userActionClickedCard(int fromUser, UserActionClickedCard s)
 		{		
 		LogicPlayerState ps=pstate.get(fromUser);
@@ -143,8 +146,11 @@ public class Solitaire extends DefaultGameLogic
 				if(ps.deckCurrent.size()!=0)
 					{
 					//Make old card face downward
+					
+					//TODO This causes a crash after a while
 					getStack(fromUser, DECKCURRENT).getCard(0).showsFront=false;
 					msg.add(getUpdateCardForClient(fromUser, DECKCURRENT, 0));
+					
 					
 					//Move away the old current card
 					UserActionDragCard actionMoveOld=new UserActionDragCard();
@@ -163,8 +169,8 @@ public class Solitaire extends DefaultGameLogic
 					}
 				
 				//Make next card face upward
-				fromStack.getCard(s.stackPos).showsFront=true;
-				msg.add(getUpdateCardForClient(fromUser, s.stack, s.stackPos));
+				fromStack.getTopCard().showsFront=true;
+				msg.add(getUpdateCardForClient(fromUser, s.stack, fromStack.size()-1));
 
 				//Move in the next card
 				UserActionDragCard actionMoveNew=new UserActionDragCard();
@@ -226,14 +232,13 @@ public class Solitaire extends DefaultGameLogic
 	 */
 	private UserActionGameCardUpdate getUpdateCardForClient(int playerID, String stackName, int stackPos)
 		{
-		return null;
-		/*
+		System.out.println("updating card ----- "+playerID+"  "+stackName+"  "+stackPos);
+		
 		LogicPlayerState ps=pstate.get(playerID);
 		return new UserActionGameCardUpdate(
 				sessionID, 
 				playerID, stackName, stackPos,
 				ps.getStack(stackName).getCard(stackPos).toClientCard());
-				*/
 		}
 
 	/**
@@ -336,11 +341,17 @@ public class Solitaire extends DefaultGameLogic
 		}
 	
 
+	/**
+	 * Get a stack
+	 */
 	public CardStack<PlayingCard> getStack(int player, String stackName)
 		{
 		return pstate.get(player).getStack(stackName);
 		}
-	
+
+	/**
+	 * Execute an action server-side
+	 */
 	public void executeMove(UserActionDragCard action)
 		{
 		CardStack<PlayingCard> stackFrom=getStack(action.fromPlayer, action.fromStackName);
@@ -372,7 +383,9 @@ public class Solitaire extends DefaultGameLogic
 		}
 	
 	
-	
+	/**
+	 * Handle user leaving game
+	 */
 	public boolean userLeft(int userID)
 		{
 		if (!super.userLeft(userID))
@@ -385,6 +398,9 @@ public class Solitaire extends DefaultGameLogic
 		return players.size();
 		}
 	
+	/**
+	 * Get the graphical layout of the game
+	 */
 	public GameDesign createGameDesign()
 		{
 		double cardDistX=200;
@@ -424,7 +440,10 @@ public class Solitaire extends DefaultGameLogic
 		
 		return d;
 		}
-	
+
+	/**
+	 * Get the current state of the game
+	 */
 	public void getGameState(UserActionGameStateUpdate action)
 		{
 		for(int p:players)
@@ -433,10 +452,10 @@ public class Solitaire extends DefaultGameLogic
 			PlayerState ps=action.createPlayer(p);
 			
 			CardStack<ClientCard> deckNew=CardStack.toClientCardStack(ds.deckNew);
-			ps.stacks.put("decknew", deckNew);
+			ps.stacks.put(DECKNEW, deckNew);
 
 			CardStack<ClientCard> deckCurrent=CardStack.toClientCardStack(ds.deckCurrent);
-			ps.stacks.put("deckcurrent", deckCurrent);
+			ps.stacks.put(DECKCURRENT, deckCurrent);
 
 			for(int i=0;i<ds.stacksForHand.size();i++)
 				{

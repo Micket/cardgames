@@ -60,14 +60,9 @@ public class QtGraphicsData
 	public QtGraphicsData getScaledImage(double zoom)
 		{
 		if(svg!=null)
-			{
 			return rasterizeSvg(svg, zoom);
-			}
 		else
-			{
-			System.out.println("png - baaad. need to implement rescaling here");
-			return this;
-			}
+			throw new RuntimeException("png - baaad. need to implement rescaling here");
 		}
 	
 	
@@ -93,6 +88,7 @@ public class QtGraphicsData
 
 		g2.dispose();
 
+		System.out.println("rasterization1!!!!");
 		return new QtGraphicsData(pm);
 		}
 
