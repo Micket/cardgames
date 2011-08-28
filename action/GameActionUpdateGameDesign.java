@@ -10,17 +10,17 @@ import clientData.GameDesign;
  *
  * @author mahogny
  */
-public class UserActionGameDesign extends GameAction
+public class GameActionUpdateGameDesign extends GameAction
 	{
 	private static final long serialVersionUID = 1L;
 
 	public GameDesign design=new GameDesign();
 
 	
-	public UserActionGameDesign(int gameID, GameDesign design)
+	public GameActionUpdateGameDesign(int gameID, GameDesign design)
 		{
 		this.gameID=gameID;
-		this.design = design;
+		this.design=design;
 		}
 	
 	}

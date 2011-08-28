@@ -3,6 +3,12 @@ package clientData;
 import action.Message;
 import server.ServerThread;
 
+/**
+ * Connection to server running locally, transmitting data by direct object transfer
+ * 
+ * @author mahogny
+ *
+ */
 public class ConnectionToServerLocal implements ConnectionToServer
 	{
 	public ServerThread thread=new ServerThread();
@@ -23,6 +29,11 @@ public class ConnectionToServerLocal implements ConnectionToServer
 		{
 		return thisClientID;
 		}
-	
+
+	@Override
+	public void tearDownConnection()
+		{
+		thread.shutDown();
+		}
 
 	}

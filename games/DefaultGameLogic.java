@@ -1,7 +1,7 @@
 package games;
 
-import action.UserActionClickedButton;
-import action.UserActionClickedCard;
+import action.GameActionClickedButton;
+import action.GameActionClickedCard;
 
 /**
  * Default values for some game logic methods.
@@ -9,12 +9,12 @@ import action.UserActionClickedCard;
 abstract public class DefaultGameLogic extends GameLogic
 	{
 
-    public boolean userActionClickedCard(int fromUser, UserActionClickedCard s)
+    public boolean userActionClickedCard(int fromUser, GameActionClickedCard s)
         {
         System.out.println("Card clicked!");
         return false;
         }
-    public boolean userActionClickedButton(int fromUser, UserActionClickedButton s)
+    public boolean userActionClickedButton(int fromUser, GameActionClickedButton s)
         {
         System.out.println("Button pressed");
         return false;

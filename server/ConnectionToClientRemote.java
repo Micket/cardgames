@@ -11,7 +11,8 @@ import action.Message;
 import server.ConnectionToClient;
 
 /**
- * Player - Either a remote connection or an AI
+ * Connection to a client over TCP/IP
+ * 
  * @author mahogny
  */
 public class ConnectionToClientRemote extends ConnectionToClient
@@ -59,13 +60,15 @@ public class ConnectionToClientRemote extends ConnectionToClient
 					synchronized (sendQueue)
 						{
 						if(sendQueue.isEmpty())
+							{
 							try
-							{
-							sendQueue.wait();
-							}
-						catch (InterruptedException e)
-							{
-							e.printStackTrace();
+								{
+								sendQueue.wait();
+								}
+							catch (InterruptedException e)
+								{
+								e.printStackTrace();
+								}
 							}
 						else
 							{
@@ -116,12 +119,11 @@ public class ConnectionToClientRemote extends ConnectionToClient
 					{
 					Message msg = (Message)is.readObject();
 					System.out.println("Got message");
-
 					thread.addIncomingMessage(clientID, msg);
 					}
 				catch (ClassNotFoundException e)
 					{
-					//TODO tell client that is a too old version
+					//One should maybe tell client that the version is too old
 					e.printStackTrace();
 					}
 				}
@@ -145,8 +147,11 @@ public class ConnectionToClientRemote extends ConnectionToClient
 	 */
 	private void connectionDied()
 		{
-		stopThread=true;
-		thread.disconnectClient(clientID);
+		if(!stopThread)
+			{
+			stopThread=true;
+			thread.disconnectClient(clientID);
+			}
 		}
 	
 	

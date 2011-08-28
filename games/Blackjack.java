@@ -12,10 +12,10 @@ import serverData.CardStack.StackStyle;
 import clientData.ClientCard;
 import clientData.GameDesign;
 
-import action.UserActionClickedButton;
-import action.UserActionDragCard;
-import action.UserActionGameStateUpdate;
-import action.UserActionGameStateUpdate.PlayerState;
+import action.GameActionClickedButton;
+import action.GameActionDragCard;
+import action.GameActionUpdateGameState;
+import action.GameActionUpdateGameState.PlayerState;
 
 /**
  * Logic for the simple card game BlackJack with betting.
@@ -95,7 +95,7 @@ public class Blackjack extends DefaultGameLogic
 	private final String BID_HIT="hit";
 	private final String BID_STAND="stand";
 
-	public boolean userActionClickedButton(int fromUser, UserActionClickedButton action)
+	public boolean userActionClickedButton(int fromUser, GameActionClickedButton action)
 		{
 		LogicPlayerState p = players.get(fromUser);
 		if (action.buttonID.equals(BID_BET)) // Bet
@@ -357,7 +357,7 @@ public class Blackjack extends DefaultGameLogic
 		return d;
 		}
 	
-	public void getGameState(UserActionGameStateUpdate action)
+	public void getGameState(GameActionUpdateGameState action)
 		{
 		
 		for(int p:players.keySet())
@@ -377,7 +377,7 @@ public class Blackjack extends DefaultGameLogic
 		
 		}
 
-	public boolean userActionDragCard(int fromUser, UserActionDragCard s)
+	public boolean userActionDragCard(int fromUser, GameActionDragCard s)
 		{
 		return false;
 		}

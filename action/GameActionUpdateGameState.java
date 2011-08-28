@@ -13,19 +13,22 @@ import clientData.ClientCard;
  * @author mahogny
  *
  */
-public class UserActionGameStateUpdate extends GameAction
+public class GameActionUpdateGameState extends GameAction
 	{
 	private static final long serialVersionUID = 1L;
 
 	public static class PlayerState implements Serializable
 		{
 		private static final long serialVersionUID = 1L;
-
 		public Map<String, CardStack<ClientCard>> stacks=new HashMap<String, CardStack<ClientCard>>();
-		
 		}
 	
 	public Map<Integer, PlayerState> player=new HashMap<Integer, PlayerState>();
+		
+	public GameActionUpdateGameState(int gameID)
+		{
+		this.gameID=gameID;
+		}
 	
 	public PlayerState createPlayer(int id)
 		{
@@ -33,9 +36,5 @@ public class UserActionGameStateUpdate extends GameAction
 		player.put(id,s);
 		return s;
 		}
-	
-	public UserActionGameStateUpdate(int gameID)
-		{
-		this.gameID=gameID;
-		}
+
 	}

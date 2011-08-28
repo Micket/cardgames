@@ -14,11 +14,11 @@ import util.Tuple;
 
 
 import action.Message;
-import action.UserActionClickedCard;
-import action.UserActionDragCard;
-import action.UserActionGameCardUpdate;
-import action.UserActionGameDesign;
-import action.UserActionGameStateUpdate;
+import action.GameActionClickedCard;
+import action.GameActionDragCard;
+import action.GameActionUpdateCard;
+import action.GameActionUpdateGameDesign;
+import action.GameActionUpdateGameState;
 import clientData.Client;
 import clientData.ClientCard;
 import clientData.ClientGameData;
@@ -116,11 +116,11 @@ public class BoardView extends QGraphicsView
 				{
 				ClientCard cc=card.cardData;
 				
-				UserActionClickedCard a=new UserActionClickedCard();
+				GameActionClickedCard a=new GameActionClickedCard();
 				a.gameID=gameID;
-				a.stack=cc.stackName;
+				a.stackName=cc.stackName;
 				a.stackPos=cc.stackPos;
-				a.player=cc.cardPlayer;
+				a.playerID=cc.cardPlayer;
 				
 				client.send(new Message(a));
 				}
@@ -206,7 +206,7 @@ public class BoardView extends QGraphicsView
 				ClientCard fromCard=draggedCard.cardData;
 				ClientCard toCard=cardBeneath.cardData;
 
-				UserActionDragCard a=new UserActionDragCard();
+				GameActionDragCard a=new GameActionDragCard();
 				a.gameID=gameID;
 
 				a.fromPlayer=fromCard.cardPlayer;
@@ -223,7 +223,7 @@ public class BoardView extends QGraphicsView
 				{
 				ClientCard fromCard=draggedCard.cardData;
 
-				UserActionDragCard a=new UserActionDragCard();
+				GameActionDragCard a=new GameActionDragCard();
 				a.gameID=gameID;
 
 				a.fromPlayer=fromCard.cardPlayer;
@@ -381,27 +381,27 @@ public class BoardView extends QGraphicsView
 
 	
 	
-	public void setGameDesign(UserActionGameDesign msg)
+	public void setGameDesign(GameActionUpdateGameDesign msg)
 		{
 		layout.newDesign(msg.design);
 		threadSafeDoLayout();
 		}
 
 
-	public void setGameState(UserActionGameStateUpdate msg)
+	public void setGameState(GameActionUpdateGameState msg)
 		{
 		layout.newState(msg);
 		threadSafeDoLayout();
 		}
 
 
-	public void dragCard(UserActionDragCard action)
+	public void dragCard(GameActionDragCard action)
 		{
 		layout.dragCard(action);
 		threadSafeDoLayout();
 		}
 	
-	public void gameCardUpdate(UserActionGameCardUpdate action)
+	public void gameCardUpdate(GameActionUpdateCard action)
 		{
 		layout.cardUpdate(action);
 		threadSafeDoLayout();

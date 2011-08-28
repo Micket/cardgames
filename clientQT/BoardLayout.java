@@ -6,12 +6,13 @@ import java.util.Map;
 
 import javax.vecmath.Vector2d;
 
-import action.UserActionDragCard;
-import action.UserActionGameCardUpdate;
-import action.UserActionGameStateUpdate;
+import action.GameActionDragCard;
+import action.GameActionUpdateCard;
+import action.GameActionUpdateGameState;
 
 import serverData.CardStack;
 import serverData.CardStack.StackStyle;
+import util.CardGameInfo;
 import util.Matrix2d;
 
 import clientData.Client;
@@ -80,7 +81,7 @@ public class BoardLayout
 			}
 
 		//Common area
-		ClientPlayerData pdata=gamedata.playerMap.get(-1);
+		ClientPlayerData pdata=gamedata.playerMap.get(CardGameInfo.commonAreaID);
 		if(pdata!=null)
 			{
 			Matrix2d transformRot=new Matrix2d();
@@ -88,7 +89,7 @@ public class BoardLayout
 			transformRot.setRot(baseRotAngle);
 			Vector2d transformMove=new Vector2d(0,100/view.zoom);
 			Vector2d midPos=new Vector2d(400.0/2/view.zoom,400.0/2/view.zoom);
-			layoutForOnePlayer(view, client, -1, baseRotAngle, transformRot, transformMove, midPos, pdata);
+			layoutForOnePlayer(view, client, CardGameInfo.commonAreaID, baseRotAngle, transformRot, transformMove, midPos, pdata);
 			}
 		
 		return needRedraw;
@@ -314,7 +315,7 @@ public class BoardLayout
 		this.design=design;
 		}
 
-	public void newState(UserActionGameStateUpdate msg)
+	public void newState(GameActionUpdateGameState msg)
 		{
 		ClientGameData gamedata=view.gameData;
 
@@ -323,14 +324,14 @@ public class BoardLayout
 			ClientPlayerData pdata=new ClientPlayerData();
 			gamedata.playerMap.put(playerID,pdata);
 
-			UserActionGameStateUpdate.PlayerState pstate=msg.player.get(playerID);
+			GameActionUpdateGameState.PlayerState pstate=msg.player.get(playerID);
 			
 			for(String stackName:pstate.stacks.keySet())
 				{
 				/*
 				//Get the design of the board area
 				GameDesign.StackDef stackDef;
-				if(playerID==-1)
+				if(playerID==CardGameInfo.commonAreaID)
 					stackDef=design.commonField.stacks.get(stackName);
 				else
 					stackDef=design.playerField.stacks.get(stackName);
@@ -349,7 +350,7 @@ public class BoardLayout
 	
 	
 	
-	public void dragCard(UserActionDragCard action)
+	public void dragCard(GameActionDragCard action)
 		{
 		ClientGameData gamedata=view.gameData;
 		
@@ -387,7 +388,7 @@ public class BoardLayout
 		gamedata.updateCardLinksToStacks();
 		}
 
-	public void cardUpdate(UserActionGameCardUpdate action)
+	public void cardUpdate(GameActionUpdateCard action)
 		{
 		ClientGameData gamedata=view.gameData;
 		action.updateStack(gamedata.playerMap.get(action.playerID).stackMap.get(action.stackName));

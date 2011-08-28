@@ -5,7 +5,7 @@ import games.GameType;
 
 import java.util.Map;
 
-public class UserActionListOfGameTypes extends UserAction
+public class ActionListOfGameTypes extends Action
 	{
 	private static final long serialVersionUID = 1L;
 

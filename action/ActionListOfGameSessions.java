@@ -3,7 +3,7 @@ package action;
 import java.util.HashMap;
 import clientData.GameInfo;
 
-public class UserActionListOfGameSessions extends UserAction
+public class ActionListOfGameSessions extends Action
 	{
 	private static final long serialVersionUID = 1L;
 

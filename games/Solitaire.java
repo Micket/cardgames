@@ -13,11 +13,11 @@ import clientData.ClientCard;
 import clientData.GameDesign;
 
 import action.Message;
-import action.UserActionClickedCard;
-import action.UserActionDragCard;
-import action.UserActionGameCardUpdate;
-import action.UserActionGameStateUpdate;
-import action.UserActionGameStateUpdate.PlayerState;
+import action.GameActionClickedCard;
+import action.GameActionDragCard;
+import action.GameActionUpdateCard;
+import action.GameActionUpdateGameState;
+import action.GameActionUpdateGameState.PlayerState;
 
 /**
  * Classic solitaire
@@ -132,11 +132,11 @@ public class Solitaire extends DefaultGameLogic
 	/**
 	 * Handle user clicking on a card
 	 */
-	public boolean userActionClickedCard(int fromUser, UserActionClickedCard s)
+	public boolean userActionClickedCard(int fromUser, GameActionClickedCard s)
 		{		
 		LogicPlayerState ps=pstate.get(fromUser);
-		CardStack<PlayingCard> fromStack=ps.getStack(s.stack);
-		if(s.stack.equals("decknew") && s.player==fromUser)
+		CardStack<PlayingCard> fromStack=ps.getStack(s.stackName);
+		if(s.stackName.equals("decknew") && s.playerID==fromUser)
 			{
 			//Cycle current cards
 			if(ps.deckNew.size()!=0)
@@ -153,14 +153,14 @@ public class Solitaire extends DefaultGameLogic
 					
 					
 					//Move away the old current card
-					UserActionDragCard actionMoveOld=new UserActionDragCard();
+					GameActionDragCard actionMoveOld=new GameActionDragCard();
 					actionMoveOld.gameID=sessionID;
 					
-					actionMoveOld.fromPlayer=s.player;
+					actionMoveOld.fromPlayer=s.playerID;
 					actionMoveOld.fromPos=0;
 					actionMoveOld.fromStackName=DECKCURRENT;
 					
-					actionMoveOld.toPlayer=s.player;
+					actionMoveOld.toPlayer=s.playerID;
 					actionMoveOld.toPos=0;
 					actionMoveOld.toStackName=DECKNEW;
 			
@@ -170,17 +170,17 @@ public class Solitaire extends DefaultGameLogic
 				
 				//Make next card face upward
 				fromStack.getTopCard().showsFront=true;
-				msg.add(getUpdateCardForClient(fromUser, s.stack, fromStack.size()-1));
+				msg.add(getUpdateCardForClient(fromUser, s.stackName, fromStack.size()-1));
 
 				//Move in the next card
-				UserActionDragCard actionMoveNew=new UserActionDragCard();
+				GameActionDragCard actionMoveNew=new GameActionDragCard();
 				actionMoveNew.gameID=sessionID;
 				
-				actionMoveNew.fromPlayer=s.player;
+				actionMoveNew.fromPlayer=s.playerID;
 				actionMoveNew.fromPos=ps.deckNew.size()-1;
 				actionMoveNew.fromStackName=DECKNEW;
 
-				actionMoveNew.toPlayer=s.player;
+				actionMoveNew.toPlayer=s.playerID;
 				actionMoveNew.toPos=ps.deckCurrent.size();
 				actionMoveNew.toStackName=DECKCURRENT;
 		
@@ -198,21 +198,21 @@ public class Solitaire extends DefaultGameLogic
 			if(s.stackPos==fromStack.size()-1)
 				{
 				fromStack.getCard(s.stackPos).showsFront=true;
-				sendToPlayers(new Message(getUpdateCardForClient(fromUser, s.stack, s.stackPos)));
+				sendToPlayers(new Message(getUpdateCardForClient(fromUser, s.stackName, s.stackPos)));
 				return true;
 				}
 			}
-		else if(!s.stack.startsWith("sorted"))
+		else if(!s.stackName.startsWith("sorted"))
 			{
 			//Try to automatically put card on any sorted heap
 			if(s.stackPos==fromStack.size()-1)
 				for(int i=0;i<4;i++)
 					if(canPutOnSorted(ps.stacksForSorted.get(i), fromStack.getCard(s.stackPos)))
 						{
-						UserActionDragCard action=new UserActionDragCard();
+						GameActionDragCard action=new GameActionDragCard();
 						
 						action.fromPlayer=fromUser;
-						action.fromStackName=s.stack;
+						action.fromStackName=s.stackName;
 						action.fromPos=s.stackPos;
 						
 						action.toPlayer=fromUser;
@@ -231,12 +231,12 @@ public class Solitaire extends DefaultGameLogic
 	/**
 	 * Generate an update of the view of a card
 	 */
-	private UserActionGameCardUpdate getUpdateCardForClient(int playerID, String stackName, int stackPos)
+	private GameActionUpdateCard getUpdateCardForClient(int playerID, String stackName, int stackPos)
 		{
 		System.out.println("updating card ----- "+playerID+"  "+stackName+"  "+stackPos);
 		
 		LogicPlayerState ps=pstate.get(playerID);
-		return new UserActionGameCardUpdate(
+		return new GameActionUpdateCard(
 				sessionID, 
 				playerID, stackName, stackPos,
 				ps.getStack(stackName).getCard(stackPos).toClientCard());
@@ -300,7 +300,7 @@ public class Solitaire extends DefaultGameLogic
 	/**
 	 * Handle user dragging a card
 	 */
-	public boolean userActionDragCard(int fromUser, UserActionDragCard s)
+	public boolean userActionDragCard(int fromUser, GameActionDragCard s)
 		{
 		LogicPlayerState ps=pstate.get(fromUser);
 		boolean isOk=false;
@@ -353,7 +353,7 @@ public class Solitaire extends DefaultGameLogic
 	/**
 	 * Execute an action server-side
 	 */
-	public void executeMove(UserActionDragCard action)
+	public void executeMove(GameActionDragCard action)
 		{
 		CardStack<PlayingCard> stackFrom=getStack(action.fromPlayer, action.fromStackName);
 		CardStack<PlayingCard> stackTo=getStack(action.toPlayer, action.toStackName);
@@ -445,7 +445,7 @@ public class Solitaire extends DefaultGameLogic
 	/**
 	 * Get the current state of the game
 	 */
-	public void getGameState(UserActionGameStateUpdate action)
+	public void getGameState(GameActionUpdateGameState action)
 		{
 		for(int p:players)
 			{

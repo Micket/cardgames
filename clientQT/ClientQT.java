@@ -11,10 +11,10 @@ import util.CardGameInfo;
 
 import action.GameActionSendMessage;
 import action.Message;
-import action.UserActionDragCard;
-import action.UserActionGameCardUpdate;
-import action.UserActionGameDesign;
-import action.UserActionGameStateUpdate;
+import action.GameActionDragCard;
+import action.GameActionUpdateCard;
+import action.GameActionUpdateGameDesign;
+import action.GameActionUpdateGameState;
 
 import com.trolltech.qt.gui.QApplication;
 
@@ -74,7 +74,7 @@ public class ClientQT extends Client implements ServerListener
 		}
 	
 	@Override
-	public void eventGameDesign(UserActionGameDesign msg)
+	public void eventGameDesign(GameActionUpdateGameDesign msg)
 		{
 		}
 
@@ -151,18 +151,18 @@ public class ClientQT extends Client implements ServerListener
 		{
 		}
 
-	public void eventGameStateUpdate(UserActionGameStateUpdate action)
+	public void eventGameStateUpdate(GameActionUpdateGameState action)
 		{
 		
 		}
 
 	@Override
-	public void eventDragCard(UserActionDragCard action)
+	public void eventDragCard(GameActionDragCard action)
 		{
 		}
 
 	@Override
-	public void eventGameCardUpdate(UserActionGameCardUpdate action)
+	public void eventGameCardUpdate(GameActionUpdateCard action)
 		{
 		}
 

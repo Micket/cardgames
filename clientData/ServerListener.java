@@ -2,10 +2,10 @@ package clientData;
 
 import action.GameActionSendMessage;
 import action.Message;
-import action.UserActionDragCard;
-import action.UserActionGameCardUpdate;
-import action.UserActionGameDesign;
-import action.UserActionGameStateUpdate;
+import action.GameActionDragCard;
+import action.GameActionUpdateCard;
+import action.GameActionUpdateGameDesign;
+import action.GameActionUpdateGameState;
 
 public interface ServerListener
 	{
@@ -16,13 +16,13 @@ public interface ServerListener
 	
 	public void eventNewGameSessions();
 
-	public void eventGameDesign(UserActionGameDesign msg);
+	public void eventGameDesign(GameActionUpdateGameDesign msg);
 
 	public void eventGameMessage(GameActionSendMessage action);
 
-	public void eventGameStateUpdate(UserActionGameStateUpdate action);
+	public void eventGameStateUpdate(GameActionUpdateGameState action);
 
-	public void eventDragCard(UserActionDragCard action);
+	public void eventDragCard(GameActionDragCard action);
 
-	public void eventGameCardUpdate(UserActionGameCardUpdate action);
+	public void eventGameCardUpdate(GameActionUpdateCard action);
 	}

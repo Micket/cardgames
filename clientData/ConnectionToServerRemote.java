@@ -8,6 +8,12 @@ import java.net.Socket;
 
 import action.Message;
 
+/**
+ * Connection to a server over TCP/IP
+ * 
+ * @author mahogny
+ *
+ */
 public class ConnectionToServerRemote extends Thread implements ConnectionToServer 
 	{
 	public Client client;
@@ -39,7 +45,6 @@ public class ConnectionToServerRemote extends Thread implements ConnectionToServ
 			if(c!=checkString[i])
 				throw new IOException("This is not a cardgame port");
 			}
-		System.out.println("This is a cardgame server!");
 		
 		//Get the version of the protocol
 		protocolVersionMajor=is.readInt();
@@ -49,8 +54,9 @@ public class ConnectionToServerRemote extends Thread implements ConnectionToServ
 		thisClientID=is.readInt();
 
 		//Tell server our preferred nick. We will get the actual nick later from the user list
-		os.writeObject("Iwannabeme");
-		
+		os.writeObject(client.tryToGetNick);
+
+		//TODO handle timeouts
 		
 		System.out.println("Connected");
 
@@ -67,11 +73,22 @@ public class ConnectionToServerRemote extends Thread implements ConnectionToServ
 			}
 		catch (IOException e)
 			{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			connectionFailed();
 			}
 		}
 	
+	private void connectionFailed()
+		{
+		if(!stopThread)
+			{
+			stopThread=true;
+			// TODO Auto-generated method stub
+			
+			
+			}
+		}
+
 	@Override
 	public int getCliendID()
 		{
@@ -79,41 +96,45 @@ public class ConnectionToServerRemote extends Thread implements ConnectionToServ
 		}
 
 
+	private boolean stopThread=false;
 	
 
 	@Override
 	public void run()
 		{
-		
-		for(;;)
+		try
 			{
-			
-			try
+			while(!stopThread)
 				{
-				Message msg=(Message)is.readObject();
-				System.out.println("Got message");
-
-				client.gotMessageFromServer(msg);
+				try
+					{
+					Message msg=(Message)is.readObject();
+					System.out.println("Got message");
+					client.gotMessageFromServer(msg);
+					}
+				catch (ClassNotFoundException e)
+					{
+					client.gotBadMessageFromServer(e);
+					}
 				}
-			catch (IOException e)
-				{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				}
-			catch (ClassNotFoundException e)
-				{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				}
-			
-			//TODO
 			}
-		
-		//socket.
-		
-		
+		catch (IOException e)
+			{
+			e.printStackTrace();
+			connectionFailed();
+			}
 		}
 	
-	
+	public void tearDownConnection()
+		{
+		stopThread=true;
+		try
+			{
+			socket.close();
+			}
+		catch (IOException e)
+			{
+			}
+		}
 	
 	}

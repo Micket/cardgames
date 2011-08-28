@@ -10,17 +10,17 @@ import java.util.List;
 import java.util.Arrays;
 import java.util.TreeMap;
 
-import action.GameActionJoinGame;
+import action.GameActionJoin;
 import action.GameActionSendMessage;
 import action.Message;
-import action.UserAction;
-import action.UserActionDragCard;
-import action.UserActionGameCardUpdate;
-import action.UserActionGameDesign;
-import action.UserActionGameStateUpdate;
-import action.UserActionLobbyMessage;
-import action.UserActionSetNick;
-import action.UserActionStartGame;
+import action.Action;
+import action.GameActionDragCard;
+import action.GameActionUpdateCard;
+import action.GameActionUpdateGameDesign;
+import action.GameActionUpdateGameState;
+import action.ActionLobbyMessage;
+import action.ActionSetNick;
+import action.ActionStartGame;
 
 import clientData.Client;
 import clientData.ServerListener;
@@ -153,9 +153,9 @@ public class LobbyWindow extends QWidget implements ServerListener
 
 	public void eventServerMessage(Message msg)
 		{
-		for(UserAction action:msg.actions)
-			if(action instanceof UserActionLobbyMessage)
-				showLobbyMessage((UserActionLobbyMessage)action);
+		for(Action action:msg.actions)
+			if(action instanceof ActionLobbyMessage)
+				showLobbyMessage((ActionLobbyMessage)action);
 		
 		}
 
@@ -178,7 +178,7 @@ public class LobbyWindow extends QWidget implements ServerListener
 		if(!text.equals(""))
 			{
 			tfEditLine.setText("");
-			client.send(new Message(new UserActionLobbyMessage(text)));
+			client.send(new Message(new ActionLobbyMessage(text)));
 			}
 		}
 	
@@ -186,7 +186,7 @@ public class LobbyWindow extends QWidget implements ServerListener
 		{
 		String text = QInputDialog.getText(this, "New nick", "Nick:", QLineEdit.EchoMode.Normal, client.getNick());
 		if (text != null)
-			client.send(new Message(new UserActionSetNick(text)));
+			client.send(new Message(new ActionSetNick(text)));
 		}
 	
 	
@@ -207,7 +207,7 @@ public class LobbyWindow extends QWidget implements ServerListener
 			Integer sessionID=mapGameList2sessionID.get(i);
 			if(sessionID!=null)
 				{
-				client.send(new Message(new GameActionJoinGame(sessionID)));
+				client.send(new Message(new GameActionJoin(sessionID)));
 				return;
 				}
 			}
@@ -229,7 +229,7 @@ public class LobbyWindow extends QWidget implements ServerListener
 			});
 		}
 	
-	public void showLobbyMessage(final UserActionLobbyMessage lm)
+	public void showLobbyMessage(final ActionLobbyMessage lm)
 		{
 		QApplication.invokeLater(new Runnable() {
 			public void run() {
@@ -332,7 +332,7 @@ public class LobbyWindow extends QWidget implements ServerListener
 						System.out.println("new game "+cl);
 						// TODO Auto-generated method stub
 						
-						UserActionStartGame a=new UserActionStartGame();
+						ActionStartGame a=new ActionStartGame();
 						a.sessionName = QInputDialog.getText(null, "Session name", gt.description+"\nSession name:", QLineEdit.EchoMode.Normal, "My game");
 						if (a.sessionName == null)
 							return; // Then no new game!
@@ -382,7 +382,7 @@ public class LobbyWindow extends QWidget implements ServerListener
 		}
 
 	@Override
-	public void eventGameDesign(UserActionGameDesign msg)
+	public void eventGameDesign(GameActionUpdateGameDesign msg)
 		{
 		}
 
@@ -391,17 +391,17 @@ public class LobbyWindow extends QWidget implements ServerListener
 		{
 		}
 
-	public void eventGameStateUpdate(UserActionGameStateUpdate action)
+	public void eventGameStateUpdate(GameActionUpdateGameState action)
 		{
 		}
 
 	@Override
-	public void eventDragCard(UserActionDragCard action)
+	public void eventDragCard(GameActionDragCard action)
 		{
 		}
 
 	@Override
-	public void eventGameCardUpdate(UserActionGameCardUpdate action)
+	public void eventGameCardUpdate(GameActionUpdateCard action)
 		{
 		}
 

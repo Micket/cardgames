@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import games.GameType;
 
-public class UserActionListOfAvailableGames extends UserAction
+public class ActionListOfAvailableGames extends Action
 	{
 	private static final long serialVersionUID = 1L;
 

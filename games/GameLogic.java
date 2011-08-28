@@ -12,15 +12,15 @@ import server.ServerThread;
 import util.ClassHandling;
 
 import action.GameAction;
-import action.GameActionJoinGame;
+import action.GameActionJoin;
 import action.GameActionLeave;
 import action.Message;
-import action.UserActionClickedButton;
-import action.UserActionClickedCard;
-import action.UserActionDragCard;
-import action.UserActionGameDesign;
-import action.UserActionGameInfoUpdate;
-import action.UserActionGameStateUpdate;
+import action.GameActionClickedButton;
+import action.GameActionClickedCard;
+import action.GameActionDragCard;
+import action.GameActionUpdateGameDesign;
+import action.GameActionUpdateGameInfo;
+import action.GameActionUpdateGameState;
 
 /**
  * www.pagat.com for many many games.
@@ -40,12 +40,12 @@ abstract public class GameLogic
 	
 	public boolean userAction(int fromUser, GameAction s)
 		{
-		if (s instanceof UserActionClickedCard)
-			return userActionClickedCard(fromUser, (UserActionClickedCard) s);
-		else if (s instanceof UserActionClickedButton)
-			return userActionClickedButton(fromUser, (UserActionClickedButton) s);
-		else if (s instanceof UserActionDragCard)
-			return userActionDragCard(fromUser, (UserActionDragCard) s);
+		if (s instanceof GameActionClickedCard)
+			return userActionClickedCard(fromUser, (GameActionClickedCard) s);
+		else if (s instanceof GameActionClickedButton)
+			return userActionClickedButton(fromUser, (GameActionClickedButton) s);
+		else if (s instanceof GameActionDragCard)
+			return userActionDragCard(fromUser, (GameActionDragCard) s);
 		else if (s instanceof GameActionLeave)
 			{
 			GameActionLeave a=(GameActionLeave)s;
@@ -59,9 +59,9 @@ abstract public class GameLogic
 			
 			return b;
 			}
-		else if (s instanceof GameActionJoinGame)
+		else if (s instanceof GameActionJoin)
 			{
-			GameActionJoinGame action=(GameActionJoinGame)s;
+			GameActionJoin action=(GameActionJoin)s;
 			
 			//Check that the user is not in the game already
 			if(!players.contains(action.fromClientID))
@@ -79,11 +79,11 @@ abstract public class GameLogic
 	public void handleClientJoinGameInfo(int clientID)
 		{
 		userJoined(clientID);
-		thread.broadcastToClients(new Message(new UserActionGameInfoUpdate(sessionID, thread.createGameSessionUpdate(sessionID))));
+		thread.broadcastToClients(new Message(new GameActionUpdateGameInfo(sessionID, thread.createGameSessionUpdate(sessionID))));
 		
 		Message back=new Message();
-		back.add(new UserActionGameDesign(sessionID, createGameDesign()));
-		UserActionGameStateUpdate upd=new UserActionGameStateUpdate(sessionID);
+		back.add(new GameActionUpdateGameDesign(sessionID, createGameDesign()));
+		GameActionUpdateGameState upd=new GameActionUpdateGameState(sessionID);
 		getGameState(upd);
 		back.add(upd);
 		
@@ -97,11 +97,11 @@ abstract public class GameLogic
 		}
 	
 	
-	abstract public boolean userActionDragCard(int fromUser, UserActionDragCard s);
+	abstract public boolean userActionDragCard(int fromUser, GameActionDragCard s);
 
-	abstract public boolean userActionClickedCard(int fromUser, UserActionClickedCard s);
+	abstract public boolean userActionClickedCard(int fromUser, GameActionClickedCard s);
 
-	abstract public boolean userActionClickedButton(int fromUser, UserActionClickedButton s);
+	abstract public boolean userActionClickedButton(int fromUser, GameActionClickedButton s);
 	
 	/**
 	 * User wants to participate in the game
@@ -123,7 +123,7 @@ abstract public class GameLogic
 	
 	abstract public GameDesign createGameDesign();
 	
-	abstract public void getGameState(UserActionGameStateUpdate state);
+	abstract public void getGameState(GameActionUpdateGameState state);
 	
 	/**
 	 * Detect available game types

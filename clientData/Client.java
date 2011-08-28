@@ -15,16 +15,16 @@ import util.CardGameInfo;
 
 import action.GameActionSendMessage;
 import action.Message;
-import action.UserAction;
-import action.UserActionDragCard;
-import action.UserActionGameCardUpdate;
-import action.UserActionGameDesign;
-import action.UserActionGameInfoUpdate;
-import action.UserActionGameStateUpdate;
-import action.UserActionListOfGameSessions;
-import action.UserActionListOfGameTypes;
-import action.UserActionListOfUsers;
-import action.UserActionDisconnect;
+import action.Action;
+import action.GameActionDragCard;
+import action.GameActionUpdateCard;
+import action.GameActionUpdateGameDesign;
+import action.GameActionUpdateGameInfo;
+import action.GameActionUpdateGameState;
+import action.ActionListOfGameSessions;
+import action.ActionListOfGameTypes;
+import action.ActionListOfUsers;
+import action.ActionDisconnect;
 
 
 /**
@@ -52,28 +52,28 @@ public class Client
 		System.out.println(msg);
 		
 		//Handle special messages
-		for(UserAction action:msg.actions)
+		for(Action action:msg.actions)
 			if(action!=null)
 				{
 				System.out.println("Getting action ---- "+action.getClass());
-				if(action instanceof UserActionListOfUsers)
-					gotListOfUsers((UserActionListOfUsers)action);
-				else if(action instanceof UserActionListOfGameTypes)
-					gotListOfGameTypes((UserActionListOfGameTypes)action);
-				else if(action instanceof UserActionListOfGameSessions)
-					gotListOfGameSessions((UserActionListOfGameSessions)action);
-				else if(action instanceof UserActionGameDesign)
-					gotGameDesign((UserActionGameDesign)action);
-				else if(action instanceof UserActionGameInfoUpdate)
-					gotGameSessionUpdate((UserActionGameInfoUpdate)action);
+				if(action instanceof ActionListOfUsers)
+					gotListOfUsers((ActionListOfUsers)action);
+				else if(action instanceof ActionListOfGameTypes)
+					gotListOfGameTypes((ActionListOfGameTypes)action);
+				else if(action instanceof ActionListOfGameSessions)
+					gotListOfGameSessions((ActionListOfGameSessions)action);
+				else if(action instanceof GameActionUpdateGameDesign)
+					gotGameDesign((GameActionUpdateGameDesign)action);
+				else if(action instanceof GameActionUpdateGameInfo)
+					gotGameSessionUpdate((GameActionUpdateGameInfo)action);
 				else if(action instanceof GameActionSendMessage)
 					gotGameMessage((GameActionSendMessage)action);
-				else if(action instanceof UserActionGameStateUpdate)
-					gotGameStateUpdate((UserActionGameStateUpdate)action);
-				else if(action instanceof UserActionGameCardUpdate)
-					gotGameCardUpdate((UserActionGameCardUpdate)action);
-				else if(action instanceof UserActionDragCard)
-					gotDragCard((UserActionDragCard)action);
+				else if(action instanceof GameActionUpdateGameState)
+					gotGameStateUpdate((GameActionUpdateGameState)action);
+				else if(action instanceof GameActionUpdateCard)
+					gotGameCardUpdate((GameActionUpdateCard)action);
+				else if(action instanceof GameActionDragCard)
+					gotDragCard((GameActionDragCard)action);
 				
 				//TODO in so many ways it would be nice with a general "else"
 				
@@ -86,21 +86,21 @@ public class Client
 		}
 
 
-	private void gotGameCardUpdate(UserActionGameCardUpdate action)
+	private void gotGameCardUpdate(GameActionUpdateCard action)
 		{
 		for(ServerListener listener:serverListeners)
 			listener.eventGameCardUpdate(action);
 		}
 
 
-	private void gotDragCard(UserActionDragCard action)
+	private void gotDragCard(GameActionDragCard action)
 		{
 		for(ServerListener listener:serverListeners)
 			listener.eventDragCard(action);
 		}
 
 
-	private void gotGameStateUpdate(UserActionGameStateUpdate action)
+	private void gotGameStateUpdate(GameActionUpdateGameState action)
 		{
 		for(ServerListener listener:serverListeners)
 			listener.eventGameStateUpdate(action);
@@ -114,7 +114,7 @@ public class Client
 		}
 
 
-	private void gotGameDesign(UserActionGameDesign action)
+	private void gotGameDesign(GameActionUpdateGameDesign action)
 		{
 		for(ServerListener listener:serverListeners)
 			listener.eventGameDesign(action);
@@ -124,7 +124,7 @@ public class Client
 	/**
 	 * Handle incoming list of game types
 	 */
-	private void gotListOfGameTypes(UserActionListOfGameTypes action)
+	private void gotListOfGameTypes(ActionListOfGameTypes action)
 		{
 		gameTypes=action.availableGames;
 		System.out.println(gameTypes);
@@ -135,7 +135,7 @@ public class Client
 	/**
 	 * Handle incoming list of users
 	 */
-	private void gotListOfUsers(UserActionListOfUsers action)
+	private void gotListOfUsers(ActionListOfUsers action)
 		{
 		mapClientIDtoNick=action.nickMap;
 		for(ServerListener listener:serverListeners)
@@ -145,7 +145,7 @@ public class Client
 	/**
 	 * Handle incoming list of games
 	 */
-	private void gotListOfGameSessions(UserActionListOfGameSessions action)
+	private void gotListOfGameSessions(ActionListOfGameSessions action)
 		{
 		gameSessions=action.gameList;
 		for(ServerListener listener:new LinkedList<ServerListener>(serverListeners))
@@ -155,12 +155,12 @@ public class Client
 	/**
 	 * One updated game session
 	 */
-	private void gotGameSessionUpdate(UserActionGameInfoUpdate action)
+	private void gotGameSessionUpdate(GameActionUpdateGameInfo action)
 		{
-		if(action.session==null)
+		if(action.gameInfo==null)
 			gameSessions.remove(action.gameID);
 		else
-			gameSessions.put(action.gameID,action.session);
+			gameSessions.put(action.gameID,action.gameInfo);
 		
 		for(ServerListener listener:new LinkedList<ServerListener>(serverListeners))
 			listener.eventNewGameSessions();
@@ -219,9 +219,10 @@ public class Client
 	 */
 	public void disconnectFromServer()
 		{
-		if (serverConn != null)
+		if(serverConn != null)
 			{
-			serverConn.send(new Message(new UserActionDisconnect()));
+			serverConn.send(new Message(new ActionDisconnect()));
+			serverConn.tearDownConnection(); //TODO This is not optimal! the action might not even be sent here. so should one even send one?
 			}
 		serverConn = null;
 		}
@@ -250,7 +251,12 @@ public class Client
 		else
 			System.out.println("Error: Trying to send message but there is no connection");
 		}
-	
+
+
+	public void gotBadMessageFromServer(Exception e)
+		{
+		System.out.println("Got a message from server that could not be resolved "+e);
+		}
 	
 	
 	

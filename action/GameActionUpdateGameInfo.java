@@ -8,15 +8,14 @@ import clientData.GameInfo;
  * @author mahogny
  *
  */
-public class UserActionGameInfoUpdate extends GameAction
+public class GameActionUpdateGameInfo extends GameAction
 	{
 	private static final long serialVersionUID = 1L;
-	public GameInfo session;
+	public GameInfo gameInfo;
 	
-	
-	public UserActionGameInfoUpdate(int sessionID, GameInfo session)
+	public GameActionUpdateGameInfo(int sessionID, GameInfo gameInfo)
 		{
 		this.gameID=sessionID;
-		this.session=session;
+		this.gameInfo=gameInfo;
 		}
 	}

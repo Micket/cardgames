@@ -16,3 +16,6 @@ gitaddall:
 
 loc:
 	wc -l */*.java
+
+todo:
+	grep -r TODO *

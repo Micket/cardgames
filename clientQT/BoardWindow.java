@@ -3,11 +3,11 @@ package clientQT;
 import action.GameActionLeave;
 import action.Message;
 import action.GameActionSendMessage;
-import action.UserActionClickedButton;
-import action.UserActionDragCard;
-import action.UserActionGameCardUpdate;
-import action.UserActionGameDesign;
-import action.UserActionGameStateUpdate;
+import action.GameActionClickedButton;
+import action.GameActionDragCard;
+import action.GameActionUpdateCard;
+import action.GameActionUpdateGameDesign;
+import action.GameActionUpdateGameState;
 import clientData.GameDesign;
 import clientData.ServerListener;
 
@@ -72,7 +72,7 @@ public class BoardWindow extends QWidget implements ServerListener
 				{
 				public void run()
 					{
-					client.send(new Message(new UserActionClickedButton(view.gameID, b.id)));
+					client.send(new Message(new GameActionClickedButton(view.gameID, b.id)));
 					}
 				}, "run()");
 			
@@ -128,7 +128,7 @@ public class BoardWindow extends QWidget implements ServerListener
 		}
 
 	@Override
-	public void eventGameDesign(final UserActionGameDesign msg)
+	public void eventGameDesign(final GameActionUpdateGameDesign msg)
 		{
 		if(msg.gameID==view.gameID)
 			{
@@ -143,7 +143,7 @@ public class BoardWindow extends QWidget implements ServerListener
 			}
 		}
 
-	public void eventGameStateUpdate(UserActionGameStateUpdate msg)
+	public void eventGameStateUpdate(GameActionUpdateGameState msg)
 		{
 		if(msg.gameID==view.gameID)
 			view.setGameState(msg);
@@ -161,13 +161,13 @@ public class BoardWindow extends QWidget implements ServerListener
 		}
 
 	@Override
-	public void eventDragCard(UserActionDragCard action)
+	public void eventDragCard(GameActionDragCard action)
 		{
 		view.dragCard(action);
 		}
 
 	@Override
-	public void eventGameCardUpdate(UserActionGameCardUpdate action)
+	public void eventGameCardUpdate(GameActionUpdateCard action)
 		{
 		view.gameCardUpdate(action);
 		}

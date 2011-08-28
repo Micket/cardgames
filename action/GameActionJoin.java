@@ -4,12 +4,12 @@ package action;
  *
  * @author micket
  */
-public class GameActionJoinGame extends GameAction
+public class GameActionJoin extends GameAction
 	{
 	private static final long serialVersionUID = 1L;
 	boolean asSpectator = false;
 	
-	public GameActionJoinGame(int gameID)
+	public GameActionJoin(int gameID)
 		{
 		this.gameID=gameID;
 		}

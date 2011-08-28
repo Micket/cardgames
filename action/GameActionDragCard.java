@@ -1,6 +1,6 @@
 package action;
 
-public class UserActionDragCard extends GameAction
+public class GameActionDragCard extends GameAction
 	{
 	private static final long serialVersionUID = 1L;
 	

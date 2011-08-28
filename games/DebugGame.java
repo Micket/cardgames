@@ -10,10 +10,10 @@ import clientData.ClientCard;
 import clientData.GameDesign;
 
 import action.Message;
-import action.UserActionClickedCard;
-import action.UserActionDragCard;
-import action.UserActionGameStateUpdate;
-import action.UserActionGameStateUpdate.PlayerState;
+import action.GameActionClickedCard;
+import action.GameActionDragCard;
+import action.GameActionUpdateGameState;
+import action.GameActionUpdateGameState.PlayerState;
 
 /**
  * Empty game for testing. One player, and some decks of cards.
@@ -78,21 +78,21 @@ public class DebugGame extends DefaultGameLogic
 		return true;
 		}
 	
-	public boolean userActionClickedCard(int fromUser, UserActionClickedCard s)
+	public boolean userActionClickedCard(int fromUser, GameActionClickedCard s)
 		{
 		
-		if (s.stack.equals("hand") && s.player==fromUser)
+		if (s.stackName.equals("hand") && s.playerID==fromUser)
 			{
 			LogicPlayerState ps=pstate.get(fromUser);
 			
-			UserActionDragCard action=new UserActionDragCard();
+			GameActionDragCard action=new GameActionDragCard();
 			action.gameID=sessionID;
 			
-			action.fromPlayer=s.player;
+			action.fromPlayer=s.playerID;
 			action.fromPos=s.stackPos;
 			action.fromStackName="hand";
 
-			action.toPlayer=s.player;
+			action.toPlayer=s.playerID;
 			action.toPos=ps.deck.size();
 			action.toStackName="deck";
 	
@@ -105,7 +105,7 @@ public class DebugGame extends DefaultGameLogic
 		}
 	
 	
-	public boolean userActionDragCard(int fromUser, UserActionDragCard s)
+	public boolean userActionDragCard(int fromUser, GameActionDragCard s)
 		{
 		LogicPlayerState ps=pstate.get(fromUser);
 
@@ -125,7 +125,7 @@ public class DebugGame extends DefaultGameLogic
 			throw new RuntimeException("no such stack: "+stackName);
 		}
 	
-	public void executeMove(UserActionDragCard action)
+	public void executeMove(GameActionDragCard action)
 		{
 		CardStack<PlayingCard> stackFrom=getStack(action.fromPlayer, action.fromStackName);
 		CardStack<PlayingCard> stackTo=getStack(action.toPlayer, action.toStackName);
@@ -172,7 +172,7 @@ public class DebugGame extends DefaultGameLogic
 		return d;
 		}
 	
-	public void getGameState(UserActionGameStateUpdate action)
+	public void getGameState(GameActionUpdateGameState action)
 		{
 		for(int p:players)
 			{

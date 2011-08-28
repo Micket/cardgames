@@ -10,7 +10,7 @@ public class Message implements Serializable
 	
 	public Integer messageID; //To be returned when replying
 	public Integer replyTo;
-	public List<UserAction> actions=new LinkedList<UserAction>();
+	public List<Action> actions=new LinkedList<Action>();
 	
 
 	/**
@@ -23,12 +23,12 @@ public class Message implements Serializable
 	/**
 	 * Message with one action added
 	 */
-	public Message(UserAction action)
+	public Message(Action action)
 		{
 		actions.add(action);
 		}
 	
-	public void add(UserAction action)
+	public void add(Action action)
 		{
 		actions.add(action);
 		}

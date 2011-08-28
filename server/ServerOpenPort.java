@@ -4,10 +4,15 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+/**
+ * A server port, listening for new connections
+ */
 public class ServerOpenPort extends Thread
 	{
-	ServerThread thread;
-	ServerSocket listener;
+	private ServerThread thread;
+	private ServerSocket listener;
+	
+	private boolean stopThread=false;
 	
 	public ServerOpenPort(ServerThread thread, int port) throws IOException
 		{
@@ -19,28 +24,41 @@ public class ServerOpenPort extends Thread
 	@Override
 	public void run()
 		{
-		for(;;)
+		while(!stopThread)
+			try
+				{
+				Socket newClientSocket = listener.accept();
+		
+				ConnectionToClientRemote connClient=new ConnectionToClientRemote(thread, newClientSocket);
+				
+				synchronized (thread)
+					{
+					connClient.clientID=thread.getFreeClientID();
+					connClient.nick=thread.getFreeNick();
+					thread.connections.put(connClient.clientID, connClient);
+					}
+				connClient.start();
+				
+				
+	
+				}
+			catch (IOException ioe) 
+				{
+				}
+		}
+
+	/**
+	 * Stop listening to this port
+	 */
+	public void closePort()
+		{
+		stopThread=true;
 		try
 			{
-			Socket newClientSocket = listener.accept();
-	
-			ConnectionToClientRemote connClient=new ConnectionToClientRemote(thread, newClientSocket);
-			
-			synchronized (thread)
-				{
-				connClient.clientID=thread.getFreeClientID();
-				connClient.nick=thread.getFreeNick();
-				thread.connections.put(connClient.clientID, connClient);
-				}
-			connClient.start();
-			
-			
-
+			listener.close();
 			}
-		catch (IOException ioe) 
+		catch (IOException e)
 			{
-			System.out.println("IOException on socket listen: " + ioe);
-			ioe.printStackTrace();
 			}
 		}
 	

@@ -8,21 +8,17 @@ import java.util.Map;
 import java.util.Set;
 
 import action.GameAction;
-import action.GameActionJoinGame;
 import action.GameActionSendMessage;
 import action.Message;
-import action.UserAction;
-import action.UserActionGameDesign;
-import action.UserActionGameInfoUpdate;
-import action.UserActionGameStateUpdate;
-import action.UserActionListOfGameTypes;
-import action.UserActionListOfUsers;
-import action.UserActionListOfGameSessions;
-import action.UserActionListOfAvailableGames;
-import action.UserActionLobbyMessage;
-import action.UserActionSetNick;
-import action.UserActionStartGame;
-import action.UserActionDisconnect;
+import action.Action;
+import action.ActionListOfGameTypes;
+import action.ActionListOfUsers;
+import action.ActionListOfGameSessions;
+import action.ActionListOfAvailableGames;
+import action.ActionLobbyMessage;
+import action.ActionSetNick;
+import action.ActionStartGame;
+import action.ActionDisconnect;
 import games.GameLogic;
 import games.GameType;
 
@@ -47,6 +43,8 @@ public class ServerThread extends Thread
 	private LinkedList<Message> incomingQueue=new LinkedList<Message>();
 	private Set<ServerOpenPort> openPorts=new HashSet<ServerOpenPort>();
 	
+	private boolean stopThread=false;
+	
 	/**
 	 * Add an incoming message to the message queue
 	 */
@@ -55,7 +53,7 @@ public class ServerThread extends Thread
 		synchronized (incomingQueue)
 			{
 			//Make sure the from-flag is properly set (clients does not set, and should not)
-			for(UserAction action:msg.actions)
+			for(Action action:msg.actions)
 				action.fromClientID=fromClientID;
 			
 			//Add to queue, wake up thread
@@ -68,7 +66,7 @@ public class ServerThread extends Thread
 	@Override
 	public void run()
 		{
-		for(;;)
+		while(!stopThread)
 			{
 			Message msg;
 			synchronized (incomingQueue)
@@ -88,7 +86,7 @@ public class ServerThread extends Thread
 				}
 			if(msg!=null)
 				{
-				for(UserAction action:msg.actions)
+				for(Action action:msg.actions)
 					{
 					if(action instanceof GameAction)// Pass on message to game session
 						{
@@ -109,25 +107,25 @@ public class ServerThread extends Thread
 						else
 							System.out.println("Error: Trying to pass message to non-existing game session "+ga.gameID);
 						}
-					else if(action instanceof UserActionLobbyMessage)
+					else if(action instanceof ActionLobbyMessage)
 						{
-						UserActionLobbyMessage lm=(UserActionLobbyMessage)action;
+						ActionLobbyMessage lm=(ActionLobbyMessage)action;
 						lm.fromClientID=action.fromClientID;
 						broadcastToClients(new Message(lm));
 						
 						System.out.println("got message "+lm.message);
 						}
-					else if (action instanceof UserActionStartGame)
+					else if (action instanceof ActionStartGame)
 						{
 						try
 							{
 							//Create the game session
-							GameLogic game = ((UserActionStartGame)action).game.newInstance();
+							GameLogic game = ((ActionStartGame)action).game.newInstance();
 							game.thread=this;
-							int sessionID=getFreeGameSessionID();
+							int sessionID=getFreeSessionID();
 							game.sessionID=sessionID;
 							gameSessions.put(sessionID, game);
-							game.sessionName = ((UserActionStartGame)action).sessionName;
+							game.sessionName = ((ActionStartGame)action).sessionName;
 							
 							//Join the player
 							game.handleClientJoinGameInfo(action.fromClientID);
@@ -140,16 +138,16 @@ public class ServerThread extends Thread
 							e.printStackTrace();
 							}
 						}
-					else if (action instanceof UserActionSetNick)
+					else if (action instanceof ActionSetNick)
 						{
-						UserActionSetNick a=(UserActionSetNick)action;
+						ActionSetNick a=(ActionSetNick)action;
 						if(!getNickSet().contains(a.nick))
 							{
 							connections.get(a.fromClientID).nick=a.nick;
 							broadcastUserlistToClients();
 							}
 						}
-					else if (action instanceof UserActionDisconnect)
+					else if (action instanceof ActionDisconnect)
 						{
 						disconnectClient(action.fromClientID);
 						}
@@ -188,7 +186,7 @@ public class ServerThread extends Thread
 	 */
 	public void broadcastUserlistToClients()
 		{
-		UserActionListOfUsers action=new UserActionListOfUsers();
+		ActionListOfUsers action=new ActionListOfUsers();
 		for(Map.Entry<Integer,ConnectionToClient> c:connections.entrySet())
 			action.nickMap.put(c.getKey(), c.getValue().nick);
 		System.out.println("----- "+action.nickMap);
@@ -218,7 +216,7 @@ public class ServerThread extends Thread
 	public Message createMessageGameTypesToClients()
 		{
 		System.out.println("Sending game type list");
-		UserActionListOfGameTypes action=new UserActionListOfGameTypes();
+		ActionListOfGameTypes action=new ActionListOfGameTypes();
 		action.availableGames=new HashMap<Class<? extends GameLogic>, GameType>(availableGames);
 		return new Message(action);
 		}
@@ -243,7 +241,7 @@ public class ServerThread extends Thread
 	public Message createMessageGameSessionsToClients()
 		{
 		System.out.println("Sending game list");
-		UserActionListOfGameSessions action=new UserActionListOfGameSessions();
+		ActionListOfGameSessions action=new ActionListOfGameSessions();
 		for(Map.Entry<Integer,GameLogic> s:gameSessions.entrySet())
 			{
 			GameInfo gmd = createGameSessionUpdate(s.getKey());
@@ -259,7 +257,7 @@ public class ServerThread extends Thread
 	public void sendGamelistToClients(int userID)
 		{
 		System.out.println("Sending game list");
-		UserActionListOfAvailableGames action=new UserActionListOfAvailableGames();
+		ActionListOfAvailableGames action=new ActionListOfAvailableGames();
 		action.gameList = new LinkedList<GameType>(availableGames.values());
 		broadcastToClients(new Message(action));
 		}
@@ -283,6 +281,7 @@ public class ServerThread extends Thread
 			}
 		}
 	
+	
 	/**
 	 * Disconnect a client
 	 */
@@ -291,7 +290,7 @@ public class ServerThread extends Thread
 		if(connections.containsKey(clientID))
 			{
 			connections.remove(clientID);
-			for(Map.Entry<Integer,GameLogic> g:gameSessions.entrySet()) // TODO: This doesn't scale. Store this mapping as well instead of looping.
+			for(Map.Entry<Integer,GameLogic> g:gameSessions.entrySet())
 				{
 				if(g.getValue().players.contains(clientID))
 					{
@@ -309,6 +308,9 @@ public class ServerThread extends Thread
 		}
 
 	
+	/**
+	 * Get an unused clientID
+	 */
 	public int getFreeClientID()
 		{
 		int id=1;
@@ -317,7 +319,9 @@ public class ServerThread extends Thread
 		return id;
 		}
 
-	
+	/**
+	 * Get all nicks in use
+	 */
 	public Set<String> getNickSet()
 		{
 		Set<String> nicks=new HashSet<String>();
@@ -325,7 +329,10 @@ public class ServerThread extends Thread
 			nicks.add(c.nick);
 		return nicks;
 		}
-	
+
+	/**
+	 * Generate one nick which is guaranteed to be free
+	 */
 	public String getFreeNick()
 		{
 		Set<String> nicks=getNickSet();
@@ -335,12 +342,33 @@ public class ServerThread extends Thread
 		return "Guest"+id;
 		}
 
-	public int getFreeGameSessionID()
+	/**
+	 * Get one unused sessionID
+	 */
+	public int getFreeSessionID()
 		{
 		int i=1;
 		while(gameSessions.containsKey(i))
 			i++;
 		return i;
+		}
+
+	/**
+	 * Shut down the server
+	 */
+	public void shutDown()
+		{
+		//Close all listening ports
+		for(ServerOpenPort p:openPorts)
+			p.closePort();
+		openPorts.clear();
+		
+		//Stop the server
+		stopThread=true;
+		synchronized (incomingQueue)
+			{
+			incomingQueue.notifyAll();
+			}
 		}
 	
 	}

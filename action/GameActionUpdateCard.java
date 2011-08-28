@@ -9,7 +9,7 @@ import clientData.ClientCard;
  * @author mahogny
  *
  */
-public class UserActionGameCardUpdate extends GameAction
+public class GameActionUpdateCard extends GameAction
 	{
 	private static final long serialVersionUID = 1L;
 
@@ -22,17 +22,13 @@ public class UserActionGameCardUpdate extends GameAction
 	private boolean showsFront=false;
 	private double rotation;
 
-	public UserActionGameCardUpdate(int gameID, int playerID, String stackName, int stackPos, ClientCard card)
+	public GameActionUpdateCard(int gameID, int playerID, String stackName, int stackPos, ClientCard card)
 		{
 		this.gameID=gameID;
 		
 		this.playerID=playerID;
 		this.stackName=stackName;
 		this.stackPos=stackPos;
-		
-	//	playerID=card.cardPlayer;
-	//	stackName=card.stack;
-	//	stackPos=card.stackPos;
 		
 		front=card.front;
 		back=card.back;

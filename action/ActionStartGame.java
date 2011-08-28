@@ -6,7 +6,7 @@ import games.GameLogic;
  *
  * @author micket
  */
-public class UserActionStartGame extends UserAction
+public class ActionStartGame extends Action
 	{
 	private static final long serialVersionUID = 1L;
 	
