@@ -7,11 +7,8 @@
 * android port
 * debian package
 * fedora package
-* card placement: as a hand
-* move card from one heap to another, send signal
 * layout of cards on board.
   in particular, how to display other players cards? and common cards?
-* chat within game session
 * GUI for user to flag that it wishes to participate in game (I'm not sure about this...)
 * spectators
 * teams
@@ -43,4 +40,3 @@
 
 * more games
   * poker (texas hold'em?)
-  * solitaire

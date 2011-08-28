@@ -1,5 +1,6 @@
 package clientQT;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -53,12 +54,21 @@ public class BoardLayout
 		
 		ClientGameData gamedata=view.gameData;
 
-		//Each player
+		ArrayList<Integer> playersList=new ArrayList<Integer>(gamedata.playerMap.keySet());
+		int indexOfMe=playersList.indexOf(client.getClientID());
+		//TODO what if this user not in list?
+		if(indexOfMe==-1)
+			indexOfMe=0;
+		
+		//For each player
 		for(int playerID:gamedata.playerMap.keySet())
 			{
 			//Here, create a transform for this players coordinate system
 			Matrix2d transformRot=new Matrix2d();
-			double baseRotAngle=Math.PI/2*playerID;
+			
+			int posOfThisPlayer=playersList.indexOf(playerID)-indexOfMe;
+			
+			double baseRotAngle=posOfThisPlayer*(Math.PI*2/playersList.size());
 			transformRot.setRot(baseRotAngle);
 			Vector2d transformMove=new Vector2d(0,100/view.zoom);
 			
