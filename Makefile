@@ -22,5 +22,8 @@ todo:
 
 jars:
 	ls games/*.java > games/gameslist.txt
-	jar cfvm startCardgame.jar ports/MANIFEST.STARTQTCLIENT */*.class games/gameslist.txt
+	jar cfvm cardgame.jar ports/MANIFEST.STARTQTCLIENT */*.class games/gameslist.txt
 	rm games/gameslist.txt 
+
+macport: jars
+	cp cardgame.jar ports/CardGame.app//

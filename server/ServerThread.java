@@ -32,7 +32,7 @@ import clientData.GameInfo;
  */
 public class ServerThread extends Thread
 	{
-	private Map<Class<? extends GameLogic>, GameType> availableGames = GameLogic.availableGames();
+	private Map<Class<? extends GameLogic>, GameType> availableGames = GameType.availableGames();
 	
 	/** from clientID */
 	public Map<Integer,ConnectionToClient> connections=new HashMap<Integer, ConnectionToClient>();
