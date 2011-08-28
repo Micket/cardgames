@@ -195,6 +195,9 @@ public class ServerThread extends Thread
 		broadcastToClients(new Message(action));
 		}
 
+	/**
+	 * Send data to one client
+	 */
 	public void send(int clientID, Message msg)
 		{
 		connections.get(clientID).send(msg);
@@ -261,6 +264,9 @@ public class ServerThread extends Thread
 		broadcastToClients(new Message(action));
 		}
 	
+	/**
+	 * Listen to one additional port
+	 */
 	public boolean openPort(int port)
 		{
 		try
@@ -277,17 +283,21 @@ public class ServerThread extends Thread
 			}
 		}
 	
+	/**
+	 * Disconnect a client
+	 */
 	public void disconnectClient(int clientID)
 		{
-		if (connections.containsKey(clientID))
+		if(connections.containsKey(clientID))
 			{
 			connections.remove(clientID);
 			for(Map.Entry<Integer,GameLogic> g:gameSessions.entrySet()) // TODO: This doesn't scale. Store this mapping as well instead of looping.
 				{
-				if (g.getValue().players.contains(clientID))
+				if(g.getValue().players.contains(clientID))
 					{
 					g.getValue().userLeft(clientID);
-					if (g.getValue().players.isEmpty()) // Remove empty games automatically.
+					//Remove empty games automatically
+					if (g.getValue().players.isEmpty()) 
 						gameSessions.remove(g.getKey());
 					}
 				}

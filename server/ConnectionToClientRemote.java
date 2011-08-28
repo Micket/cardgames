@@ -17,10 +17,17 @@ import server.ConnectionToClient;
 public class ConnectionToClientRemote extends ConnectionToClient
 	{
 	public int clientID;
-
+	
 	private ObjectInputStream is;
 	private ObjectOutputStream os;
 	private ServerThread thread;
+	private LinkedList<Message> sendQueue=new LinkedList<Message>();
+	
+	private boolean stopThread=false;
+	private boolean getStopThread()
+		{
+		return stopThread;
+		}
 	
 	public ConnectionToClientRemote(ServerThread thread, Socket socket) throws IOException
 		{
@@ -29,10 +36,6 @@ public class ConnectionToClientRemote extends ConnectionToClient
 		os=new ObjectOutputStream(socket.getOutputStream());
 		}
 	
-	/**
-	 * Random unique ID obtained upon connection. It never changes during a session.
-	 */
-	//public int connectionID;
 	
 	public void send(Message msg)
 		{
@@ -41,40 +44,29 @@ public class ConnectionToClientRemote extends ConnectionToClient
 			sendQueue.addLast(msg);
 			sendQueue.notifyAll();
 			}
-		/*
-		try
-			{
-			os.writeObject(msg);
-			System.out.println("Sending message over network!!!");
-			}
-		catch (IOException e)
-			{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			}
-*/		
 		}
 	
-	private LinkedList<Message> sendQueue=new LinkedList<Message>();
 	
-/*
-	public void addToSendQueue(Message msg)
-		{
-		}
-	*/
 	private class SendThread extends Thread
 		{
 		@Override
 		public void run()
 			{
-			for(;;)
+			try
 				{
-				try
+				while(!getStopThread())
 					{
 					synchronized (sendQueue)
 						{
 						if(sendQueue.isEmpty())
+							try
+							{
 							sendQueue.wait();
+							}
+						catch (InterruptedException e)
+							{
+							e.printStackTrace();
+							}
 						else
 							{
 							Message msg=sendQueue.poll();
@@ -83,11 +75,13 @@ public class ConnectionToClientRemote extends ConnectionToClient
 							}
 						}
 					}
-				catch (Exception e)
-					{
-					e.printStackTrace();
-					}
 				}
+			catch (IOException e)
+				{
+				e.printStackTrace();
+				connectionDied();
+				}
+
 			}
 		}
 
@@ -97,8 +91,6 @@ public class ConnectionToClientRemote extends ConnectionToClient
 	@Override
 	public void run()
 		{
-
-
 		try
 			{
 			os.writeChars("Cardgame\n");
@@ -107,46 +99,55 @@ public class ConnectionToClientRemote extends ConnectionToClient
 			os.writeInt(clientID);
 			os.flush();
 
-			System.out.println("----------");
-
 			//Get preferred nick, set it if it is available
 			String preferredNick=(String)is.readObject();
 			if(!thread.getNickSet().contains(preferredNick))
 				nick=preferredNick;
 
 			//Now this connection is ready for normal communication. Allow sending
-			//SendThread sendThread=
 			SendThread sendThread=new SendThread();
 			sendThread.start();
 
 			doFinalHandshake(thread);
-			
-			for(;;)
+
+			while(!getStopThread())
 				{
+				try
+					{
+					Message msg = (Message)is.readObject();
+					System.out.println("Got message");
 
-				Message msg=(Message)is.readObject();
-				System.out.println("Got message");
-
-				thread.addIncomingMessage(clientID, msg);
+					thread.addIncomingMessage(clientID, msg);
+					}
+				catch (ClassNotFoundException e)
+					{
+					//TODO tell client that is a too old version
+					e.printStackTrace();
+					}
 				}
 
 			}
 		catch (IOException e)
 			{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			connectionDied();
 			}
 		catch (ClassNotFoundException e)
 			{
-			// TODO Auto-generated catch block
+			//This one is impossible to recover from
 			e.printStackTrace();
+			connectionDied();
 			}
-
-		//TODO
-
-		//socket.
-
-
 		}
 
+	/**
+	 * Handle broken connections
+	 */
+	private void connectionDied()
+		{
+		stopThread=true;
+		thread.disconnectClient(clientID);
+		}
+	
+	
 	}
