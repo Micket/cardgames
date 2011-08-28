@@ -26,18 +26,29 @@ public class ClientGameData
 	 */
 	public QtGraphicsData getImage(String image)
 		{
-		File fileSVG=new File("images",image+".svg");
+		QtGraphicsData img=getImage("Default", image);
+		if(img==null)
+			throw new RuntimeException("No such image, "+image); //Later: Request image from server
+		else
+			return img;
+		}
+	
+	/**
+	 * Get an image for a given theme
+	 */
+	private QtGraphicsData getImage(String theme, String image)
+		{
+		File fileSVG=new File(new File("images",theme),image+".svg");
 		if(fileSVG.exists())
 			return new QtGraphicsData(fileSVG);
 		else
 			{
-			File filePNG=new File("images",image+".png");
+			File filePNG=new File(new File("images",theme),image+".png");
 			if(filePNG.exists())
 				return new QtGraphicsData(filePNG);
 			}
-		throw new RuntimeException("No such image, "+image); //Later: Request image from server
+		return null;
 		}
-	
 	
 
 	/**
