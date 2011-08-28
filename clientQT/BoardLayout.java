@@ -256,9 +256,40 @@ public class BoardLayout
 
 				ac.posZ=newAc.posZ;
 
-				//TODO rotation
-				ac.rotation=newAc.rotation;
 
+				
+				needRedraw=true;
+				}
+
+			//Rotation around z
+			if(ac.rotation!=newAc.rotation)
+				{
+				//There can be any reference angle,
+				//so set current rotation to closest equivalent angle
+				while(newAc.rotation-ac.rotation>Math.PI)
+					newAc.rotation+=2*Math.PI;
+				while(ac.rotation-newAc.rotation>Math.PI)
+					newAc.rotation+=2*Math.PI;
+				
+				//Converge
+				double dr=newAc.rotation-ac.rotation;
+				if(Math.abs(dr)<Math.PI*0.02)
+					ac.rotation=newAc.rotation;
+				else
+					ac.rotation+=dr*0.2;
+				}
+			
+			
+			//Rotation around y
+			double shouldBeRotY=ac.shouldHaveRotation();
+			if(ac.rotY!=shouldBeRotY)
+				{
+				//Simple handling since only 0 & PI is considered
+				double dr=(shouldBeRotY-ac.rotY)*0.2;
+				if(Math.abs(ac.rotY-shouldBeRotY)<Math.PI*0.02)
+					ac.rotY=shouldBeRotY;
+				else
+					ac.rotY+=dr;
 				needRedraw=true;
 				}
 

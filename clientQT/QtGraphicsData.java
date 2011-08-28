@@ -88,7 +88,6 @@ public class QtGraphicsData
 
 		g2.dispose();
 
-		System.out.println("rasterization1!!!!");
 		return new QtGraphicsData(pm);
 		}
 

@@ -336,18 +336,16 @@ public class BoardView extends QGraphicsView
 			{
 			QGraphicsItemInterface item;
 
-			boolean showsFront=card.cardData.showsFront;
+//			=card.cardData.showsFront;
 			
 			//Handle rotation around y
+			boolean showsFront=card.rotY<Math.PI/2;
 			double scaleX=Math.cos(card.rotY);
 			if(scaleX<0)
-				{
-				//TODO this should decide showsFront
 				scaleX=-scaleX;
-				}
 
 			//Get the image for the card if it is not loaded
-			if(card.cardData.showsFront)
+			if(showsFront)
 				{
 				if(card.imageFront==null)
 					card.imageFront=getScaledImage(card.cardData.front).createGraphicsItem(); //TODO don't change image all the time!

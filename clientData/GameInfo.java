@@ -3,6 +3,7 @@ package clientData;
 import games.GameLogic;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -19,6 +20,13 @@ public class GameInfo implements Serializable
 	
 	public int maxusers;
 	public int minusers;
-	public Set<Integer> joinedUsers;
+	public Set<Integer> joinedUsers=new HashSet<Integer>();
 	public String sessionName;
+	
+	
+	@Override
+	public String toString()
+		{
+		return "GameInfo{"+sessionName+"  "+joinedUsers+"}";
+		}
 	}

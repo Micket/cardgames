@@ -16,12 +16,26 @@ public class AnimatedCard
 	
 	public double rotation;
 
+	/**
+	 * Rotation: 0 is front-facing, PI is back-facing
+	 */
 	public double rotY;
 	
 	public AnimatedCard(ClientCard cardData)
 		{
 		this.cardData=cardData;
+		rotY=shouldHaveRotation();
 		}
+	
+	
+	public double shouldHaveRotation()
+		{
+		if(cardData.showsFront)
+			return 0;
+		else
+			return Math.PI;
+		}
+
 	
 	/*
 	public void loadImageFront(String file)

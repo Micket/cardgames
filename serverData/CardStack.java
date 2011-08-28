@@ -13,8 +13,10 @@ import clientData.ClientCard;
  * @author mahogny
  *
  */
-public class CardStack<E>
+public class CardStack<E> implements Serializable
 	{
+	private static final long serialVersionUID = 1L;
+
 
 	public static enum StackStyle implements Serializable
 		{

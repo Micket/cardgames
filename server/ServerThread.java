@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 import action.GameAction;
+import action.GameActionJoinGame;
 import action.GameActionSendMessage;
 import action.Message;
 import action.UserAction;
@@ -120,22 +121,16 @@ public class ServerThread extends Thread
 						{
 						try
 							{
+							//Create the game session
 							GameLogic game = ((UserActionStartGame)action).game.newInstance();
 							game.thread=this;
-							game.userJoined(action.fromClientID);
-							game.sessionName = ((UserActionStartGame)action).sessionName;
 							int sessionID=getFreeGameSessionID();
 							game.sessionID=sessionID;
 							gameSessions.put(sessionID, game);
+							game.sessionName = ((UserActionStartGame)action).sessionName;
 							
-							broadcastToClients(new Message(new UserActionGameInfoUpdate(sessionID, createGameSessionUpdate(sessionID))));
-							
-							Message back=new Message();
-							back.add(new UserActionGameDesign(sessionID, game.createGameDesign()));
-							UserActionGameStateUpdate upd=new UserActionGameStateUpdate(game.sessionID);
-							game.getGameState(upd);
-							back.add(upd);
-							send(action.fromClientID,back);
+							//Join the player
+							game.handleClientJoinGameInfo(action.fromClientID);
 							
 							System.out.println("Starting game.");
 							}
@@ -227,14 +222,14 @@ public class ServerThread extends Thread
 	
 	
 	
-	private GameInfo createGameSessionUpdate(int sessionID)
+	public GameInfo createGameSessionUpdate(int sessionID)
 		{
 		GameLogic logic=gameSessions.get(sessionID);
 		GameInfo gmd = new GameInfo();
 		gmd.maxusers=logic.getMaxPlayers();
 		gmd.minusers=logic.getMinPlayers();
 		gmd.type=logic.getClass();
-		gmd.joinedUsers = logic.players;
+		gmd.joinedUsers.addAll(logic.players);
 		gmd.sessionName = logic.sessionName;
 		return gmd;
 		}

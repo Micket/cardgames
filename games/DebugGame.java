@@ -53,6 +53,9 @@ public class DebugGame extends DefaultGameLogic
 	
 	public boolean userJoined(int userID)
 		{
+		if (!super.userJoined(userID))
+			return false;
+		
 		LogicPlayerState s=new LogicPlayerState();
 		pstate.put(userID, s);
 		
@@ -72,10 +75,6 @@ public class DebugGame extends DefaultGameLogic
 		for(PlayingCard c:s.deck.cards)
 			c.showsFront=true;
 		
-		
-//////////////		
-		if (!super.userJoined(userID))
-			return false;
 		return true;
 		}
 	

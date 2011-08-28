@@ -186,7 +186,8 @@ public class Solitaire extends DefaultGameLogic
 		
 				executeMove(actionMoveNew);
 				msg.add(actionMoveNew);
-				thread.send(fromUser, msg);
+				
+				sendToPlayers(msg);
 				return true;
 				}
 			
@@ -197,7 +198,7 @@ public class Solitaire extends DefaultGameLogic
 			if(s.stackPos==fromStack.size()-1)
 				{
 				fromStack.getCard(s.stackPos).showsFront=true;
-				thread.send(fromUser, new Message(getUpdateCardForClient(fromUser, s.stack, s.stackPos)));
+				sendToPlayers(new Message(getUpdateCardForClient(fromUser, s.stack, s.stackPos)));
 				return true;
 				}
 			}
@@ -219,7 +220,7 @@ public class Solitaire extends DefaultGameLogic
 						action.toPos=ps.stacksForSorted.get(i).size();
 						
 						executeMove(action);
-						thread.send(fromUser, new Message(action));
+						sendToPlayers(new Message(action));
 						return true;
 						}
 			}
@@ -333,7 +334,7 @@ public class Solitaire extends DefaultGameLogic
 		if(isOk)
 			{
 			executeMove(s);
-			thread.send(fromUser, new Message(s));
+			sendToPlayers(new Message(s));
 			return true;
 			}
 		else

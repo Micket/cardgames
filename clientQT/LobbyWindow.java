@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Arrays;
 import java.util.TreeMap;
 
+import action.GameActionJoinGame;
 import action.GameActionSendMessage;
 import action.Message;
 import action.UserAction;
@@ -33,6 +34,7 @@ import com.trolltech.qt.gui.QAbstractItemView.SelectionBehavior;
 public class LobbyWindow extends QWidget implements ServerListener
 	{
 	private QPushButton bNick;
+	private QPushButton bJoin;
 	
 	private QTreeWidget nickList;
 	private Map<Integer,QTreeWidgetItem> nicks = new HashMap<Integer, QTreeWidgetItem>();
@@ -62,6 +64,10 @@ public class LobbyWindow extends QWidget implements ServerListener
 		bNick=new QPushButton(client.getNick()+":", this);
 		bNick.clicked.connect(this, "actionChangeNick()");
 		bNick.setSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum);
+
+		bJoin=new QPushButton("Join",this);
+		bJoin.clicked.connect(this, "actionJoinGame()");
+
 		chatHistory=new QTextEdit(this);
 		chatHistory.setReadOnly(true);
 		
@@ -80,6 +86,8 @@ public class LobbyWindow extends QWidget implements ServerListener
 		gameList.horizontalHeader().setStretchLastSection(true);
 		gameList.setAlternatingRowColors(true);
 		gameList.setSortingEnabled(true);
+		gameList.setSelectionBehavior(SelectionBehavior.SelectRows);
+		gameList.doubleClicked.connect(this, "actionJoinGame()");
 		
 		// Lobby layout
 		setLayout(lobbyLayout);
@@ -96,11 +104,14 @@ public class LobbyWindow extends QWidget implements ServerListener
 		chatWindowLayout.addWidget(chatHistory);
 		chatWindowLayout.addLayout(chatInputLayout);
 		chatWindowLayout.setSpacing(0);
+		
 		chatInputLayout.addWidget(bNick);
 		chatInputLayout.addWidget(tfEditLine);
 		chatInputLayout.setSpacing(0);
+		
 		nickAndGame.addWidget(nickList);
 		nickAndGame.addWidget(gameList);
+		nickAndGame.addWidget(bJoin);
 		
 		setWindowTitle("Lobby");
 		
@@ -189,6 +200,20 @@ public class LobbyWindow extends QWidget implements ServerListener
 		client.disconnectFromServer();
 		}
 	
+	public void actionJoinGame()
+		{
+		for(QTableWidgetItem i:gameList.selectedItems())
+			{
+			Integer sessionID=mapGameList2sessionID.get(i);
+			if(sessionID!=null)
+				{
+				client.send(new Message(new GameActionJoinGame(sessionID)));
+				return;
+				}
+			}
+		}
+	
+	
 	public void closeEvent(QCloseEvent e)
 		{
 		actionExit();
@@ -229,9 +254,10 @@ public class LobbyWindow extends QWidget implements ServerListener
 		
 		}
 
+	private Map<QTableWidgetItem, Integer> mapGameList2sessionID=new HashMap<QTableWidgetItem, Integer>();
+	
 	public void setGameSessions()
 		{
-		gameList.setSelectionBehavior(SelectionBehavior.SelectRows);
 		gameList.clear();
 		gameList.setRowCount(client.gameSessions.size());
 		gameList.setHorizontalHeaderLabels(Arrays.asList("#","Type","Session"));
@@ -241,10 +267,12 @@ public class LobbyWindow extends QWidget implements ServerListener
 		for(QTreeWidgetItem w:nicks.values())
 			for(QTreeWidgetItem s:w.takeChildren())
 				w.removeChild(s);
-
-		int i = 0;
-		for(GameInfo g:client.gameSessions.values())
+		mapGameList2sessionID.clear();
+		
+		int currentRow = 0;
+		for(int sessionID:client.gameSessions.keySet())
 			{
+			GameInfo g=client.gameSessions.get(sessionID);
 			GameType gt=client.gameTypes.get(g.type);
 			if(gt==null)
 				System.out.println("Error: gametype does not exist "+gt); //This is a problem with the local connection
@@ -255,15 +283,16 @@ public class LobbyWindow extends QWidget implements ServerListener
 			QTableWidgetItem newGameUsersItem=new PlayersTableWidgetItem(g.minusers, g.maxusers, g.joinedUsers.size());
 			//QTableWidgetItem newGameUsersItem=new QTableWidgetItem( g.maxusers < 0 ? ""+g.joinedUsers.size() : ""+g.joinedUsers.size()+"/"+g.maxusers);
 			QTableWidgetItem newGameName=new QTableWidgetItem( g.sessionName );
+			mapGameList2sessionID.put(newGameName,sessionID);
 			
 			newGameUsersItem.setFlags(ItemFlag.ItemIsSelectable, ItemFlag.ItemIsEnabled);
 			newGameType.setFlags(ItemFlag.ItemIsSelectable, ItemFlag.ItemIsEnabled);
 			newGameName.setFlags(ItemFlag.ItemIsSelectable, ItemFlag.ItemIsEnabled);
 
-			gameList.setItem(i,0,newGameUsersItem);
-			gameList.setItem(i,1,newGameType);
-			gameList.setItem(i,2,newGameName);
-			i++;
+			gameList.setItem(currentRow,0,newGameUsersItem);
+			gameList.setItem(currentRow,1,newGameType);
+			gameList.setItem(currentRow,2,newGameName);
+			currentRow++;
 			
 
 

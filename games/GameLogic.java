@@ -12,10 +12,14 @@ import server.ServerThread;
 import util.ClassHandling;
 
 import action.GameAction;
+import action.GameActionJoinGame;
 import action.GameActionLeave;
+import action.Message;
 import action.UserActionClickedButton;
 import action.UserActionClickedCard;
 import action.UserActionDragCard;
+import action.UserActionGameDesign;
+import action.UserActionGameInfoUpdate;
 import action.UserActionGameStateUpdate;
 
 /**
@@ -55,9 +59,44 @@ abstract public class GameLogic
 			
 			return b;
 			}
+		else if (s instanceof GameActionJoinGame)
+			{
+			GameActionJoinGame action=(GameActionJoinGame)s;
+			
+			//Check that the user is not in the game already
+			if(!players.contains(action.fromClientID))
+				{
+				System.out.println("is joining "+action.fromClientID+" "+action.gameID);
+				
+				handleClientJoinGameInfo(action.fromClientID);
+				
+				
+				}
+			}
 		return false;
 		}
 
+	public void handleClientJoinGameInfo(int clientID)
+		{
+		userJoined(clientID);
+		thread.broadcastToClients(new Message(new UserActionGameInfoUpdate(sessionID, thread.createGameSessionUpdate(sessionID))));
+		
+		Message back=new Message();
+		back.add(new UserActionGameDesign(sessionID, createGameDesign()));
+		UserActionGameStateUpdate upd=new UserActionGameStateUpdate(sessionID);
+		getGameState(upd);
+		back.add(upd);
+		
+		sendToPlayers(back);
+		}
+
+	public void sendToPlayers(Message msg)
+		{
+		for(int playerID:players)
+			thread.send(playerID, msg);
+		}
+	
+	
 	abstract public boolean userActionDragCard(int fromUser, UserActionDragCard s);
 
 	abstract public boolean userActionClickedCard(int fromUser, UserActionClickedCard s);

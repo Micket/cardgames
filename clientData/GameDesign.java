@@ -47,7 +47,7 @@ public class GameDesign implements Serializable
 	public FieldDef commonField=new FieldDef();
 
 
-	public static class Button
+	public static class Button implements Serializable
 		{
 		public String title;
 		public String id;
