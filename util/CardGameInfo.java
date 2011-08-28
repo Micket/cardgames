@@ -13,4 +13,6 @@ public class CardGameInfo
 	public static final String version="1.0.0";
 	
 	public static final int commonAreaID=-1;
+	
+	public static final String programName="Cardgame";
 	}

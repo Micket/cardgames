@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Arrays;
 import java.util.TreeMap;
 
+import util.CardGameInfo;
+
 import action.GameActionJoin;
 import action.GameActionSendMessage;
 import action.Message;
@@ -169,7 +171,10 @@ public class LobbyWindow extends QWidget implements ServerListener
 
 	public void actionAbout()
 		{
-		//TODO show about dialog.
+		QMessageBox.about(this, tr("About "+CardGameInfo.programName),
+        tr("<b>"+CardGameInfo.programName+" QT client"+"</b> version "+CardGameInfo.version+"<br/>"+
+           "by Johan Henriksson & Mikael Öhman<br/>"
+           ));
 		}
 	
 	public void actionSendMessage()

@@ -21,4 +21,6 @@ todo:
 	grep -r TODO *
 
 jars:
-	jar cfvm startCardgame.jar MANIFEST.STARTQTCLIENT */*.class
+	ls games/*.java > games/gameslist.txt
+	jar cfvm startCardgame.jar ports/MANIFEST.STARTQTCLIENT */*.class games/gameslist.txt
+	rm games/gameslist.txt 

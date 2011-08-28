@@ -25,8 +25,7 @@ public class ClassHandling
 	 * @throws ClassNotFoundException
 	 * @throws IOException
 	 */
-	@SuppressWarnings("unchecked")
-	public static List<Class> getClasses(String packageName) throws ClassNotFoundException, IOException 
+	public static List<Class<?>> getClasses(String packageName) throws ClassNotFoundException, IOException 
 		{
 		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 		assert classLoader != null;
@@ -40,7 +39,7 @@ public class ClassHandling
 			String fileNameDecoded = URLDecoder.decode(fileName, "UTF-8");
 			dirs.add(new File(fileNameDecoded));
 			}
-		ArrayList<Class> classes = new ArrayList<Class>();
+		ArrayList<Class<?>> classes = new ArrayList<Class<?>>();
 		for (File directory : dirs) 
 			classes.addAll(findClasses(directory, packageName));
 		
@@ -55,10 +54,9 @@ public class ClassHandling
 	 * @return The classes
 	 * @throws ClassNotFoundException
 	 */
-	@SuppressWarnings("unchecked")
-	private static List<Class> findClasses(File directory, String packageName) throws ClassNotFoundException 
+	private static List<Class<?>> findClasses(File directory, String packageName) throws ClassNotFoundException 
 		{
-		List<Class> classes = new ArrayList<Class>();
+		List<Class<?>> classes = new ArrayList<Class<?>>();
 		if (!directory.exists()) 
 			return classes;
 		
@@ -73,7 +71,7 @@ public class ClassHandling
 				} 
 			else if (fileName.endsWith(".class") && !fileName.contains("$")) 
 				{
-				Class _class;
+				Class<?> _class;
 				try 
 					{
 					_class = Class.forName(packageName + '.' + fileName.substring(0, fileName.length() - 6));

@@ -1,4 +1,3 @@
-* about menu
 * clear menu items/nicklists and such when disconnected (but not the chat window)
 * server connection status
 * handle lost connections. IOExceptions. common function to tear down client connection
