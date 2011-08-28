@@ -1,6 +1,9 @@
 package clientQT;
 
 import java.io.File;
+import java.util.Set;
+import java.util.TreeSet;
+
 
 import com.trolltech.qt.core.QSize;
 import com.trolltech.qt.gui.QColor;
@@ -109,4 +112,51 @@ public class QtGraphicsData
 		}
 
 
+	/**
+	 * Get an image for a given theme
+	 */
+	public static QtGraphicsData getImage(String theme, String image)
+		{
+		File fileSVG=new File(new File("images",theme),image+".svg");
+		if(fileSVG.exists())
+			return new QtGraphicsData(fileSVG);
+		else
+			{
+			File filePNG=new File(new File("images",theme),image+".png");
+			if(filePNG.exists())
+				return new QtGraphicsData(filePNG);
+			}
+		return null;
+		}
+
+
+	/**
+	 * Images should be stored on the client for bandwidth. But it would make sense to allow the server to provide missing cards,
+	 * in case a game need a very specialized card - this allows for more stupid clients.
+	 * 
+	 * Interface problem: Now this depends on QT
+	 */
+	public static QtGraphicsData getImage(String image)
+		{
+		QtGraphicsData img=QtGraphicsData.getImage("Default", image);
+		if(img==null)
+			throw new RuntimeException("No such image, "+image); //Later: Request image from server
+		else
+			return img;
+		}
+
+
+	/**
+	 * Get all graphical themes
+	 */
+	public static Set<String> getThemes()
+		{
+		File dir=new File("images");
+		Set<String> themes=new TreeSet<String>();
+		for(File f:dir.listFiles())
+			if(f.isDirectory() && !f.getName().startsWith("."))
+				themes.add(f.getName());
+		return themes;
+		}
+	
 	}

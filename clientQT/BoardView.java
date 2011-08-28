@@ -261,7 +261,7 @@ public class BoardView extends QGraphicsView
 	 */
 	public QtGraphicsData getScaledImage(String front)
 		{
-		return gameData.getImage(front).getScaledImage(zoom);
+		return QtGraphicsData.getImage(front).getScaledImage(zoom);
 		}
 	
 	public void redoLayout()
@@ -272,7 +272,7 @@ public class BoardView extends QGraphicsView
 		
 		//Place background
 		if(bg==null)
-			bg=gameData.getImage("tiledtable");
+			bg=QtGraphicsData.getImage("tiledtable");
 		for(int ax=0;ax<10;ax++)
 			for(int ay=0;ay<10;ay++)
 				{

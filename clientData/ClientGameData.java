@@ -1,12 +1,10 @@
 package clientData;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
 import serverData.CardStack;
 
-import clientQT.QtGraphicsData;
 
 public class ClientGameData
 	{
@@ -16,39 +14,6 @@ public class ClientGameData
 	public Map<Integer, ClientPlayerData> playerMap=new HashMap<Integer, ClientPlayerData>();
 
 	
-	
-
-	/**
-	 * Images should be stored on the client for bandwidth. But it would make sense to allow the server to provide missing cards,
-	 * in case a game need a very specialized card - this allows for more stupid clients.
-	 * 
-	 * Interface problem: Now this depends on QT
-	 */
-	public QtGraphicsData getImage(String image)
-		{
-		QtGraphicsData img=getImage("Default", image);
-		if(img==null)
-			throw new RuntimeException("No such image, "+image); //Later: Request image from server
-		else
-			return img;
-		}
-	
-	/**
-	 * Get an image for a given theme
-	 */
-	private QtGraphicsData getImage(String theme, String image)
-		{
-		File fileSVG=new File(new File("images",theme),image+".svg");
-		if(fileSVG.exists())
-			return new QtGraphicsData(fileSVG);
-		else
-			{
-			File filePNG=new File(new File("images",theme),image+".png");
-			if(filePNG.exists())
-				return new QtGraphicsData(filePNG);
-			}
-		return null;
-		}
 	
 
 	/**
