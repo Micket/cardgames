@@ -1,5 +1,5 @@
 all:
-	javac -cp qtjambi452/qtjambi-4.5.2_01.jar */*java
+	javac -cp libs/qtjambi-4.5.2_01.jar:libs/qtjambi-linux64-gcc-4.5.2_01.jar:libs/vecmath.jar:. */*java
 
 run:
 	java -cp libs/qtjambi-4.5.2_01.jar:libs/qtjambi-linux64-gcc-4.5.2_01.jar:libs/vecmath.jar:. clientQT.ClientQT
