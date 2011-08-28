@@ -2,13 +2,13 @@ all:
 	javac -cp qtjambi452/qtjambi-4.5.2_01.jar */*java
 
 run:
-	java -cp qtjambi452/qtjambi-4.5.2_01.jar:qtjambi452/qtjambi-linux64-gcc-4.5.2_01.jar:libs/vecmath.jar:. clientQT.ClientQT
+	java -cp libs/qtjambi-4.5.2_01.jar:libs/qtjambi-linux64-gcc-4.5.2_01.jar:libs/vecmath.jar:. clientQT.ClientQT
 
 client:
-	java -cp qtjambi452/qtjambi-4.5.2_01.jar:qtjambi452/qtjambi-linux64-gcc-4.5.2_01.jar:libs/vecmath.jar:. clientQT.ClientQT --connect localhost
+	java -cp libs/qtjambi-4.5.2_01.jar:libs/qtjambi-linux64-gcc-4.5.2_01.jar:libs/vecmath.jar:. clientQT.ClientQT --connect localhost
 
 rs:
-	java -cp qtjambi452/qtjambi-4.5.2_01.jar:qtjambi452/qtjambi-linux64-gcc-4.5.2_01.jar:libs/vecmath.jar:. server.ServerMain
+	java -cp libs/qtjambi-4.5.2_01.jar:libs/qtjambi-linux64-gcc-4.5.2_01.jar:libs/vecmath.jar:. server.ServerMain
 
 gitaddall:
 	git add \
@@ -19,3 +19,6 @@ loc:
 
 todo:
 	grep -r TODO *
+
+jars:
+	jar cfvm startCardgame.jar MANIFEST.STARTQTCLIENT */*.class
