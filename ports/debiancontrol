@@ -1,0 +1,15 @@
+Package: cardgame
+Version: VERSION
+Section: contrib/science
+Priority: optional
+Architecture: all
+Essential: no
+Recommends: RECOMMENDS
+Depends: DEPENDENCIES
+#Suggests: SUGGESTS
+Installed-Size: SIZE
+Maintainer: Johan Henriksson [mahogny@areta.org]
+Description: A collection of card games that can be played multiplayer over network.
+ Cardgame is bla bla.
+ here is another line. try to keep below 80 columns.
+Homepage: http://www.somewhere.net
