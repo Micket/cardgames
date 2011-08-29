@@ -8,7 +8,7 @@ run:
 	java -cp libs/qtjambi-4.5.2_01.jar:libs/qtjambi-linux64-gcc-4.5.2_01.jar:libs/vecmath.jar:. clientQT.ClientQT
 
 client:
-	java -cp libs/qtjambi-4.5.2_01.jar:libs/qtjambi-linux64-gcc-4.5.2_01.jar:libs/vecmath.jar:. clientQT.ClientQT --connect localhost
+	java -cp libs/linux/qtjambi-4.5.2_01.jar:libs/linux/qtjambi-linux64-gcc-4.5.2_01.jar:libs/vecmath.jar:. clientQT.ClientQT --connect localhost
 
 rs:
 	java -cp libs/qtjambi-4.5.2_01.jar:libs/qtjambi-linux64-gcc-4.5.2_01.jar:libs/vecmath.jar:. server.ServerMain
@@ -31,4 +31,5 @@ jars:
 macport:
 	ls games/*.java > games/gameslist.txt
 	jar cfv ports/CardGame.app/cardgame.jar */*.class games/gameslist.txt
+	cp libs/*jar libs/mac/*jar ports/CardGame.app/
 	rm games/gameslist.txt 
