@@ -89,7 +89,6 @@ public class ConnectionToServerRemote extends Thread implements ConnectionToServ
 			}
 		}
 
-	@Override
 	public int getCliendID()
 		{
 		return thisClientID;

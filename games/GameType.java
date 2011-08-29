@@ -52,7 +52,6 @@ public class GameType implements Serializable, Comparable<GameType>
 		return category+"."+name;
 		}
 
-	@Override
 	public int compareTo(GameType o)
 		{
 		return name.compareTo(o.name);

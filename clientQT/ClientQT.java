@@ -32,7 +32,6 @@ public class ClientQT extends Client implements ServerListener
 	{
 	public Set<Integer> boardViewsExistFor=new HashSet<Integer>();
 	
-	@Override
 	public void eventNewGameSessions()
 		{
 		for(final Map.Entry<Integer, GameInfo> e:gameSessions.entrySet())
@@ -59,21 +58,18 @@ public class ClientQT extends Client implements ServerListener
 		
 		}
 
-	@Override
 	public void eventNewUserList()
 		{
 		// TODO Auto-generated method stub
 		
 		}
 
-	@Override
 	public void eventServerMessage(Message msg)
 		{
 		// TODO Auto-generated method stub
 		
 		}
 	
-	@Override
 	public void eventGameDesign(GameActionUpdateGameDesign msg)
 		{
 		}
@@ -146,7 +142,6 @@ public class ClientQT extends Client implements ServerListener
 		QApplication.exec();
 		}
 
-	@Override
 	public void eventGameMessage(GameActionSendMessage action)
 		{
 		}
@@ -156,12 +151,10 @@ public class ClientQT extends Client implements ServerListener
 		
 		}
 
-	@Override
 	public void eventDragCard(GameActionDragCard action)
 		{
 		}
 
-	@Override
 	public void eventGameCardUpdate(GameActionUpdateCard action)
 		{
 		}

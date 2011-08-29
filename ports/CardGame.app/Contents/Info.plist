@@ -1,87 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>CFBundleAllowMixedLocalizations</key>
-	<string>true</string>
-	<key>CFBundleDevelopmentRegion</key>
-	<string>English</string>
-	<key>CFBundleDocumentTypes</key>
-	<array>
-		<dict>
-			<key>CFBundleTypeIconFile</key>
-			<string>129</string>
-			<key>CFBundleTypeOSTypes</key>
-			<array>
-				<string>****</string>
-			</array>
-			<key>CFBundleTypeRole</key>
-			<string>Viewer</string>
-		</dict>
-		<dict>
-			<key>CFBundleTypeExtensions</key>
-			<array>
-				<string>xml</string>
-			</array>
-			<key>CFBundleTypeName</key>
-			<string>OST XML</string>
-			<key>CFBundleTypeOSTypes</key>
-			<array>
-				<string>TEXT</string>
-			</array>
-			<key>CFBundleTypeRole</key>
-			<string>Viewer</string>
-			<key>NSDocumentClass</key>
-			<string>MyDocument</string>
-		</dict>
-	</array>
-	<key>CFBundleExecutable</key>
-	<string>JavaApplicationStub</string>
-	<key>CFBundleGetInfoString</key>
-	<string>http://www.endrov.net</string>
-	<key>CFBundleIconFile</key>
-	<string>CardGame.icns</string>
-	<key>CFBundleIdentifier</key>
-	<string>cardgame</string>
-	<key>CFBundleInfoDictionaryVersion</key>
-	<string>6.0</string>
 	<key>CFBundleName</key>
 	<string>CardGame</string>
+	<key>CFBundleVersion</key>
+	<string>100.0</string>
+	<key>CFBundleAllowMixedLocalizations</key>
+	<string>true</string>
+	<key>CFBundleExecutable</key>
+	<string>JavaApplicationStub</string>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleSignature</key>
-	<string>CardGame</string>
-	<key>CFBundleVersion</key>
-	<string>10.2</string>
+	<string>????</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleIconFile</key>
+	<string>logo.icns</string>
 	<key>Java</key>
 	<dict>
-		<key>ClassPath</key>
-		<string>$APPLICATION/cardgame.jar</string>
-		<key>JVMVersion</key>
-		<string>1.5+</string>
 		<key>MainClass</key>
 		<string>clientQT.ClientQT</string>
-		<key>Properties</key>
-		<dict>
-			<key>apple.awt.Antialiasing</key>
-			<string>false</string>
-			<key>apple.awt.brushMetalLook</key>
-			<string>false</string>
-			<key>com.apple.hwaccel</key>
-			<string>true</string>
-			<key>com.apple.macos.useScreenMenuBar</key>
-			<string>false</string>
-			<key>com.apple.mrj.application.growbox.intrudes</key>
-			<string>false</string>
-			<key>com.apple.mrj.application.live-resize</key>
-			<string>true</string>
-			<key>com.apple.smallTabs</key>
-			<string>true</string>
-		</dict>
-		<key>VMOptions</key>
-		<string>-Xmx500m</string>
-		<key>Arguments</key>
-		<string>--classload</string>
+		<key>StartOnMainThread</key>
+		<true/>
+		<key>JVMVersion</key>
+		<string>1.5*</string>
+		<key>ClassPath</key>
+		<array>
+			<string>$APP_PACKAGE/cardgame.jar</string>
+			<string>$APP_PACKAGE/vecmath.jar</string>
+			<string>$APP_PACKAGE/qtjambi-4.5.2_01.jar</string>
+			<string>$APP_PACKAGE/qtjambi-macosx-gcc-4.5.2_01.jar</string>
+		</array>
 	</dict>
 </dict>
 </plist>

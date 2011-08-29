@@ -106,12 +106,10 @@ public class BoardWindow extends QWidget implements ServerListener
 		
 		}
 
-	@Override
 	public void eventNewUserList()
 		{
 		}
 
-	@Override
 	public void eventNewGameSessions()
 		{
 		}
@@ -127,7 +125,6 @@ public class BoardWindow extends QWidget implements ServerListener
 		client.boardViewsExistFor.remove(view.gameID);
 		}
 
-	@Override
 	public void eventGameDesign(final GameActionUpdateGameDesign msg)
 		{
 		if(msg.gameID==view.gameID)
@@ -149,7 +146,6 @@ public class BoardWindow extends QWidget implements ServerListener
 			view.setGameState(msg);
 		}
 
-	@Override
 	public void eventGameMessage(final GameActionSendMessage action)
 		{
 		if(action.gameID==gameID)
@@ -160,13 +156,11 @@ public class BoardWindow extends QWidget implements ServerListener
 			});
 		}
 
-	@Override
 	public void eventDragCard(GameActionDragCard action)
 		{
 		view.dragCard(action);
 		}
 
-	@Override
 	public void eventGameCardUpdate(GameActionUpdateCard action)
 		{
 		view.gameCardUpdate(action);

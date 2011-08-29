@@ -24,13 +24,11 @@ public class ConnectionToServerLocal implements ConnectionToServer
 		thread.addIncomingMessage(thisClientID, msg);
 		}
 
-	@Override
 	public int getCliendID()
 		{
 		return thisClientID;
 		}
 
-	@Override
 	public void tearDownConnection()
 		{
 		thread.shutDown();

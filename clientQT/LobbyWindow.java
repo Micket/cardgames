@@ -354,7 +354,6 @@ public class LobbyWindow extends QWidget implements ServerListener
 		}
 
 	
-	@Override
 	public void eventNewUserList()
 		{
 		System.out.println("list of nicks: "+client.mapClientIDtoNick);
@@ -374,7 +373,6 @@ public class LobbyWindow extends QWidget implements ServerListener
 
 		}
 
-	@Override
 	public void eventNewGameSessions()
 		{
 		System.out.println("New game list...");
@@ -386,12 +384,10 @@ public class LobbyWindow extends QWidget implements ServerListener
 		});
 		}
 
-	@Override
 	public void eventGameDesign(GameActionUpdateGameDesign msg)
 		{
 		}
 
-	@Override
 	public void eventGameMessage(GameActionSendMessage action)
 		{
 		}
@@ -400,12 +396,10 @@ public class LobbyWindow extends QWidget implements ServerListener
 		{
 		}
 
-	@Override
 	public void eventDragCard(GameActionDragCard action)
 		{
 		}
 
-	@Override
 	public void eventGameCardUpdate(GameActionUpdateCard action)
 		{
 		}
