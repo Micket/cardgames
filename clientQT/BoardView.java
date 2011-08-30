@@ -101,7 +101,7 @@ public class BoardView extends QGraphicsView
 		QGraphicsItemInterface picked=scene().itemAt(event.posF());
 		if(picked!=null)
 			for(AnimatedCard card:cards)
-				if(card.imageFront==picked || card.imageBack==picked) //TODO. bug. what if a card exists multiple times?
+				if(card.curImageItem==picked)
 					return card;
 		return null;
 		}
@@ -188,7 +188,7 @@ public class BoardView extends QGraphicsView
 			for(QGraphicsItemInterface item:scene().items(event.posF()))
 				{
 				for(AnimatedCard ocard:cards)
-					if(ocard.imageFront==item || ocard.imageBack==item)
+					if(ocard.curImageItem==item)
 						if(!ocard.isBeingDragged)
 							if(cardBeneath==null || ocard.posZ>cardBeneath.posZ)
 								cardBeneath=ocard;
@@ -334,10 +334,6 @@ public class BoardView extends QGraphicsView
 		int curz=0;
 		for(AnimatedCard card:cards)
 			{
-			QGraphicsItemInterface item;
-
-//			=card.cardData.showsFront;
-			
 			//Handle rotation around y
 			boolean showsFront=card.rotY<Math.PI/2;
 			double scaleX=Math.cos(card.rotY);
@@ -345,29 +341,30 @@ public class BoardView extends QGraphicsView
 				scaleX=-scaleX;
 
 			//Get the image for the card if it is not loaded
+			QtGraphicsData image;
 			if(showsFront)
 				{
 				if(card.imageFront==null)
-					card.imageFront=getScaledImage(card.cardData.front).createGraphicsItem(); //TODO don't change image all the time!
-				item=card.imageFront;
+					card.imageFront=getScaledImage(card.cardData.front); //TODO don't change image all the time!
+				image=card.imageFront;
 				}
 			else
 				{
 				if(card.imageBack==null)
 					{
-					card.imageBack=getScaledImage(card.cardData.back).createGraphicsItem();
+					card.imageBack=getScaledImage(card.cardData.back);
 					//TODO maybe delete image here?
 					}
-				item=card.imageBack;
+				image=card.imageBack;
 				}
 			
-			
+			//Create graphics item
+			QGraphicsItemInterface item=image.createGraphicsItem();
+			card.curImageItem=item; //TODO is there a memory leak here or is GC taking care of it?
 			item.setZValue(curz);
 			item.resetTransform();
 			item.setTransform(QTransform.fromTranslate(card.posX*zoom, card.posY*zoom), true);
 			item.rotate(card.rotation*180/Math.PI);
-			
-			
 			item.setTransform(QTransform.fromTranslate(-item.boundingRect().width()*scaleX*zoom/2, -item.boundingRect().height()*zoom/2), true);
 			item.setTransform(QTransform.fromScale(scaleX, 1), true);
 			

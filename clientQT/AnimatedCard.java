@@ -8,8 +8,11 @@ public class AnimatedCard
 	{
 	public ClientCard cardData;
 
-	public QGraphicsItemInterface imageFront;
-	public QGraphicsItemInterface imageBack;
+	public QtGraphicsData imageFront;
+	public QtGraphicsData imageBack;
+	
+	public QGraphicsItemInterface curImageItem;
+	
 	public double posX, posY; //TODO original position
 	public int posZ;
 	public boolean isBeingDragged=false;
