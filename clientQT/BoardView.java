@@ -164,7 +164,7 @@ public class BoardView extends QGraphicsView
 
 				//For solitaire, drag also all cards beneath
 				CardStack<ClientCard> stack=gameData.playerMap.get(cc.cardPlayer).stackMap.get(cc.stackName);
-				if(stack.stackStyle==StackStyle.Solitaire)
+				if(stack.stackStyle==StackStyle.Stair)
 					for(AnimatedCard oac:cards)
 						{
 						ClientCard occ=oac.cardData;

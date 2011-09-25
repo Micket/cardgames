@@ -75,9 +75,6 @@ public class Klondike extends DefaultGameLogic
 	
 	public void startGame()
 		{
-		
-		
-		
 		gameOn = true;
 		// Send information on layout and cardstacks.
 		}
@@ -93,7 +90,7 @@ public class Klondike extends DefaultGameLogic
 		//Set style of decks
 		s.deckNew.stackStyle=StackStyle.Deck;
 		for(CardStack<PlayingCard> stack:s.stacksForHand)
-			stack.stackStyle=StackStyle.Solitaire;
+			stack.stackStyle=StackStyle.Stair;
 		for(CardStack<PlayingCard> stack:s.stacksForSorted)
 			stack.stackStyle=StackStyle.Deck;
 			
@@ -329,7 +326,7 @@ public class Klondike extends DefaultGameLogic
 		CardStack<PlayingCard> stackFrom=getStack(action.fromPlayer, action.fromStackName);
 		CardStack<PlayingCard> stackTo=getStack(action.toPlayer, action.toStackName);
 
-		if(stackFrom.stackStyle==StackStyle.Solitaire && stackTo.stackStyle==StackStyle.Solitaire)
+		if(stackFrom.stackStyle==StackStyle.Stair && stackTo.stackStyle==StackStyle.Stair)
 			{
 			//This code is simplified
 			int numCardToMove=stackFrom.cards.size()-action.fromPos;
@@ -395,7 +392,7 @@ public class Klondike extends DefaultGameLogic
 			{
 			GameDesign.StackDef defDeck=d.playerField.createStack("solitaire"+i);
 			defDeck.stack=new CardStack<Object>();
-			defDeck.stack.stackStyle=StackStyle.Solitaire;
+			defDeck.stack.stackStyle=StackStyle.Stair;
 			defDeck.y=-0;
 			defDeck.x=-400+i*cardDistX;
 			}
@@ -404,7 +401,7 @@ public class Klondike extends DefaultGameLogic
 			{
 			GameDesign.StackDef defDeck=d.playerField.createStack("sorted"+i);
 			defDeck.stack=new CardStack<Object>();
-			defDeck.stack.stackStyle=StackStyle.Solitaire;
+			defDeck.stack.stackStyle=StackStyle.Stair;
 			defDeck.y=-300;
 			defDeck.x=-400+(i+3)*cardDistX;
 			}

@@ -20,7 +20,7 @@ public class CardStack<E> implements Serializable
 
 	public static enum StackStyle implements Serializable
 		{
-		Hand, Solitaire, Deck
+		Hand, Stair, Deck
 		}
 
 	public StackStyle stackStyle=StackStyle.Hand;

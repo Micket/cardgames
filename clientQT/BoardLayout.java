@@ -198,7 +198,7 @@ public class BoardLayout
 					}
 				
 				}
-			else if(onestack.stackStyle==StackStyle.Solitaire)
+			else if(onestack.stackStyle==StackStyle.Stair)
 				{
 				
 				//Place position beneath
@@ -360,7 +360,7 @@ public class BoardLayout
 		CardStack<ClientCard> stackFrom=pdataFrom.stackMap.get(action.fromStackName);
 		CardStack<ClientCard> stackTo=pdataTo.stackMap.get(action.toStackName);
 		
-		if(stackFrom.stackStyle==StackStyle.Solitaire && stackTo.stackStyle==StackStyle.Solitaire)
+		if(stackFrom.stackStyle==StackStyle.Stair && stackTo.stackStyle==StackStyle.Stair)
 			{
 			//This code is simplified
 			int numCardToMove=stackFrom.cards.size()-action.fromPos;
