@@ -35,25 +35,10 @@ public class Solitaire extends DefaultGameLogic
 	{
 	private Map<Integer, LogicPlayerState> pstate=new HashMap<Integer, LogicPlayerState>();
 	private int numSolitaireHeap=7;
+	private int maxTurns=3; // Maximum number of times the deck can be turned.
 
 	final private String DECKCURRENT="deckcurrent";
 	final private String DECKNEW="decknew";
-
-	private PlayingCard.Rank[] ordering=new PlayingCard.Rank[]{
-			PlayingCard.Rank.Ace, 
-			PlayingCard.Rank.Deuce,
-			PlayingCard.Rank.Three,
-			PlayingCard.Rank.Four,
-			PlayingCard.Rank.Five,
-			PlayingCard.Rank.Six,
-			PlayingCard.Rank.Seven,
-			PlayingCard.Rank.Eight,
-			PlayingCard.Rank.Nine,
-			PlayingCard.Rank.Ten,
-			PlayingCard.Rank.Jack,
-			PlayingCard.Rank.Queen,
-			PlayingCard.Rank.King,
-	};
 
 	private class LogicPlayerState
 		{
@@ -99,6 +84,9 @@ public class Solitaire extends DefaultGameLogic
 	
 	public boolean userJoined(int userID)
 		{
+		if (!super.userJoined(userID))
+			return false;
+
 		LogicPlayerState s=new LogicPlayerState();
 		pstate.put(userID, s);
 
@@ -122,10 +110,6 @@ public class Solitaire extends DefaultGameLogic
 			stack.getCard(stack.size()-1).showsFront=true;
 			}
 
-		
-//////////////		
-		if (!super.userJoined(userID))
-			return false;
 		return true;
 		}
 	
@@ -251,14 +235,8 @@ public class Solitaire extends DefaultGameLogic
 		if(topCard==null)
 			return true;
 		else
-			{
-			for(int i=0;i<ordering.length-1;i++)
-				if(newc.getRank()==ordering[i])
-					return topCard.getRank()==ordering[i+1];
-			return false;
-			}
+			return (topCard.getValue() == newc.getValue()+1 && topCard.isRed() != newc.isRed());
 		}
-
 
 	/**
 	 * Check if card can be put on a sorted stack
@@ -267,16 +245,9 @@ public class Solitaire extends DefaultGameLogic
 		{
 		PlayingCard topCard=stack.getTopCard();
 		if(topCard==null)
-			return newc.getRank()==PlayingCard.Rank.Ace;
-		else if(topCard.getSuit()==newc.getSuit())
-			{
-			for(int i=0;i<ordering.length-1;i++)
-				if(topCard.getRank()==ordering[i])
-					return newc.getRank()==ordering[i+1];
-			return false;
-			}
+			return newc.isAce();
 		else
-			return false;
+			return topCard.getValue() == newc.getValue()-1 && topCard.getSuit() == newc.getSuit();
 		}
 
 	private boolean isSolitaireStack(String name)
