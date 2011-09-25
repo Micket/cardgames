@@ -38,25 +38,25 @@ public class Klondike extends DefaultGameLogic
 	private int numCardsRevealed=3; ///< Number of cards to reveal at once.
 	private int maxPasses=3; ///< Maximum number of times the deck can be turned.
 
-	final private String DECKCURRENT="deckcurrent";
-	final private String DECKNEW="decknew";
+	final private String REVEALEDDECK="deckcurrent";
+	final private String DECK="deck";
 
 	private class LogicPlayerState
 		{
 		public ArrayList<CardStack<PlayingCard>> workingStacks = new ArrayList<CardStack<PlayingCard>>();
 		public ArrayList<CardStack<PlayingCard>> sortedStacks = new ArrayList<CardStack<PlayingCard>>();
-		public CardStack<PlayingCard> deckNew = new CardStack<PlayingCard>();
-		public CardStack<PlayingCard> deckCurrent= new CardStack<PlayingCard>();
+		public CardStack<PlayingCard> deck = new CardStack<PlayingCard>(); // Top left deck
+		public CardStack<PlayingCard> revealedDeck= new CardStack<PlayingCard>(); // Revealed cards
 		
 		private int numOfPasses=1;
 
 		
 		public CardStack<PlayingCard> getStack(String stackName)
 			{
-			if(stackName.equals(DECKNEW))
-				return deckNew;
-			else if(stackName.equals(DECKCURRENT))
-				return deckCurrent;
+			if(stackName.equals(DECK))
+				return deck;
+			else if(stackName.equals(REVEALEDDECK))
+				return revealedDeck;
 			else if(isWorkingStack(stackName))
 				return workingStacks.get(Integer.parseInt(stackName.substring("working".length())));
 			else if(isSortedStack(stackName))
@@ -91,22 +91,22 @@ public class Klondike extends DefaultGameLogic
 		pstate.put(userID, s);
 
 		//Set style of decks
-		s.deckNew.stackStyle=StackStyle.Deck;
+		s.deck.stackStyle=StackStyle.Deck;
 		for(CardStack<PlayingCard> stack:s.workingStacks)
 			stack.stackStyle=StackStyle.Stair;
 		for(CardStack<PlayingCard> stack:s.sortedStacks)
 			stack.stackStyle=StackStyle.Deck;
 			
 		//Distribute cards
-		s.deckNew.addCards(PlayingCardUtil.getDeck52());
-		for(PlayingCard c:s.deckNew.cards)
+		s.deck.addCards(PlayingCardUtil.getDeck52());
+		for(PlayingCard c:s.deck.cards)
 			c.showsFront=false;
-		s.deckNew.shuffle();
+		s.deck.shuffle();
 		for(int i=0;i<7;i++)
 			{
 			CardStack<PlayingCard> stack=s.workingStacks.get(i);
 			for(int j=0;j<i+1;j++)
-				stack.addCard(s.deckNew.drawCard());
+				stack.addCard(s.deck.drawCard());
 			stack.getCard(stack.size()-1).showsFront=true;
 			}
 
@@ -120,20 +120,20 @@ public class Klondike extends DefaultGameLogic
 		{		
 		LogicPlayerState ps=pstate.get(fromUser);
 		CardStack<PlayingCard> fromStack=ps.getStack(s.stackName);
-		if(s.stackName.equals("decknew") && s.playerID==fromUser)
+		if(s.stackName.equals(DECK) && s.playerID==fromUser)
 			{
 			//Cycle current cards
-			if(ps.deckNew.size()!=0)
+			if(ps.deck.size()!=0)
 				{
 				Message msg=new Message();
 				
-				if(ps.deckCurrent.size()!=0)
+				if(ps.revealedDeck.size()!=0)
 					{
 					//Make old card face downward
 					
 					//TODO This causes a crash after a while
-					getStack(fromUser, DECKCURRENT).getCard(0).showsFront=false;
-					msg.add(getUpdateCardForClient(fromUser, DECKCURRENT, 0));
+					getStack(fromUser, REVEALEDDECK).getCard(0).showsFront=false;
+					msg.add(getUpdateCardForClient(fromUser, REVEALEDDECK, 0));
 					
 					
 					//Move away the old current card
@@ -142,11 +142,11 @@ public class Klondike extends DefaultGameLogic
 					
 					actionMoveOld.fromPlayer=s.playerID;
 					actionMoveOld.fromPos=0;
-					actionMoveOld.fromStackName=DECKCURRENT;
+					actionMoveOld.fromStackName=REVEALEDDECK;
 					
 					actionMoveOld.toPlayer=s.playerID;
 					actionMoveOld.toPos=0;
-					actionMoveOld.toStackName=DECKNEW;
+					actionMoveOld.toStackName=DECK;
 			
 					executeMove(actionMoveOld);
 					msg.add(actionMoveOld);
@@ -161,12 +161,12 @@ public class Klondike extends DefaultGameLogic
 				actionMoveNew.gameID=sessionID;
 				
 				actionMoveNew.fromPlayer=s.playerID;
-				actionMoveNew.fromPos=ps.deckNew.size()-1;
-				actionMoveNew.fromStackName=DECKNEW;
+				actionMoveNew.fromPos=ps.deck.size()-1;
+				actionMoveNew.fromStackName=DECK;
 
 				actionMoveNew.toPlayer=s.playerID;
-				actionMoveNew.toPos=ps.deckCurrent.size();
-				actionMoveNew.toStackName=DECKCURRENT;
+				actionMoveNew.toPos=ps.revealedDeck.size();
+				actionMoveNew.toStackName=REVEALEDDECK;
 		
 				executeMove(actionMoveNew);
 				msg.add(actionMoveNew);
@@ -260,11 +260,11 @@ public class Klondike extends DefaultGameLogic
 		}
 	private boolean isNewDeck(String name)
 		{
-		return name.equals(DECKNEW);
+		return name.equals(DECK);
 		}
 	private boolean isCurrentDeck(String name)
 		{
-		return name.equals(DECKCURRENT);
+		return name.equals(REVEALEDDECK);
 		}
 	
 
@@ -378,13 +378,13 @@ public class Klondike extends DefaultGameLogic
 		double cardDistX=200;
 		
 		GameDesign d=new GameDesign();
-		GameDesign.StackDef defDeckNew=d.playerField.createStack("decknew");
-		defDeckNew.stack=new CardStack<Object>();
-		defDeckNew.y=-300;
-		defDeckNew.x=-400+0*cardDistX;
+		GameDesign.StackDef defDeck=d.playerField.createStack(DECK);
+		defDeck.stack=new CardStack<Object>();
+		defDeck.y=-300;
+		defDeck.x=-400+0*cardDistX;
 
 		
-		GameDesign.StackDef defDeckCurrent=d.playerField.createStack("deckcurrent");
+		GameDesign.StackDef defDeckCurrent=d.playerField.createStack(REVEALEDDECK);
 		defDeckCurrent.stack=new CardStack<Object>();
 		defDeckCurrent.y=-300;
 		defDeckCurrent.x=-400+1*cardDistX;
@@ -393,20 +393,20 @@ public class Klondike extends DefaultGameLogic
 		
 		for(int i=0;i<numWorkingHeap;i++)
 			{
-			GameDesign.StackDef defDeck=d.playerField.createStack("working"+i);
-			defDeck.stack=new CardStack<Object>();
-			defDeck.stack.stackStyle=StackStyle.Stair;
-			defDeck.y=-0;
-			defDeck.x=-400+i*cardDistX;
+			GameDesign.StackDef defWorking=d.playerField.createStack("working"+i);
+			defWorking.stack=new CardStack<Object>();
+			defWorking.stack.stackStyle=StackStyle.Stair;
+			defWorking.y=-0;
+			defWorking.x=-400+i*cardDistX;
 			}
 
 		for(int i=0;i<4;i++)
 			{
-			GameDesign.StackDef defDeck=d.playerField.createStack("sorted"+i);
-			defDeck.stack=new CardStack<Object>();
-			defDeck.stack.stackStyle=StackStyle.Stair;
-			defDeck.y=-300;
-			defDeck.x=-400+(i+3)*cardDistX;
+			GameDesign.StackDef deckSorted=d.playerField.createStack("sorted"+i);
+			deckSorted.stack=new CardStack<Object>();
+			deckSorted.stack.stackStyle=StackStyle.Stair;
+			deckSorted.y=-300;
+			deckSorted.x=-400+(i+3)*cardDistX;
 			}
 
 		
@@ -423,11 +423,11 @@ public class Klondike extends DefaultGameLogic
 			LogicPlayerState ds=pstate.get(p);
 			PlayerState ps=action.createPlayer(p);
 			
-			CardStack<ClientCard> deckNew=CardStack.toClientCardStack(ds.deckNew);
-			ps.stacks.put(DECKNEW, deckNew);
+			CardStack<ClientCard> deck=CardStack.toClientCardStack(ds.deck);
+			ps.stacks.put(DECK, deck);
 
-			CardStack<ClientCard> deckCurrent=CardStack.toClientCardStack(ds.deckCurrent);
-			ps.stacks.put(DECKCURRENT, deckCurrent);
+			CardStack<ClientCard> deckCurrent=CardStack.toClientCardStack(ds.revealedDeck);
+			ps.stacks.put(REVEALEDDECK, deckCurrent);
 
 			for(int i=0;i<ds.workingStacks.size();i++)
 				{
