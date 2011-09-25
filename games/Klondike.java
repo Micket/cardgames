@@ -20,7 +20,7 @@ import action.GameActionUpdateGameState;
 import action.GameActionUpdateGameState.PlayerState;
 
 /**
- * Classic solitaire
+ * Classic solitaire game
  * @author mahogny
  */
 @GameTypePlugin(
@@ -34,18 +34,21 @@ import action.GameActionUpdateGameState.PlayerState;
 public class Klondike extends DefaultGameLogic
 	{
 	private Map<Integer, LogicPlayerState> pstate=new HashMap<Integer, LogicPlayerState>();
-	private int numSolitaireHeap=7;
-	private int maxTurns=3; // Maximum number of times the deck can be turned.
+	private int numWorkingHeap=7;
+	private int numCardsRevealed=3; ///< Number of cards to reveal at once.
+	private int maxPasses=3; ///< Maximum number of times the deck can be turned.
 
 	final private String DECKCURRENT="deckcurrent";
 	final private String DECKNEW="decknew";
 
 	private class LogicPlayerState
 		{
-		public ArrayList<CardStack<PlayingCard>> stacksForHand = new ArrayList<CardStack<PlayingCard>>();
-		public ArrayList<CardStack<PlayingCard>> stacksForSorted = new ArrayList<CardStack<PlayingCard>>();
+		public ArrayList<CardStack<PlayingCard>> workingStacks = new ArrayList<CardStack<PlayingCard>>();
+		public ArrayList<CardStack<PlayingCard>> sortedStacks = new ArrayList<CardStack<PlayingCard>>();
 		public CardStack<PlayingCard> deckNew = new CardStack<PlayingCard>();
 		public CardStack<PlayingCard> deckCurrent= new CardStack<PlayingCard>();
+		
+		private int numOfPasses=1;
 
 		
 		public CardStack<PlayingCard> getStack(String stackName)
@@ -54,20 +57,20 @@ public class Klondike extends DefaultGameLogic
 				return deckNew;
 			else if(stackName.equals(DECKCURRENT))
 				return deckCurrent;
-			else if(isSolitaireStack(stackName))
-				return stacksForHand.get(Integer.parseInt(stackName.substring("solitaire".length())));
+			else if(isWorkingStack(stackName))
+				return workingStacks.get(Integer.parseInt(stackName.substring("working".length())));
 			else if(isSortedStack(stackName))
-				return stacksForSorted.get(Integer.parseInt(stackName.substring("sorted".length())));
+				return sortedStacks.get(Integer.parseInt(stackName.substring("sorted".length())));
 			else
 				throw new RuntimeException("no such stack: "+stackName);
 			}
 
 		public LogicPlayerState()
 			{
-			for(int i=0;i<numSolitaireHeap;i++)
-				stacksForHand.add(new CardStack<PlayingCard>());
+			for(int i=0;i<numWorkingHeap;i++)
+				workingStacks.add(new CardStack<PlayingCard>());
 			for(int i=0;i<4;i++)
-				stacksForSorted.add(new CardStack<PlayingCard>());
+				sortedStacks.add(new CardStack<PlayingCard>());
 			}
 		
 		}
@@ -89,9 +92,9 @@ public class Klondike extends DefaultGameLogic
 
 		//Set style of decks
 		s.deckNew.stackStyle=StackStyle.Deck;
-		for(CardStack<PlayingCard> stack:s.stacksForHand)
+		for(CardStack<PlayingCard> stack:s.workingStacks)
 			stack.stackStyle=StackStyle.Stair;
-		for(CardStack<PlayingCard> stack:s.stacksForSorted)
+		for(CardStack<PlayingCard> stack:s.sortedStacks)
 			stack.stackStyle=StackStyle.Deck;
 			
 		//Distribute cards
@@ -101,7 +104,7 @@ public class Klondike extends DefaultGameLogic
 		s.deckNew.shuffle();
 		for(int i=0;i<7;i++)
 			{
-			CardStack<PlayingCard> stack=s.stacksForHand.get(i);
+			CardStack<PlayingCard> stack=s.workingStacks.get(i);
 			for(int j=0;j<i+1;j++)
 				stack.addCard(s.deckNew.drawCard());
 			stack.getCard(stack.size()-1).showsFront=true;
@@ -188,7 +191,7 @@ public class Klondike extends DefaultGameLogic
 			//Try to automatically put card on any sorted heap
 			if(s.stackPos==fromStack.size()-1)
 				for(int i=0;i<4;i++)
-					if(canPutOnSorted(ps.stacksForSorted.get(i), fromStack.getCard(s.stackPos)))
+					if(canPutOnSorted(ps.sortedStacks.get(i), fromStack.getCard(s.stackPos)))
 						{
 						GameActionDragCard action=new GameActionDragCard();
 						
@@ -198,7 +201,7 @@ public class Klondike extends DefaultGameLogic
 						
 						action.toPlayer=fromUser;
 						action.toStackName="sorted"+i;
-						action.toPos=ps.stacksForSorted.get(i).size();
+						action.toPos=ps.sortedStacks.get(i).size();
 						
 						executeMove(action);
 						sendToPlayers(new Message(action));
@@ -224,9 +227,9 @@ public class Klondike extends DefaultGameLogic
 		}
 
 	/**
-	 * Check if card can be put on a solitaire stack
+	 * Check if card can be put on a stair stack
 	 */
-	private boolean canPutOnHand(CardStack<PlayingCard> stack, PlayingCard newc)
+	private boolean canPutOnStair(CardStack<PlayingCard> stack, PlayingCard newc)
 		{
 		PlayingCard topCard=stack.getTopCard();
 		if(topCard==null)
@@ -247,9 +250,9 @@ public class Klondike extends DefaultGameLogic
 			return topCard.getValue() == newc.getValue()-1 && topCard.getSuit() == newc.getSuit();
 		}
 
-	private boolean isSolitaireStack(String name)
+	private boolean isWorkingStack(String name)
 		{
-		return name.startsWith("solitaire");
+		return name.startsWith("working");
 		}
 	private boolean isSortedStack(String name)
 		{
@@ -273,20 +276,20 @@ public class Klondike extends DefaultGameLogic
 		LogicPlayerState ps=pstate.get(fromUser);
 		boolean isOk=false;
 		
-		if(isSolitaireStack(s.toStackName))
+		if(isWorkingStack(s.toStackName))
 			{
-			if(isSolitaireStack(s.fromStackName))
+			if(isWorkingStack(s.fromStackName))
 				{
-				//Between solitaire stacks one can move a card and all cards below
+				//Between working stacks one can move a card and all cards below
 				CardStack<PlayingCard> fromStack=ps.getStack(s.fromStackName);
-				if(fromStack.getCard(s.fromPos).showsFront && canPutOnHand(ps.getStack(s.toStackName), fromStack.getCard(s.fromPos)))
+				if(fromStack.getCard(s.fromPos).showsFront && canPutOnStair(ps.getStack(s.toStackName), fromStack.getCard(s.fromPos)))
 					isOk=true;
 				}
 			else if(isSortedStack(s.fromStackName) || isCurrentDeck(s.fromStackName))
 				{
 				//From these stacks one can move the top-most card
 				CardStack<PlayingCard> fromStack=ps.getStack(s.fromStackName);
-				if(s.fromPos==fromStack.size()-1 && canPutOnHand(ps.getStack(s.toStackName), fromStack.getCard(s.fromPos)))
+				if(s.fromPos==fromStack.size()-1 && canPutOnStair(ps.getStack(s.toStackName), fromStack.getCard(s.fromPos)))
 					isOk=true;
 				}
 			}
@@ -388,9 +391,9 @@ public class Klondike extends DefaultGameLogic
 
 		
 		
-		for(int i=0;i<numSolitaireHeap;i++)
+		for(int i=0;i<numWorkingHeap;i++)
 			{
-			GameDesign.StackDef defDeck=d.playerField.createStack("solitaire"+i);
+			GameDesign.StackDef defDeck=d.playerField.createStack("working"+i);
 			defDeck.stack=new CardStack<Object>();
 			defDeck.stack.stackStyle=StackStyle.Stair;
 			defDeck.y=-0;
@@ -426,15 +429,15 @@ public class Klondike extends DefaultGameLogic
 			CardStack<ClientCard> deckCurrent=CardStack.toClientCardStack(ds.deckCurrent);
 			ps.stacks.put(DECKCURRENT, deckCurrent);
 
-			for(int i=0;i<ds.stacksForHand.size();i++)
+			for(int i=0;i<ds.workingStacks.size();i++)
 				{
-				CardStack<ClientCard> stack=CardStack.toClientCardStack(ds.stacksForHand.get(i));
-				ps.stacks.put("solitaire"+i, stack);
+				CardStack<ClientCard> stack=CardStack.toClientCardStack(ds.workingStacks.get(i));
+				ps.stacks.put("working"+i, stack);
 				}
 			
 			for(int i=0;i<4;i++)
 				{
-				CardStack<ClientCard> stack=CardStack.toClientCardStack(ds.stacksForSorted.get(i));
+				CardStack<ClientCard> stack=CardStack.toClientCardStack(ds.sortedStacks.get(i));
 				ps.stacks.put("sorted"+i, stack);
 				}
 
